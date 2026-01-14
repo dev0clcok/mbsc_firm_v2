@@ -1,158 +1,127 @@
 <template>
     <AppLayout>
+
         <Head title="FAQs Management" />
+        <div class="flex items-center justify-between">
+            <h1 class="text-3xl font-bold">FAQs Management</h1>
+            <Link :href="faqsCreate().url"
+                class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
+                Add New FAQ
+            </Link>
+        </div>
 
-        <div class="space-y-6 p-4">
-            <div class="flex items-center justify-between">
-                <h1 class="text-3xl font-bold">FAQs Management</h1>
-                <Link
-                    :href="faqsCreate().url"
-                    class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
-                >
-                    Add New FAQ
-                </Link>
-            </div>
+        <!-- Filters -->
+        <div class="rounded-lg border border-border bg-card p-4">
+            <div class="grid gap-4 md:grid-cols-4">
+                <div>
+                    <label class="mb-2 block text-sm font-medium">Category</label>
+                    <select v-model="selectedCategory"
+                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        @change="handleFilter">
+                        <option value="">All Categories</option>
+                        <option v-for="category in categories" :key="category" :value="category">
+                            {{ category }}
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium">Service</label>
+                    <select v-model="selectedService"
+                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        @change="handleFilter">
+                        <option value="">All Services</option>
+                        <option v-for="service in services" :key="service.id" :value="service.id">
+                            {{ service.title }}
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium">Status</label>
+                    <select v-model="selectedStatus"
+                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        @change="handleFilter">
+                        <option value="">All Status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
 
-            <!-- Filters -->
-            <div class="rounded-lg border border-border bg-card p-4">
-                <div class="grid gap-4 md:grid-cols-4">
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">Category</label>
-                        <select
-                            v-model="selectedCategory"
-                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                            @change="handleFilter"
-                        >
-                            <option value="">All Categories</option>
-                            <option
-                                v-for="category in categories"
-                                :key="category"
-                                :value="category"
-                            >
-                                {{ category }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">Service</label>
-                        <select
-                            v-model="selectedService"
-                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                            @change="handleFilter"
-                        >
-                            <option value="">All Services</option>
-                            <option
-                                v-for="service in services"
-                                :key="service.id"
-                                :value="service.id"
-                            >
-                                {{ service.title }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">Status</label>
-                        <select
-                            v-model="selectedStatus"
-                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                            @change="handleFilter"
-                        >
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium">Search</label>
+                    <input v-model="search" type="text" placeholder="Search questions or answers..."
+                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        @input="handleSearch" />
+                </div>
 
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">Search</label>
-                        <input
-                            v-model="search"
-                            type="text"
-                            placeholder="Search questions or answers..."
-                            class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                            @input="handleSearch"
-                        />
-                    </div>
+                <div class="flex items-end">
+                    <button type="button"
+                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                        @click="resetFilters">
+                        Reset filters
+                    </button>
                 </div>
             </div>
-
-            <!-- DataTable -->
-            <DataTable
-                :columns="columns"
-                :data="faqs.data"
-                :actions="actions"
-                :pagination="pagination"
-            >
-                <template #cell-question="{ row }">
-                    <div class="max-w-lg">
-                        <div class="font-semibold text-foreground">
-                            {{ row.question }}
-                        </div>
-                        <div
-                            class="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2"
-                            v-html="truncateHtml(row.answer, 80)"
-                        />
-                    </div>
-                </template>
-
-                <template #cell-category="{ value }">
-                    <span
-                        v-if="value"
-                        class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20"
-                    >
-                        {{ value }}
-                    </span>
-                    <span v-else class="text-sm font-medium text-muted-foreground">—</span>
-                </template>
-
-                <template #cell-service="{ row }">
-                    <span
-                        v-if="row.service"
-                        class="inline-flex items-center rounded-md bg-muted/50 px-2.5 py-1 text-sm font-medium text-foreground"
-                    >
-                        {{ row.service.title }}
-                    </span>
-                    <span v-else class="text-sm font-medium text-muted-foreground">—</span>
-                </template>
-
-                <template #cell-is_active="{ value }">
-                    <span
-                        :class="[
-                            'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-sm transition-all',
-                            value
-                                ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/20 dark:text-emerald-400 dark:ring-emerald-400/30'
-                                : 'bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/20 dark:bg-gray-800/50 dark:text-gray-400 dark:ring-gray-400/20',
-                        ]"
-                    >
-                        <span
-                            :class="[
-                                'h-2 w-2 rounded-full',
-                                value ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400',
-                            ]"
-                        />
-                        {{ value ? 'Active' : 'Inactive' }}
-                    </span>
-                </template>
-
-                <template #cell-sort_order="{ value }">
-                    <span class="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-sm font-mono font-semibold text-muted-foreground">
-                        {{ value }}
-                    </span>
-                </template>
-
-                <template #empty>
-                    <div class="text-muted-foreground">
-                        <p class="text-sm">No FAQs found.</p>
-                        <Link
-                            :href="faqsCreate().url"
-                            class="mt-2 inline-block text-sm text-primary hover:underline"
-                        >
-                            Create your first FAQ
-                        </Link>
-                    </div>
-                </template>
-            </DataTable>
         </div>
+
+        <!-- DataTable -->
+        <DataTable :columns="columns" :data="faqs.data" :actions="actions" :pagination="pagination">
+            <template #cell-question="{ row }">
+                <div class="max-w-lg">
+                    <div class="font-semibold text-foreground">
+                        {{ row.question }}
+                    </div>
+                    <div class="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2"
+                        v-html="truncateHtml(row.answer, 80)" />
+                </div>
+            </template>
+
+            <template #cell-category="{ value }">
+                <span v-if="value"
+                    class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
+                    {{ value }}
+                </span>
+                <span v-else class="text-sm font-medium text-muted-foreground">—</span>
+            </template>
+
+            <template #cell-service="{ row }">
+                <span v-if="row.service"
+                    class="inline-flex items-center rounded-md bg-muted/50 px-2.5 py-1 text-sm font-medium text-foreground">
+                    {{ row.service.title }}
+                </span>
+                <span v-else class="text-sm font-medium text-muted-foreground">—</span>
+            </template>
+
+            <template #cell-is_active="{ value }">
+                <span :class="[
+                    'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-sm transition-all',
+                    value
+                        ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/20 dark:text-emerald-400 dark:ring-emerald-400/30'
+                        : 'bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/20 dark:bg-gray-800/50 dark:text-gray-400 dark:ring-gray-400/20',
+                ]">
+                    <span :class="[
+                        'h-2 w-2 rounded-full',
+                        value ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400',
+                    ]" />
+                    {{ value ? 'Active' : 'Inactive' }}
+                </span>
+            </template>
+
+            <template #cell-sort_order="{ value }">
+                <span
+                    class="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-sm font-mono font-semibold text-muted-foreground">
+                    {{ value }}
+                </span>
+            </template>
+
+            <template #empty>
+                <div class="text-muted-foreground">
+                    <p class="text-sm">No FAQs found.</p>
+                    <Link :href="faqsCreate().url" class="mt-2 inline-block text-sm text-primary hover:underline">
+                        Create your first FAQ
+                    </Link>
+                </div>
+            </template>
+        </DataTable>
     </AppLayout>
 </template>
 
@@ -271,6 +240,22 @@ const handleFilter = () => {
             service: selectedService.value || null,
             status: selectedStatus.value || null,
         },
+        {
+            preserveState: true,
+            replace: true,
+        }
+    );
+};
+
+const resetFilters = () => {
+    search.value = '';
+    selectedCategory.value = '';
+    selectedService.value = '';
+    selectedStatus.value = '';
+
+    router.get(
+        faqsIndex().url,
+        {},
         {
             preserveState: true,
             replace: true,

@@ -13,6 +13,7 @@ class FAQController extends Controller
 {
     public function index(Request $request): Response
     {
+        // dd($request->all());
         $query = FAQ::with('service');
 
         // Filter by category
@@ -36,7 +37,7 @@ class FAQController extends Controller
 
         // Filter by status
         if ($request->filled('status')) {
-            $query->where('is_active', $request->string('status') === 'active');
+            $query->where('is_active', $request->integer('status'));
         }
 
         $faqs = $query->orderBy('sort_order')
