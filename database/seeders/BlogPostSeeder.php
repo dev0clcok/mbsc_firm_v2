@@ -19,7 +19,7 @@ class BlogPostSeeder extends Seeder
         if (!$author) {
             $author = User::create([
                 'name' => 'Admin User',
-                'email' => 'superadmin@admin.com',
+                'email' => 'admin@admin.com',
                 'password' => bcrypt('password'),
             ]);
         }

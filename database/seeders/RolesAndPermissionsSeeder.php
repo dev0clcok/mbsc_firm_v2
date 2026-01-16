@@ -6,6 +6,7 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -42,6 +43,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
         if ($user) {
             $user->roles()->syncWithoutDetaching([$adminRole->id]);
+
+            // In local dev, avoid locking yourself out of /admin due to email verification.
+            if (app()->environment('local') && ! $user->email_verified_at) {
+                $user->forceFill(['email_verified_at' => Carbon::now()])->save();
+            }
         }
     }
 }
