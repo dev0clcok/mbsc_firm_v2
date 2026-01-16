@@ -22,7 +22,7 @@ defineProps<{
                         <div
                             class="mb-1 flex h-9 w-9 items-center justify-center rounded-md"
                         >
-                            <span class="text-2xl font-medium">MBSC</span>
+                            <span class="text-2xl font-medium">RoleGuard</span>
                         </div>
                         
                         <span class="sr-only">{{ title }}</span>
