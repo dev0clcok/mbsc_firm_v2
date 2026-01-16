@@ -21,6 +21,14 @@ return [
                         ['slug' => 'admin.access', 'label' => 'Access'],
                     ],
                 ],
+                [
+                    'key' => 'audit',
+                    'label' => 'Audit',
+                    'permissions' => [
+                        ['slug' => 'audit.list', 'label' => 'List'],
+                        ['slug' => 'audit.view', 'label' => 'View'],
+                    ],
+                ],
             ],
         ],
         [
@@ -77,16 +85,7 @@ return [
                         ['slug' => 'roles.delete', 'label' => 'Delete'],
                     ],
                 ],
-                [
-                    'key' => 'audit',
-                    'label' => 'Audit',
-                    'permissions' => [
-                        ['slug' => 'audit.list', 'label' => 'List'],
-                        ['slug' => 'audit.view', 'label' => 'View'],
-                    ],
-                ],
             ],
         ],
     ],
 ];
-

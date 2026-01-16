@@ -7,11 +7,11 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])
+Route::middleware(['auth', 'verified', 'permission:admin.access'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/', DashboardController::class)->name('dashboard');
     
     Route::resource('services', ServiceController::class)->except(['show']);
 
