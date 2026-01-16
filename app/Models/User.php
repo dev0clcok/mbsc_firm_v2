@@ -56,6 +56,18 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
+    public function isSuperAdmin(): bool
+    {
+        $email = (string) config('admin.super_admin_email');
+
+        // If no email configured, first user is super admin.
+        if ($email === '') {
+            return (int) $this->id === 1;
+        }
+
+        return strcasecmp((string) $this->email, $email) === 0;
+    }
+
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class)->withTimestamps();
@@ -73,6 +85,10 @@ class User extends Authenticatable
 
     public function allPermissionSlugs(): array
     {
+        if ($this->isSuperAdmin()) {
+            return Permission::query()->pluck('slug')->all();
+        }
+
         $direct = $this->permissions()->pluck('slug')->all();
 
         $viaRoles = Permission::query()
@@ -85,6 +101,10 @@ class User extends Authenticatable
 
     public function hasPermission(string $permissionSlug): bool
     {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
         if ($this->permissions()->where('slug', $permissionSlug)->exists()) {
             return true;
         }

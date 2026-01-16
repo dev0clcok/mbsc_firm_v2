@@ -12,6 +12,10 @@ class RequireRole
         $user = $request->user();
         $allowed = array_filter(array_map('trim', explode('|', $roles)));
 
+        if ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()) {
+            return $next($request);
+        }
+
         if (! $user || empty($allowed) || ! $user->hasAnyRole($allowed)) {
             abort(403);
         }

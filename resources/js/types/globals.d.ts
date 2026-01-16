@@ -2,7 +2,6 @@ export {};
 
 declare global {
     interface Window {
-        TINYMCE_API_KEY?: string | null;
     }
 }
 

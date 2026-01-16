@@ -26,28 +26,34 @@ class RolesAndPermissionsSeeder extends Seeder
             }
         }
 
-        $adminRole = Role::firstOrCreate(
-            ['slug' => 'admin'],
-            ['name' => 'Admin'],
-        );
+        $adminRole = Role::firstOrCreate(['slug' => 'admin'], ['name' => 'Admin']);
+        $superAdminRole = Role::firstOrCreate(['slug' => 'super_admin'], ['name' => 'Super Admin']);
 
-        $adminRole->permissions()->syncWithoutDetaching(
-            Permission::query()->pluck('id')->all(),
-        );
+        // Admin gets all permissions (super admin bypasses checks anyway).
+        $adminRole->permissions()->syncWithoutDetaching(Permission::query()->pluck('id')->all());
 
-        // Assign admin role to the configured email (if exists), otherwise first user.
-        $adminEmail = env('ADMIN_EMAIL');
-        $user = $adminEmail
+        // Determine Super Admin: configured email, otherwise first user.
+        $superEmail = (string) config('admin.super_admin_email');
+        $superUser = $superEmail !== ''
+            ? User::query()->where('email', $superEmail)->first()
+            : User::query()->orderBy('id')->first();
+
+        if ($superUser) {
+            $superUser->roles()->syncWithoutDetaching([$superAdminRole->id]);
+
+            if (app()->environment('local') && ! $superUser->email_verified_at) {
+                $superUser->forceFill(['email_verified_at' => Carbon::now()])->save();
+            }
+        }
+
+        // Also assign admin role to the configured ADMIN_EMAIL (if set), otherwise first user.
+        $adminEmail = (string) env('ADMIN_EMAIL');
+        $adminUser = $adminEmail !== ''
             ? User::query()->where('email', $adminEmail)->first()
             : User::query()->orderBy('id')->first();
 
-        if ($user) {
-            $user->roles()->syncWithoutDetaching([$adminRole->id]);
-
-            // In local dev, avoid locking yourself out of /admin due to email verification.
-            if (app()->environment('local') && ! $user->email_verified_at) {
-                $user->forceFill(['email_verified_at' => Carbon::now()])->save();
-            }
+        if ($adminUser) {
+            $adminUser->roles()->syncWithoutDetaching([$adminRole->id]);
         }
     }
 }

@@ -16,7 +16,6 @@ class FAQController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:admin.access'),
             new Middleware('permission:faqs.list', only: ['index']),
             new Middleware('permission:faqs.create', only: ['create', 'store']),
             new Middleware('permission:faqs.update', only: ['edit', 'update']),

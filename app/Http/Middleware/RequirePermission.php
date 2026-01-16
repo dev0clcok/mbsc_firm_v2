@@ -11,6 +11,10 @@ class RequirePermission
     {
         $user = $request->user();
 
+        if ($user && method_exists($user, 'isSuperAdmin') && $user->isSuperAdmin()) {
+            return $next($request);
+        }
+
         if (! $user || ! $user->hasPermission($permission)) {
             abort(403);
         }
