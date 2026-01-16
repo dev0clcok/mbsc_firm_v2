@@ -6,11 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\FAQ;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class FAQController extends Controller
+class FAQController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.access'),
+            new Middleware('permission:faqs.list', only: ['index']),
+            new Middleware('permission:faqs.create', only: ['create', 'store']),
+            new Middleware('permission:faqs.update', only: ['edit', 'update']),
+            new Middleware('permission:faqs.delete', only: ['destroy']),
+        ];
+    }
+
     public function index(Request $request): Response
     {
         // dd($request->all());

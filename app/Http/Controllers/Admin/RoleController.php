@@ -7,12 +7,25 @@ use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Str;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.access'),
+            new Middleware('permission:roles.list', only: ['index']),
+            new Middleware('permission:roles.create', only: ['create', 'store']),
+            new Middleware('permission:roles.update', only: ['edit', 'update']),
+            new Middleware('permission:roles.delete', only: ['destroy']),
+        ];
+    }
+
     public function index(Request $request): Response
     {
         $roles = Role::query()

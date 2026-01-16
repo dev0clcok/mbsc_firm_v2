@@ -17,6 +17,7 @@
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold">Services Management</h1>
             <Link
+                v-if="canCreate"
                 :href="servicesCreate().url"
                 class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
             >
@@ -124,6 +125,7 @@ import { ref, computed } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
+import { usePermissions } from '@/composables/usePermissions';
 import {
     index as servicesIndex,
     create as servicesCreate,
@@ -155,10 +157,15 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const { can } = usePermissions();
 
 const search = ref(props.filters?.search || '');
 const selectedStatus = ref(props.filters?.status || '');
 const selectedParent = ref(props.filters?.parent || '');
+
+const canCreate = computed(() => can('services.create'));
+const canEdit = computed(() => can('services.update'));
+const canDelete = computed(() => can('services.delete'));
 
 const columns = [
     { key: 'title', label: 'Title' },
@@ -198,21 +205,27 @@ const confirmDelete = () => {
     });
 };
 
-const actions = [
-    {
-        type: 'link' as const,
-        label: 'Edit',
-        icon: 'pencil',
-        href: (row: any) => servicesEdit({ service: row.id }),
-    },
-    {
-        type: 'button' as const,
-        label: 'Delete',
-        icon: 'trash2',
-        variant: 'destructive' as const,
-        onClick: (row: any) => openDeleteDialog(row),
-    },
-];
+const actions = computed(() => {
+    const a: any[] = [];
+    if (canEdit.value) {
+        a.push({
+            type: 'link' as const,
+            label: 'Edit',
+            icon: 'pencil',
+            href: (row: any) => servicesEdit({ service: row.id }),
+        });
+    }
+    if (canDelete.value) {
+        a.push({
+            type: 'button' as const,
+            label: 'Delete',
+            icon: 'trash2',
+            variant: 'destructive' as const,
+            onClick: (row: any) => openDeleteDialog(row),
+        });
+    }
+    return a;
+});
 
 const handleSearch = () => {
     router.get(

@@ -15,7 +15,9 @@
         />
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold">FAQs Management</h1>
-            <Link :href="faqsCreate().url"
+            <Link
+                v-if="canCreate"
+                :href="faqsCreate().url"
                 class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
                 Add New FAQ
             </Link>
@@ -127,7 +129,11 @@
             <template #empty>
                 <div class="text-muted-foreground">
                     <p class="text-sm">No FAQs found.</p>
-                    <Link :href="faqsCreate().url" class="mt-2 inline-block text-sm text-primary hover:underline">
+                    <Link
+                        v-if="canCreate"
+                        :href="faqsCreate().url"
+                        class="mt-2 inline-block text-sm text-primary hover:underline"
+                    >
                         Create your first FAQ
                     </Link>
                 </div>
@@ -142,6 +148,7 @@ import { ref, computed } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
+import { usePermissions } from '@/composables/usePermissions';
 import {
     index as faqsIndex,
     destroy as faqsDestroy,
@@ -186,11 +193,16 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const { can } = usePermissions();
 
 const search = ref(props.filters?.search || '');
 const selectedCategory = ref(props.filters?.category || '');
 const selectedService = ref(props.filters?.service || '');
 const selectedStatus = ref(props.filters?.status || '');
+
+const canCreate = computed(() => can('faqs.create'));
+const canEdit = computed(() => can('faqs.update'));
+const canDelete = computed(() => can('faqs.delete'));
 
 const columns = [
     { key: 'question', label: 'Question' },
@@ -200,21 +212,27 @@ const columns = [
     { key: 'sort_order', label: 'Sort', align: 'center' as const },
 ];
 
-const actions = [
-    {
-        type: 'link' as const,
-        label: 'Edit',
-        icon: 'pencil',
-        href: (row: any) => faqsEdit({ faq: row.id }),
-    },
-    {
-        type: 'button' as const,
-        label: 'Delete',
-        icon: 'trash2',
-        variant: 'destructive' as const,
-        onClick: (row: any) => openDeleteDialog(row),
-    },
-];
+const actions = computed(() => {
+    const a: any[] = [];
+    if (canEdit.value) {
+        a.push({
+            type: 'link' as const,
+            label: 'Edit',
+            icon: 'pencil',
+            href: (row: any) => faqsEdit({ faq: row.id }),
+        });
+    }
+    if (canDelete.value) {
+        a.push({
+            type: 'button' as const,
+            label: 'Delete',
+            icon: 'trash2',
+            variant: 'destructive' as const,
+            onClick: (row: any) => openDeleteDialog(row),
+        });
+    }
+    return a;
+});
 
 const pagination = computed(() => ({
     links: props.faqs.links,

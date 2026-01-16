@@ -5,12 +5,25 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ServiceController extends Controller
+class ServiceController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:admin.access'),
+            new Middleware('permission:services.list', only: ['index']),
+            new Middleware('permission:services.create', only: ['create', 'store']),
+            new Middleware('permission:services.update', only: ['edit', 'update']),
+            new Middleware('permission:services.delete', only: ['destroy']),
+        ];
+    }
+
     public function index(Request $request): Response
     {
         $query = Service::with('parent')

@@ -5,6 +5,7 @@
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold">Roles</h1>
             <Link
+                v-if="canCreate"
                 href="/admin/roles/create"
                 class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
             >
@@ -32,15 +33,19 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import { toast } from '@/composables/useToast';
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { usePermissions } from '@/composables/usePermissions';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
     roles: any;
 }>();
 
-const page = usePage<any>();
-const canDelete = computed(() => (page.props.auth?.permissions || []).includes('roles.delete'));
+const { can } = usePermissions();
+
+const canCreate = computed(() => can('roles.create'));
+const canEdit = computed(() => can('roles.update'));
+const canDelete = computed(() => can('roles.delete'));
 
 const confirmOpen = ref(false);
 const pendingDeleteId = ref<number | null>(null);
@@ -53,14 +58,16 @@ const columns = [
 ];
 
 const actions = computed(() => {
-    const base: any[] = [
-        {
+    const base: any[] = [];
+
+    if (canEdit.value) {
+        base.push({
             type: 'button',
             label: 'Edit',
             icon: 'pencil',
             onClick: (row: any) => router.visit(`/admin/roles/${row.id}/edit`),
-        },
-    ];
+        });
+    }
 
     if (canDelete.value) {
         base.push({

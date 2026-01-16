@@ -13,12 +13,16 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
+import { usePermissions } from '@/composables/usePermissions';
 import { Head, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 defineProps<{
     users: any;
 }>();
+
+const { can } = usePermissions();
+const canEdit = computed(() => can('users.update'));
 
 const columns = [
     { key: 'name', label: 'Name' },
@@ -27,13 +31,16 @@ const columns = [
     { key: 'created_at', label: 'Created' },
 ];
 
-const actions = computed(() => [
-    {
-        type: 'button',
-        label: 'Edit',
-        icon: 'pencil',
-        onClick: (row: any) => router.visit(`/admin/users/${row.id}/edit`),
-    },
-]);
+const actions = computed(() => {
+    if (!canEdit.value) return [];
+    return [
+        {
+            type: 'button',
+            label: 'Edit',
+            icon: 'pencil',
+            onClick: (row: any) => router.visit(`/admin/users/${row.id}/edit`),
+        },
+    ];
+});
 </script>
 
