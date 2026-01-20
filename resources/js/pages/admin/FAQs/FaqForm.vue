@@ -21,9 +21,13 @@
                                 <label class="mb-2 block text-sm font-medium">
                                     Question <span class="text-destructive">*</span>
                                 </label>
-                                <textarea v-model="question" rows="3" required
+                                <textarea
+                                    v-model="question"
+                                    rows="3"
+                                    required
                                     class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                    placeholder="Enter the question..." />
+                                    placeholder="Enter the question..."
+                                ></textarea>
                             </div>
 
                             <div>
@@ -33,6 +37,7 @@
                                 <RichTextEditor v-model="answer" placeholder="Enter the answer..." />
                             </div>
 
+                        </div>
                     </div>
                 </div>
 
