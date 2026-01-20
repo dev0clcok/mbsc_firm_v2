@@ -24,13 +24,7 @@ class FAQController extends Controller implements HasMiddleware
 
     public function index(Request $request): Response
     {
-        // dd($request->all());
-        $query = FAQ::with('service');
-
-        // Filter by category
-        if ($request->filled('category')) {
-            $query->where('category', $request->string('category'));
-        }
+        $query = FAQ::query();
 
         // Search
         if ($request->filled('search')) {
@@ -47,23 +41,13 @@ class FAQController extends Controller implements HasMiddleware
         }
 
         $faqs = $query->orderBy('sort_order')
-            ->orderBy('category')
             ->orderBy('id')
             ->paginate(15)
             ->withQueryString();
 
-        $categories = FAQ::distinct()
-            ->whereNotNull('category')
-            ->pluck('category')
-            ->filter()
-            ->sort()
-            ->values();
-
         return Inertia::render('admin/FAQs/Index', [
             'faqs' => $faqs,
-            'categories' => $categories,
             'filters' => [
-                'category' => $request->category,
                 'search' => $request->search,
                 'status' => $request->status,
             ],
@@ -72,11 +56,7 @@ class FAQController extends Controller implements HasMiddleware
 
     public function create(): Response
     {
-        $categories = FAQ::distinct()->pluck('category')->filter()->sort()->values();
-
-        return Inertia::render('admin/FAQs/Create', [   
-            'categories' => $categories,
-        ]);
+        return Inertia::render('admin/FAQs/Create');
     }
 
     public function store(Request $request)
@@ -84,7 +64,6 @@ class FAQController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'question' => 'required|string|max:1000',
             'answer' => 'required|string',
-            'category' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
@@ -97,11 +76,8 @@ class FAQController extends Controller implements HasMiddleware
 
     public function edit(FAQ $faq): Response
     {
-        $categories = FAQ::distinct()->pluck('category')->filter()->sort()->values();
-
         return Inertia::render('admin/FAQs/Edit', [
             'faq' => $faq,
-            'categories' => $categories,
         ]);
     }
 
@@ -110,7 +86,6 @@ class FAQController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'question' => 'required|string|max:1000',
             'answer' => 'required|string',
-            'category' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);

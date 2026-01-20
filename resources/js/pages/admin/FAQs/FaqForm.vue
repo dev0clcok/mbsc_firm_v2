@@ -33,18 +33,6 @@
                                 <RichTextEditor v-model="answer" placeholder="Enter the answer..." />
                             </div>
 
-                            <div class="grid gap-6 grid-cols-1 md:grid-cols-2">
-                                <div>
-                                    <label class="mb-2 block text-sm font-medium">Category</label>
-                                    <input v-model="category" type="text" list="categories"
-                                        class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                        placeholder="e.g., General, Company Registration, Tax" />
-                                    <datalist id="categories">
-                                        <option v-for="category in categories" :key="category" :value="category" />
-                                    </datalist>
-                                </div>  
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -100,18 +88,15 @@ const props = defineProps<{
     mode: 'create' | 'edit';
     question: string;
     answer: string;
-    category: string;
     sortOrder: number;
     isActive: boolean;
-    processing: boolean;
-    categories: string[];
+    processing: boolean;    
 }>();
 
 const emit = defineEmits<{
     (e: 'submit'): void;
     (e: 'update:question', value: string): void;
     (e: 'update:answer', value: string): void;
-    (e: 'update:category', value: string): void;
     (e: 'update:sortOrder', value: number): void;
     (e: 'update:isActive', value: boolean): void;
 }>();
@@ -123,10 +108,6 @@ const question = computed({
 const answer = computed({
     get: () => props.answer,
     set: (v: string) => emit('update:answer', v),
-});
-const category = computed({
-    get: () => props.category,
-    set: (v: string) => emit('update:category', v),
 });
 const sortOrder = computed({
     get: () => props.sortOrder,

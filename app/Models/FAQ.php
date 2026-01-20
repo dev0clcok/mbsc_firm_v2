@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FAQ extends Model
 {
@@ -15,8 +14,6 @@ class FAQ extends Model
     protected $fillable = [
         'question',
         'answer',
-        'category',
-        'service_id',
         'sort_order',
         'is_active',
     ];
@@ -30,10 +27,5 @@ class FAQ extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
-    }
-
-    public function scopeByCategory($query, $category)
-    {
-        return $query->where('category', $category);
     }
 }

@@ -7,11 +7,9 @@
             mode="edit"
             v-model:question="form.question"
             v-model:answer="form.answer"
-            v-model:category="form.category"
             v-model:sortOrder="form.sort_order"
             v-model:isActive="form.is_active"
             :processing="form.processing"
-            :categories="categories"
             @submit="submit"
         />
     </AppLayout>
@@ -28,11 +26,9 @@ interface Props {
         id: number;
         question: string;
         answer: string;
-        category: string | null;
         sort_order: number;
         is_active: boolean;
     };
-    categories: string[];
 }
 
 const props = defineProps<Props>();
@@ -40,7 +36,6 @@ const props = defineProps<Props>();
 const form = useForm({
     question: props.faq.question,
     answer: props.faq.answer,
-    category: props.faq.category || '',
     sort_order: props.faq.sort_order,
     is_active: props.faq.is_active,
 });

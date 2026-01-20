@@ -27,28 +27,6 @@
         <div class="rounded-lg border border-border bg-card p-4">
             <div class="grid gap-4 md:grid-cols-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Category</label>
-                    <select v-model="selectedCategory"
-                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                        @change="handleFilter">
-                        <option value="">All Categories</option>
-                        <option v-for="category in categories" :key="category" :value="category">
-                            {{ category }}
-                        </option>
-                    </select>
-                </div>
-                <div>
-                    <label class="mb-2 block text-sm font-medium">Service</label>
-                    <select v-model="selectedService"
-                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                        @change="handleFilter">
-                        <option value="">All Services</option>
-                        <option v-for="service in services" :key="service.id" :value="service.id">
-                            {{ service.title }}
-                        </option>
-                    </select>
-                </div>
-                <div>
                     <label class="mb-2 block text-sm font-medium">Status</label>
                     <select v-model="selectedStatus"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -57,7 +35,7 @@
                         <option value="1">Active</option>
                         <option value="0">Inactive</option>
                     </select>
-                </div>
+                </div>  
 
                 <div>
                     <label class="mb-2 block text-sm font-medium">Search</label>
@@ -154,7 +132,6 @@ interface Props {
             id: number;
             question: string;
             answer: string;
-            category: string | null;
             sort_order: number;
             is_active: boolean;
         }>;
@@ -167,9 +144,7 @@ interface Props {
         to: number | null;
         total: number;
     };
-    categories: string[];
     filters?: {
-        category?: string;
         search?: string;
         status?: string;
     };
@@ -179,7 +154,6 @@ const props = defineProps<Props>();
 const { can } = usePermissions();
 
 const search = ref(props.filters?.search || '');
-const selectedCategory = ref(props.filters?.category || '');
 const selectedStatus = ref(props.filters?.status || '');
 
 const canCreate = computed(() => can('faqs.create'));
@@ -188,7 +162,6 @@ const canDelete = computed(() => can('faqs.delete'));
 
 const columns = [
     { key: 'question', label: 'Question' },
-    { key: 'category', label: 'Category' },
     { key: 'is_active', label: 'Status', align: 'center' as const },
     { key: 'sort_order', label: 'Sort', align: 'center' as const },
 ];
@@ -251,7 +224,6 @@ const handleSearch = () => {
         faqsIndex().url,
         {
             search: search.value || null,
-            category: selectedCategory.value || null,
             status: selectedStatus.value || null,
         },
         {
@@ -266,7 +238,6 @@ const handleFilter = () => {
         faqsIndex().url,
         {
             search: search.value || null,
-            category: selectedCategory.value || null,
             status: selectedStatus.value || null,
         },
         {
@@ -278,7 +249,6 @@ const handleFilter = () => {
 
 const resetFilters = () => {
     search.value = '';
-    selectedCategory.value = '';
     selectedStatus.value = '';
 
     router.get(

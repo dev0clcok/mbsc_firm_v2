@@ -15,13 +15,10 @@ return new class extends Migration
             $table->id();
             $table->text('question');
             $table->longText('answer');
-            $table->string('category')->nullable();
-            $table->foreignId('service_id')->nullable()->constrained()->nullOnDelete();
             $table->integer('sort_order')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             
-            $table->index('category');
             $table->index('is_active');
         });
     }
