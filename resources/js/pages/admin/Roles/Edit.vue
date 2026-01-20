@@ -3,9 +3,20 @@
         <Head title="Edit Role" />
 
         <div class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h1 class="text-3xl font-bold">Edit Role</h1>
-                <Link href="/admin/roles" class="text-muted-foreground hover:text-foreground">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                    <h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">
+                        Edit Role
+                    </h1>
+                    <p class="mt-1 text-sm text-muted-foreground">
+                        Update role details and adjust permissions.
+                    </p>
+                </div>
+
+                <Link
+                    :href="rolesIndex().url"
+                    class="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+                >
                     Back to Roles
                 </Link>
             </div>
@@ -13,64 +24,83 @@
             <form @submit.prevent="submit" class="space-y-6">
                 <div class="grid gap-6 lg:grid-cols-2">
                     <div class="space-y-6">
-                        <div class="rounded-lg border border-border bg-card p-6">
-                            <h2 class="mb-4 text-xl font-semibold">Role Details</h2>
-                            <div class="space-y-4">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Role Details</CardTitle>
+                                <CardDescription>
+                                    Keep the slug stable if it’s referenced in code.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent class="space-y-4">
                                 <div>
-                                    <label class="mb-2 block text-sm font-medium">
+                                    <Label for="name">
                                         Name <span class="text-destructive">*</span>
-                                    </label>
-                                    <input
+                                    </Label>
+                                    <Input
+                                        id="name"
                                         v-model="form.name"
                                         type="text"
                                         required
-                                        class="w-full rounded-md border border-input bg-background px-3 py-2"
+                                        placeholder="e.g. Admin"
                                     />
+                                    <InputError :message="form.errors.name" />
                                 </div>
 
                                 <div>
-                                    <label class="mb-2 block text-sm font-medium">Slug</label>
-                                    <input
+                                    <Label for="slug">Slug</Label>
+                                    <Input
+                                        id="slug"
                                         v-model="form.slug"
                                         type="text"
-                                        class="w-full rounded-md border border-input bg-background px-3 py-2"
                                     />
+                                    <InputError :message="form.errors.slug" />
                                 </div>
 
                                 <div>
-                                    <label class="mb-2 block text-sm font-medium">Description</label>
+                                    <Label for="description">Description</Label>
                                     <textarea
+                                        id="description"
                                         v-model="form.description"
                                         rows="3"
                                         class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                    />
+                                        placeholder="Optional notes about this role..."
+                                    ></textarea>
+                                    <InputError :message="form.errors.description" />
                                 </div>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
                     </div>
 
                     <div class="space-y-6">
-                        <div class="rounded-lg border border-border bg-card p-6">
-                            <h2 class="mb-4 text-xl font-semibold">Permissions</h2>
-                            <PermissionTree v-model="form.permissions" :groups="permissionGroups" />
-                        </div>
+                        <Card>
+                            <CardHeader class="space-y-1">
+                                <CardTitle>Permissions</CardTitle>
+                                <CardDescription>
+                                    Selected:
+                                    <span class="font-medium text-foreground">
+                                        {{ form.permissions.length }}
+                                    </span>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <PermissionTree v-model="form.permissions" :groups="permissionGroups" />
+                                <InputError :message="form.errors.permissions" />
+                            </CardContent>
+                        </Card>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-end gap-4">
-                    <Link
-                        href="/admin/roles"
-                        class="rounded-md border border-border bg-background px-4 py-2 hover:bg-muted"
-                    >
-                        Cancel
-                    </Link>
-                    <button
-                        type="submit"
-                        :disabled="form.processing"
-                        class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                    >
-                        {{ form.processing ? 'Updating...' : 'Update Role' }}
-                    </button>
+                <div
+                    class="sticky bottom-4 z-10 rounded-xl border border-border bg-background/80 p-4 shadow-sm backdrop-blur"
+                >
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+                        <Button as-child variant="secondary">
+                            <Link :href="rolesIndex().url">Cancel</Link>
+                        </Button>
+                        <Button type="submit" :disabled="form.processing">
+                            {{ form.processing ? 'Updating...' : 'Update Role' }}
+                        </Button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -81,6 +111,18 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import PermissionTree from './PermissionTree.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import InputError from '@/components/InputError.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import { index as rolesIndex, update as rolesUpdate } from '@/routes/admin/roles';
 
 type PermissionDef = { slug: string; label: string };
 type ModuleDef = { key: string; label: string; permissions: PermissionDef[] };
@@ -105,7 +147,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(`/admin/roles/${props.role.id}`);
+    form.put(rolesUpdate({ role: props.role.id }).url);
 };
 </script>
 

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
         // Seed in order (services first as other seeders may depend on them)
         $this->call([
-            RolesAndPermissionsSeeder::class,
+            PermissionsSeeder::class,
             FAQSeeder::class,
         ]);
     }

@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 
-class RolesAndPermissionsSeeder extends Seeder
+class PermissionsSeeder extends Seeder
 {
     public function run(): void
     {

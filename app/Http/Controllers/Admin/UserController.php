@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -18,6 +19,7 @@ class UserController extends Controller implements HasMiddleware
     {
         return [
             new Middleware('permission:users.list', only: ['index']),
+            new Middleware('permission:users.create', only: ['create', 'store']),
             new Middleware('permission:users.update', only: ['edit', 'update']),
         ];
     }
@@ -32,6 +34,36 @@ class UserController extends Controller implements HasMiddleware
         return Inertia::render('admin/Users/Index', [
             'users' => $users,
         ]);
+    }
+
+    public function create(): Response
+    {
+        return Inertia::render('admin/Users/Create', [
+            'roles' => Role::query()->orderBy('name')->get(['id', 'name', 'slug']),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'roles' => ['array'],
+            'roles.*' => ['integer', 'exists:roles,id'],
+        ]);
+
+        $user = User::query()->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        $user->roles()->sync($data['roles'] ?? []);
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'User created successfully.');
     }
 
     public function edit(User $user): Response
