@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/vue3';
+import { CircleCheck } from 'lucide-vue-next';
 
 defineProps<{
     status?: string;
@@ -26,12 +29,14 @@ defineProps<{
     >
         <Head title="Log in" />
 
-        <div
+        <Alert
             v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
+            class="mb-4 border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200"
         >
-            {{ status }}
-        </div>
+            <CircleCheck />
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>{{ status }}</AlertDescription>
+        </Alert>
 
         <Form
             v-bind="store.form()"
@@ -98,13 +103,13 @@ defineProps<{
                 </Button>
             </div>
 
-            <!-- <div
-                class="text-center text-sm text-muted-foreground"
-                v-if="canRegister"
-            >
-                Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
-            </div> -->
+            <template v-if="canRegister">
+                <Separator />
+                <div class="text-center text-sm text-muted-foreground">
+                    Don't have an account?
+                    <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+                </div>
+            </template>
         </Form>
     </AuthBase>
 </template>

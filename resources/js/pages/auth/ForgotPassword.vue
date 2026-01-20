@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,6 +10,7 @@ import AuthLayout from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 import { Form, Head } from '@inertiajs/vue3';
+import { CircleCheck } from 'lucide-vue-next';
 
 defineProps<{
     status?: string;
@@ -22,15 +24,17 @@ defineProps<{
     >
         <Head title="Forgot password" />
 
-        <div
+        <Alert
             v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
+            class="mb-4 border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200"
         >
-            {{ status }}
-        </div>
+            <CircleCheck />
+            <AlertTitle>Sent</AlertTitle>
+            <AlertDescription>{{ status }}</AlertDescription>
+        </Alert>
 
         <div class="space-y-6">
-            <Form v-bind="email.form()" v-slot="{ errors, processing }">
+            <Form v-bind="email.form()" v-slot="{ errors, processing }" class="space-y-6">
                 <div class="grid gap-2">
                     <Label for="email">Email address</Label>
                     <Input
@@ -44,7 +48,7 @@ defineProps<{
                     <InputError :message="errors.email" />
                 </div>
 
-                <div class="my-6 flex items-center justify-start">
+                <div class="flex items-center justify-start">
                     <Button
                         class="w-full"
                         :disabled="processing"

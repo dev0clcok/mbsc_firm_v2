@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import TextLink from '@/components/TextLink.vue';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
 import { Form, Head } from '@inertiajs/vue3';
+import { CircleCheck } from 'lucide-vue-next';
 
 defineProps<{
     status?: string;
@@ -19,13 +21,16 @@ defineProps<{
     >
         <Head title="Email verification" />
 
-        <div
+        <Alert
             v-if="status === 'verification-link-sent'"
-            class="mb-4 text-center text-sm font-medium text-green-600"
+            class="mb-4 border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200"
         >
-            A new verification link has been sent to the email address you
-            provided during registration.
-        </div>
+            <CircleCheck />
+            <AlertTitle>Sent</AlertTitle>
+            <AlertDescription>
+                A new verification link has been sent to the email address you provided during registration.
+            </AlertDescription>
+        </Alert>
 
         <Form
             v-bind="send.form()"

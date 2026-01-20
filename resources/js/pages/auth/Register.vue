@@ -4,6 +4,7 @@ import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
@@ -94,14 +95,10 @@ import { Form, Head } from '@inertiajs/vue3';
                 </Button>
             </div>
 
+            <Separator />
             <div class="text-center text-sm text-muted-foreground">
                 Already have an account?
-                <TextLink
-                    :href="login()"
-                    class="underline underline-offset-4"
-                    :tabindex="6"
-                    >Log in</TextLink
-                >
+                <TextLink :href="login()" :tabindex="6">Log in</TextLink>
             </div>
         </Form>
     </AuthBase>

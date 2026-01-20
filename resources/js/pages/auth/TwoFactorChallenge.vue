@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import InputError from '@/components/InputError.vue';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -11,6 +12,7 @@ import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/two-factor/login';
 import { Form, Head } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { KeyRound, ShieldCheck } from 'lucide-vue-next';
 
 interface AuthConfigContent {
     title: string;
@@ -55,10 +57,19 @@ const code = ref<string>('');
         <Head title="Two-Factor Authentication" />
 
         <div class="space-y-6">
+            <Alert class="border-border bg-card text-muted-foreground">
+                <AlertDescription class="flex items-start gap-2">
+                    <ShieldCheck class="mt-0.5 h-4 w-4 text-foreground" />
+                    <span>
+                        Two‑factor authentication is enabled for your account. Enter your code, or switch to a recovery code if you can’t access your authenticator.
+                    </span>
+                </AlertDescription>
+            </Alert>
+
             <template v-if="!showRecoveryInput">
                 <Form
                     v-bind="store.form()"
-                    class="space-y-4"
+                    class="space-y-6"
                     reset-on-error
                     @error="code = ''"
                     #default="{ errors, processing, clearErrors }"
@@ -86,9 +97,9 @@ const code = ref<string>('');
                         </div>
                         <InputError :message="errors.code" />
                     </div>
-                    <Button type="submit" class="w-full" :disabled="processing"
-                        >Continue</Button
-                    >
+                    <Button type="submit" class="w-full" :disabled="processing">
+                        Continue
+                    </Button>
                     <div class="text-center text-sm text-muted-foreground">
                         <span>or you can </span>
                         <button
@@ -105,10 +116,14 @@ const code = ref<string>('');
             <template v-else>
                 <Form
                     v-bind="store.form()"
-                    class="space-y-4"
+                    class="space-y-6"
                     reset-on-error
                     #default="{ errors, processing, clearErrors }"
                 >
+                    <div class="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                        <KeyRound class="h-4 w-4" />
+                        <span>Use one of your emergency recovery codes.</span>
+                    </div>
                     <Input
                         name="recovery_code"
                         type="text"
@@ -117,9 +132,9 @@ const code = ref<string>('');
                         required
                     />
                     <InputError :message="errors.recovery_code" />
-                    <Button type="submit" class="w-full" :disabled="processing"
-                        >Continue</Button
-                    >
+                    <Button type="submit" class="w-full" :disabled="processing">
+                        Continue
+                    </Button>
 
                     <div class="text-center text-sm text-muted-foreground">
                         <span>or you can </span>
