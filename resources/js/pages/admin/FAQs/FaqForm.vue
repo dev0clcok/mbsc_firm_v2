@@ -42,18 +42,7 @@
                                     <datalist id="categories">
                                         <option v-for="category in categories" :key="category" :value="category" />
                                     </datalist>
-                                </div>
-
-                                <div>
-                                    <label class="mb-2 block text-sm font-medium">Service (optional)</label>
-                                    <select v-model="serviceId"
-                                        class="w-full rounded-md border border-input bg-background px-3 py-2">
-                                        <option :value="null">None</option>
-                                        <option v-for="service in services" :key="service.id" :value="service.id">
-                                            {{ service.title }}
-                                        </option>
-                                    </select>
-                                </div>
+                                </div>  
                             </div>
                         </div>
                     </div>
@@ -112,11 +101,9 @@ const props = defineProps<{
     question: string;
     answer: string;
     category: string;
-    serviceId: number | null;
     sortOrder: number;
     isActive: boolean;
     processing: boolean;
-    services: Array<{ id: number; title: string }>;
     categories: string[];
 }>();
 
@@ -125,7 +112,6 @@ const emit = defineEmits<{
     (e: 'update:question', value: string): void;
     (e: 'update:answer', value: string): void;
     (e: 'update:category', value: string): void;
-    (e: 'update:serviceId', value: number | null): void;
     (e: 'update:sortOrder', value: number): void;
     (e: 'update:isActive', value: boolean): void;
 }>();
@@ -141,10 +127,6 @@ const answer = computed({
 const category = computed({
     get: () => props.category,
     set: (v: string) => emit('update:category', v),
-});
-const serviceId = computed({
-    get: () => props.serviceId,
-    set: (v: number | null) => emit('update:serviceId', v),
 });
 const sortOrder = computed({
     get: () => props.sortOrder,

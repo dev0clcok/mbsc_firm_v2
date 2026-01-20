@@ -12,11 +12,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes/admin';
-import { index as servicesIndex } from '@/routes/admin/services';
 import { index as faqsIndex } from '@/routes/admin/faqs';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import {LayoutGrid, Package, HelpCircle, Users, Shield} from 'lucide-vue-next';
+import {LayoutGrid, HelpCircle, Users, Shield} from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
@@ -29,10 +28,6 @@ const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [
         { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
     ];
-
-    if (canAny(['services.list', 'services.view', 'services.create', 'services.update', 'services.delete'])) {
-        items.push({ title: 'Services', href: servicesIndex(), icon: Package });
-    }
 
     if (canAny(['faqs.list', 'faqs.view', 'faqs.create', 'faqs.update', 'faqs.delete'])) {
         items.push({ title: 'FAQs', href: faqsIndex(), icon: HelpCircle });

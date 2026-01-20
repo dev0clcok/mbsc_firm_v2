@@ -36,17 +36,6 @@ return [
             'label' => 'CMS',
             'modules' => [
                 [
-                    'key' => 'services',
-                    'label' => 'Services',
-                    'permissions' => [
-                        ['slug' => 'services.list', 'label' => 'List'],
-                        ['slug' => 'services.view', 'label' => 'View'],
-                        ['slug' => 'services.create', 'label' => 'Create'],
-                        ['slug' => 'services.update', 'label' => 'Update'],
-                        ['slug' => 'services.delete', 'label' => 'Delete'],
-                    ],
-                ],
-                [
                     'key' => 'faqs',
                     'label' => 'FAQs',
                     'permissions' => [

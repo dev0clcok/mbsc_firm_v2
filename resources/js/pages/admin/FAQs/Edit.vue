@@ -8,11 +8,9 @@
             v-model:question="form.question"
             v-model:answer="form.answer"
             v-model:category="form.category"
-            v-model:serviceId="form.service_id"
             v-model:sortOrder="form.sort_order"
             v-model:isActive="form.is_active"
             :processing="form.processing"
-            :services="services"
             :categories="categories"
             @submit="submit"
         />
@@ -31,14 +29,9 @@ interface Props {
         question: string;
         answer: string;
         category: string | null;
-        service_id: number | null;
         sort_order: number;
         is_active: boolean;
     };
-    services: Array<{
-        id: number;
-        title: string;
-    }>;
     categories: string[];
 }
 
@@ -48,7 +41,6 @@ const form = useForm({
     question: props.faq.question,
     answer: props.faq.answer,
     category: props.faq.category || '',
-    service_id: props.faq.service_id,
     sort_order: props.faq.sort_order,
     is_active: props.faq.is_active,
 });

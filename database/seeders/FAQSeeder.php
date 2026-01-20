@@ -3,17 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\FAQ;
-use App\Models\Service;
 use Illuminate\Database\Seeder;
 
 class FAQSeeder extends Seeder
 {
     public function run(): void
     {
-        $companyRegistration = Service::where('slug', 'company-registration')->first();
-        $payrollServices = Service::where('slug', 'payroll-services')->first();
-        $taxCompliance = Service::where('slug', 'tax-vat-compliance')->first();
-
         $faqs = [
             [
                 'question' => 'How much do Bangladesh Consultant financial consulting services cost?',
@@ -35,7 +30,7 @@ class FAQSeeder extends Seeder
                 'question' => 'How does Bangladesh Consultant assist with drafting the MOA and AOA?',
                 'answer' => 'We provide expert guidance to draft the Memorandum of Association (MOA) and Articles of Association (AOA), ensuring compliance with Bangladesh\'s legal requirements and alignment with your business goals.',
                 'category' => 'Company Registration',
-                'service_id' => $companyRegistration?->id,
+                'service_id' => null,
                 'sort_order' => 3,
                 'is_active' => true,
             ],
@@ -67,7 +62,7 @@ class FAQSeeder extends Seeder
                 'question' => 'How does Bangladesh Consultant help with tax and VAT compliance?',
                 'answer' => 'We handle TIN and VAT registration, prepare and file returns, optimize tax liabilities, and represent you during audits.',
                 'category' => 'Tax & VAT',
-                'service_id' => $taxCompliance?->id,
+                'service_id' => null,
                 'sort_order' => 7,
                 'is_active' => true,
             ],
@@ -91,7 +86,7 @@ class FAQSeeder extends Seeder
                 'question' => 'Can you assist with cross-border tax compliance or international expansion?',
                 'answer' => 'Yes, we help with cross-border tax compliance, double taxation agreements, and international business setup and expansion strategies.',
                 'category' => 'Tax & VAT',
-                'service_id' => $taxCompliance?->id,
+                'service_id' => null,
                 'sort_order' => 10,
                 'is_active' => true,
             ],

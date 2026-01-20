@@ -26,12 +26,6 @@ class FAQ extends Model
         'sort_order' => 'integer',
     ];
 
-    // Relationships
-    public function service(): BelongsTo
-    {
-        return $this->belongsTo(Service::class);
-    }
-
     // Scopes
     public function scopeActive($query)
     {

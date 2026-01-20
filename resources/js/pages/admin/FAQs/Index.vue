@@ -96,14 +96,6 @@
                 <span v-else class="text-sm font-medium text-muted-foreground">—</span>
             </template>
 
-            <template #cell-service="{ row }">
-                <span v-if="row.service"
-                    class="inline-flex items-center rounded-md bg-muted/50 px-2.5 py-1 text-sm font-medium text-foreground">
-                    {{ row.service.title }}
-                </span>
-                <span v-else class="text-sm font-medium text-muted-foreground">—</span>
-            </template>
-
             <template #cell-is_active="{ value }">
                 <span :class="[
                     'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-sm transition-all',
@@ -163,12 +155,8 @@ interface Props {
             question: string;
             answer: string;
             category: string | null;
-            service_id: number | null;
             sort_order: number;
             is_active: boolean;
-            service?: {
-                title: string;
-            } | null;
         }>;
         links: Array<{
             url: string | null;
@@ -179,14 +167,9 @@ interface Props {
         to: number | null;
         total: number;
     };
-    services: Array<{
-        id: number;
-        title: string;
-    }>;
     categories: string[];
     filters?: {
         category?: string;
-        service?: string;
         search?: string;
         status?: string;
     };
@@ -197,7 +180,6 @@ const { can } = usePermissions();
 
 const search = ref(props.filters?.search || '');
 const selectedCategory = ref(props.filters?.category || '');
-const selectedService = ref(props.filters?.service || '');
 const selectedStatus = ref(props.filters?.status || '');
 
 const canCreate = computed(() => can('faqs.create'));
@@ -207,7 +189,6 @@ const canDelete = computed(() => can('faqs.delete'));
 const columns = [
     { key: 'question', label: 'Question' },
     { key: 'category', label: 'Category' },
-    { key: 'service', label: 'Service' },
     { key: 'is_active', label: 'Status', align: 'center' as const },
     { key: 'sort_order', label: 'Sort', align: 'center' as const },
 ];
@@ -271,7 +252,6 @@ const handleSearch = () => {
         {
             search: search.value || null,
             category: selectedCategory.value || null,
-            service: selectedService.value || null,
             status: selectedStatus.value || null,
         },
         {
@@ -287,7 +267,6 @@ const handleFilter = () => {
         {
             search: search.value || null,
             category: selectedCategory.value || null,
-            service: selectedService.value || null,
             status: selectedStatus.value || null,
         },
         {
@@ -300,7 +279,6 @@ const handleFilter = () => {
 const resetFilters = () => {
     search.value = '';
     selectedCategory.value = '';
-    selectedService.value = '';
     selectedStatus.value = '';
 
     router.get(

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\FAQ;
-use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -33,11 +32,6 @@ class FAQController extends Controller implements HasMiddleware
             $query->where('category', $request->string('category'));
         }
 
-        // Filter by service
-        if ($request->filled('service')) {
-            $query->where('service_id', $request->integer('service'));
-        }
-
         // Search
         if ($request->filled('search')) {
             $search = $request->string('search');
@@ -58,11 +52,6 @@ class FAQController extends Controller implements HasMiddleware
             ->paginate(15)
             ->withQueryString();
 
-        $services = Service::parents()
-            ->active()
-            ->orderBy('sort_order')
-            ->get();
-
         $categories = FAQ::distinct()
             ->whereNotNull('category')
             ->pluck('category')
@@ -72,11 +61,9 @@ class FAQController extends Controller implements HasMiddleware
 
         return Inertia::render('admin/FAQs/Index', [
             'faqs' => $faqs,
-            'services' => $services,
             'categories' => $categories,
             'filters' => [
                 'category' => $request->category,
-                'service' => $request->service,
                 'search' => $request->search,
                 'status' => $request->status,
             ],
@@ -85,15 +72,9 @@ class FAQController extends Controller implements HasMiddleware
 
     public function create(): Response
     {
-        $services = Service::parents()
-            ->active()
-            ->orderBy('sort_order')
-            ->get();
-
         $categories = FAQ::distinct()->pluck('category')->filter()->sort()->values();
 
-        return Inertia::render('admin/FAQs/Create', [
-            'services' => $services,
+        return Inertia::render('admin/FAQs/Create', [   
             'categories' => $categories,
         ]);
     }
@@ -104,7 +85,6 @@ class FAQController extends Controller implements HasMiddleware
             'question' => 'required|string|max:1000',
             'answer' => 'required|string',
             'category' => 'nullable|string|max:255',
-            'service_id' => 'nullable|exists:services,id',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
@@ -117,18 +97,10 @@ class FAQController extends Controller implements HasMiddleware
 
     public function edit(FAQ $faq): Response
     {
-        $faq->load('service');
-
-        $services = Service::parents()
-            ->active()
-            ->orderBy('sort_order')
-            ->get();
-
         $categories = FAQ::distinct()->pluck('category')->filter()->sort()->values();
 
         return Inertia::render('admin/FAQs/Edit', [
             'faq' => $faq,
-            'services' => $services,
             'categories' => $categories,
         ]);
     }
@@ -139,7 +111,6 @@ class FAQController extends Controller implements HasMiddleware
             'question' => 'required|string|max:1000',
             'answer' => 'required|string',
             'category' => 'nullable|string|max:255',
-            'service_id' => 'nullable|exists:services,id',
             'sort_order' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
