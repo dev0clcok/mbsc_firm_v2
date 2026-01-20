@@ -25,36 +25,6 @@ class RolesAndPermissionsSeeder extends Seeder
                 }
             }
         }
-
-        $adminRole = Role::firstOrCreate(['slug' => 'admin'], ['name' => 'Admin']);
-        $superAdminRole = Role::firstOrCreate(['slug' => 'super_admin'], ['name' => 'Super Admin']);
-
-        // Admin gets all permissions (super admin bypasses checks anyway).
-        $adminRole->permissions()->syncWithoutDetaching(Permission::query()->pluck('id')->all());
-
-        // Determine Super Admin: configured email, otherwise first user.
-        $superEmail = (string) config('admin.super_admin_email');
-        $superUser = $superEmail !== ''
-            ? User::query()->where('email', $superEmail)->first()
-            : User::query()->orderBy('id')->first();
-
-        if ($superUser) {
-            $superUser->roles()->syncWithoutDetaching([$superAdminRole->id]);
-
-            if (app()->environment('local') && ! $superUser->email_verified_at) {
-                $superUser->forceFill(['email_verified_at' => Carbon::now()])->save();
-            }
-        }
-
-        // Also assign admin role to the configured ADMIN_EMAIL (if set), otherwise first user.
-        $adminEmail = (string) env('ADMIN_EMAIL');
-        $adminUser = $adminEmail !== ''
-            ? User::query()->where('email', $adminEmail)->first()
-            : User::query()->orderBy('id')->first();
-
-        if ($adminUser) {
-            $adminUser->roles()->syncWithoutDetaching([$adminRole->id]);
-        }
     }
 }
 
