@@ -16,22 +16,15 @@ class DatabaseSeeder extends Seeder
         // Create a test user if needed (so we can attach roles/permissions in seeders).
         if (User::count() === 0) {
             User::factory()->create([
-                'name' => 'Test User',
-                'email' => 'test@example.com',
+                'name' => 'Admin',
+                'email' => config('admin.super_admin_email'),
             ]);
         }
 
         // Seed in order (services first as other seeders may depend on them)
         $this->call([
-            ServiceSeeder::class,
-            BlogCategorySeeder::class,
-            StatisticSeeder::class,
-            ContactInformationSeeder::class,
-            FAQSeeder::class,
-            TestimonialSeeder::class,
-            BlogPostSeeder::class,
-            CaseStudySeeder::class,
             RolesAndPermissionsSeeder::class,
+            FAQSeeder::class,
         ]);
     }
 }
