@@ -53,26 +53,15 @@
         </div>
 
         <DataTable :columns="columns" :data="roles.data" :actions="actions" :pagination="roles" />
-
-        <ConfirmDialog
-            v-model:open="confirmOpen"
-            title="Delete role?"
-            description="This action cannot be undone."
-            confirm-text="Delete"
-            confirm-variant="destructive"
-            :loading="deleting"
-            loading-text="Deleting..."
-            @confirm="confirmDelete"
-        />
     </AppLayout>
 </template>
 
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
-import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import { toast } from '@/composables/useToast';
 import { usePermissions } from '@/composables/usePermissions';
+import { useConfirm } from '@/composables/useConfirm';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -93,9 +82,7 @@ const canDelete = computed(() => can('roles.delete'));
 const search = ref(props.filters?.search || '');
 const hasUsers = ref(props.filters?.has_users || '');
 
-const confirmOpen = ref(false);
-const pendingDeleteId = ref<number | null>(null);
-const deleting = ref(false);
+const { confirm } = useConfirm();
 
 const columns = computed(() => [
     { key: 'name', label: t('roles.columns.name') },
@@ -146,8 +133,7 @@ const actions = computed(() => {
             icon: 'trash',
             variant: 'destructive',
             onClick: (row: any) => {
-                pendingDeleteId.value = row.id;
-                confirmOpen.value = true;
+                confirmDelete(row.id);
             },
         });
     }
@@ -155,17 +141,18 @@ const actions = computed(() => {
     return base;
 });
 
-const confirmDelete = () => {
-    if (!pendingDeleteId.value) return;
-    deleting.value = true;
-    router.delete(`/admin/roles/${pendingDeleteId.value}`, {
+const confirmDelete = async (id: number) => {
+    const ok = await confirm({
+        title: t('roles.delete.title'),
+        description: t('roles.delete.description'),
+        confirmText: t('roles.delete.confirm'),
+        confirmVariant: 'destructive',
+    });
+    if (!ok) return;
+
+    router.delete(`/admin/roles/${id}`, {
         onSuccess: () => toast({ variant: 'success', message: 'Role deleted.' }),
         onError: () => toast({ variant: 'error', message: 'Failed to delete role.' }),
-        onFinish: () => {
-            pendingDeleteId.value = null;
-            confirmOpen.value = false;
-            deleting.value = false;
-        },
     });
 };
 </script>

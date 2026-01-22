@@ -19,5 +19,5 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
 
     Route::resource('roles', RoleController::class)->except(['show']);
 
-    Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+    Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 });

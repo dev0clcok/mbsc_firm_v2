@@ -31,6 +31,11 @@
     "users": {
         "title": "Users",
         "create_user": "Create User",
+        "delete": {
+            "title": "Delete user?",
+            "description": "This will permanently delete the user. This action cannot be undone.",
+            "confirm": "Delete"
+        },
         "filters": {
             "role": "Role",
             "verified": "Verified"
@@ -50,6 +55,11 @@
     "roles": {
         "title": "Roles",
         "create_role": "Create Role",
+        "delete": {
+            "title": "Delete role?",
+            "description": "This action cannot be undone.",
+            "confirm": "Delete"
+        },
         "filters": {
             "users": "Users",
             "with_users": "With users",

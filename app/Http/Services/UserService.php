@@ -32,9 +32,11 @@ class UserService
         $verified = (string) $request->query('verified', '');
 
         $dateFormat = (string) config('app.settings.date_format', 'Y-m-d');
+        $superAdminEmail = (string) config('admin.super_admin_email');
 
         return User::query()
-            ->where('email', '!=', config('admin.super_admin_email'))
+            ->when($superAdminEmail === '', fn (Builder $q) => $q->whereKeyNot(1))
+            ->when($superAdminEmail !== '', fn (Builder $q) => $q->where('email', '!=', $superAdminEmail))
             ->when($search !== '', function (Builder $q) use ($search) {
                 $q->where(function (Builder $q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -70,6 +72,7 @@ class UserService
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
+                'email_verified_at' => now()
             ]);
 
             $user->roles()->sync($data['roles'] ?? []);
@@ -96,6 +99,24 @@ class UserService
             DB::commit();
 
             return $user;
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function destroy(User $user): void
+    {
+        try {
+            DB::beginTransaction();
+
+            // Safety: detach relations explicitly (pivots also have cascadeOnDelete)
+            $user->roles()->detach();
+            $user->permissions()->detach();
+
+            $user->delete();
+
+            DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;

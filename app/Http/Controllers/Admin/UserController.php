@@ -24,6 +24,7 @@ class UserController extends Controller implements HasMiddleware
             new Middleware('permission:users.list', only: ['index']),
             new Middleware('permission:users.create', only: ['create', 'store']),
             new Middleware('permission:users.update', only: ['edit', 'update']),
+            new Middleware('permission:users.delete', only: ['destroy']),
         ];
     }
 
@@ -91,6 +92,35 @@ class UserController extends Controller implements HasMiddleware
             return back()
                 ->withInput()
                 ->with('error', 'Failed to update user. Please try again.');
+        }
+    }
+
+    public function destroy(Request $request, User $user, UserService $userService): RedirectResponse
+    {
+        if ((int) $request->user()?->id === (int) $user->id) {
+            return redirect()
+                ->route('admin.users.index')
+                ->with('error', 'You cannot delete your own account.');
+        }
+
+        if ($user->isSuperAdmin()) {
+            return redirect()
+                ->route('admin.users.index')
+                ->with('error', 'You cannot delete the super admin user.');
+        }
+
+        try {
+            $userService->destroy($user);
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'User deleted successfully.');
+        } catch (Throwable $e) {
+            report($e);
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('error', 'Failed to delete user. Please try again.');
         }
     }
 }

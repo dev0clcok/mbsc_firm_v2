@@ -75,6 +75,8 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import { usePermissions } from '@/composables/usePermissions';
+import { useConfirm } from '@/composables/useConfirm';
+import { toast } from '@/composables/useToast';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -90,6 +92,9 @@ const { t } = useI18n();
 const { can } = usePermissions();
 const canEdit = computed(() => can('users.update'));
 const canCreate = computed(() => can('users.create'));
+const canDelete = computed(() => can('users.delete'));
+
+const { confirm } = useConfirm();
 
 const search = ref(props.filters?.search || '');
 const roleId = ref(props.filters?.role_id ? String(props.filters.role_id) : '');
@@ -129,15 +134,43 @@ const resetFilters = () => {
 };
 
 const actions = computed(() => {
-    if (!canEdit.value) return [];
-    return [
-        {
+    const a: any[] = [];
+
+    if (canEdit.value) {
+        a.push({
             type: 'button',
             label: t('common.edit'),
             icon: 'pencil',
             onClick: (row: any) => router.visit(`/admin/users/${row.id}/edit`),
-        },
-    ];
+        });
+    }
+
+    if (canDelete.value) {
+        a.push({
+            type: 'button',
+            label: t('common.delete'),
+            icon: 'trash',
+            variant: 'destructive',
+            onClick: async (row: any) => {
+                const ok = await confirm({
+                    title: t('users.delete.title'),
+                    description: t('users.delete.description'),
+                    details: row.email ? `${row.name} <${row.email}>` : row.name,
+                    confirmText: t('users.delete.confirm'),
+                    confirmVariant: 'destructive',
+                });
+                if (!ok) return;
+
+                router.delete(`/admin/users/${row.id}`, {
+                    preserveScroll: true,
+                    onSuccess: () => toast({ variant: 'success', message: 'User deleted.' }),
+                    onError: () => toast({ variant: 'error', message: 'Failed to delete user.' }),
+                });
+            },
+        });
+    }
+
+    return a;
 });
 </script>
 

@@ -5,6 +5,7 @@ import { usePage } from '@inertiajs/vue3';
 import { watch } from 'vue';
 import ToastContainer from '@/components/admin/ToastContainer.vue';
 import { toast } from '@/composables/useToast';
+import ConfirmDialogHost from '@/components/admin/ConfirmDialogHost.vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
@@ -36,5 +37,6 @@ watch(
             <slot />
         </div>
         <ToastContainer />
+        <ConfirmDialogHost />
     </AppLayout>
 </template>

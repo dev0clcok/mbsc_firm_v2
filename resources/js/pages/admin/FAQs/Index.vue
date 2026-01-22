@@ -2,17 +2,6 @@
     <AppLayout>
 
         <Head :title="t('faqs.title')" />
-        <ConfirmDialog
-            v-model:open="confirmOpen"
-            :title="t('faqs.delete.title')"
-            :description="t('faqs.delete.description')"
-            :details="confirmDetails"
-            :confirm-text="t('faqs.delete.confirm')"
-            confirm-variant="destructive"
-            :loading="deleting"
-            :loading-text="t('faqs.delete.loading')"
-            @confirm="confirmDelete"
-        />
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold">{{ t('faqs.title') }}</h1>
             <Link
@@ -117,8 +106,8 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
-import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import { usePermissions } from '@/composables/usePermissions';
+import { useConfirm } from '@/composables/useConfirm';
 import { useI18n } from 'vue-i18n';
 import {
     index as faqsIndex,
@@ -154,6 +143,7 @@ interface Props {
 const props = defineProps<Props>();
 const { can } = usePermissions();
 const { t } = useI18n();
+const { confirm } = useConfirm();
 
 const search = ref(props.filters?.search || '');
 const selectedStatus = ref(props.filters?.status || '');
@@ -184,7 +174,7 @@ const actions = computed(() => {
             label: t('common.delete'),
             icon: 'trash2',
             variant: 'destructive' as const,
-            onClick: (row: any) => openDeleteDialog(row),
+            onClick: (row: any) => confirmDelete({ id: row.id, question: row.question }),
         });
     }
     return a;
@@ -197,28 +187,17 @@ const pagination = computed(() => ({
     total: props.faqs.total,
 }));
 
-const confirmOpen = ref(false);
-const deleting = ref(false);
-const pendingDelete = ref<{ id: number; question: string } | null>(null);
-const confirmDetails = computed(() => pendingDelete.value?.question || '');
-
-const openDeleteDialog = (row: any) => {
-    pendingDelete.value = { id: row.id, question: row.question };
-    confirmOpen.value = true;
-};
-
-const confirmDelete = () => {
-    if (!pendingDelete.value) return;
-
-    deleting.value = true;
-    router.delete(faqsDestroy({ faq: pendingDelete.value.id }).url, {
-        preserveScroll: true,
-        onFinish: () => {
-            deleting.value = false;
-            confirmOpen.value = false;
-            pendingDelete.value = null;
-        },
+const confirmDelete = async (row: { id: number; question: string }) => {
+    const ok = await confirm({
+        title: t('faqs.delete.title'),
+        description: t('faqs.delete.description'),
+        details: row.question,
+        confirmText: t('faqs.delete.confirm'),
+        confirmVariant: 'destructive',
     });
+    if (!ok) return;
+
+    router.delete(faqsDestroy({ faq: row.id }).url, { preserveScroll: true });
 };
 
 const handleSearch = () => {

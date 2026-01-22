@@ -31,6 +31,11 @@
     "users": {
         "title": "ইউজার",
         "create_user": "ইউজার তৈরি করুন",
+        "delete": {
+            "title": "ইউজার মুছবেন?",
+            "description": "এটি স্থায়ীভাবে ইউজার মুছে ফেলবে। এই কাজটি আর ফিরিয়ে আনা যাবে না।",
+            "confirm": "মুছুন"
+        },
         "filters": {
             "role": "রোল",
             "verified": "ভেরিফাইড"
@@ -50,6 +55,11 @@
     "roles": {
         "title": "রোল",
         "create_role": "রোল তৈরি করুন",
+        "delete": {
+            "title": "রোল মুছবেন?",
+            "description": "এই কাজটি আর ফিরিয়ে আনা যাবে না।",
+            "confirm": "মুছুন"
+        },
         "filters": {
             "users": "ইউজার",
             "with_users": "ইউজার আছে",
