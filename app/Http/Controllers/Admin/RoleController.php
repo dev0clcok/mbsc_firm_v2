@@ -33,6 +33,10 @@ class RoleController extends Controller implements HasMiddleware
 
         return Inertia::render('admin/Roles/Index', [
             'roles' => $roles,
+            'filters' => [
+                'search' => (string) $request->query('search', ''),
+                'has_users' => (string) $request->query('has_users', ''),
+            ],
         ]);
     }
 

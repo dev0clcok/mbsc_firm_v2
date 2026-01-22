@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Models\Permission;
 use App\Models\Role;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +15,20 @@ class RoleService
 {
     public function index(Request $request): LengthAwarePaginator
     {
+        $search = (string) $request->query('search', '');
+        $hasUsers = (string) $request->query('has_users', '');
+
         return Role::query()
             ->withCount('users')
+            ->when($search !== '', function (Builder $q) use ($search) {
+                $q->where(function (Builder $q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when($hasUsers === '1', fn (Builder $q) => $q->having('users_count', '>', 0))
+            ->when($hasUsers === '0', fn (Builder $q) => $q->having('users_count', '=', 0))
             ->orderBy('id', 'desc')
             ->paginate(15)
             ->withQueryString();

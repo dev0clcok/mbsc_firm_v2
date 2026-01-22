@@ -33,6 +33,12 @@ class UserController extends Controller implements HasMiddleware
 
         return Inertia::render('admin/Users/Index', [
             'users' => $users,
+            'filters' => [
+                'search' => (string) $request->query('search', ''),
+                'role_id' => $request->query('role_id'),
+                'verified' => (string) $request->query('verified', ''),
+            ],
+            'roleOptions' => $userService->roleOptions(),
         ]);
     }
 

@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+
+    'settings' => [
+        'pagination' => [
+            'per_page' => env('APP_PAGINATION_PER_PAGE', 15),
+        ],
+        'date_format' => env('APP_DATE_FORMAT', 'Y-m-d'),
+        'time_format' => env('APP_TIME_FORMAT', 'H:i:s'),
+        'datetime_format' => env('APP_DATETIME_FORMAT', 'Y-m-d H:i:s'),
+        'currency' => env('APP_CURRENCY', 'USD'),
+        'currency_symbol' => env('APP_CURRENCY_SYMBOL', '$'),
+    ],
+
 ];
