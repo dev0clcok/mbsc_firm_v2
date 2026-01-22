@@ -14,8 +14,15 @@
         </div>
 
         <!-- Filters -->
-        <div class="rounded-lg border border-border bg-card p-4">
-            <div class="grid gap-4 md:grid-cols-4">
+        <AppFilters
+            v-model:search="search"
+            :search-label="t('common.search')"
+            :search-placeholder="t('common.search')"
+            :reset-text="t('common.reset_filters')"
+            @search="applySearch"
+            @reset="resetFilters"
+        >
+            <template #filters>
                 <div>
                     <label class="mb-2 block text-sm font-medium">{{ t('roles.filters.users') }}</label>
                     <select
@@ -28,29 +35,8 @@
                         <option value="0">{{ t('roles.filters.without_users') }}</option>
                     </select>
                 </div>
-
-                <div class="md:col-span-2">
-                    <label class="mb-2 block text-sm font-medium">{{ t('common.search') }}</label>
-                    <input
-                        v-model="search"
-                        type="text"
-                        :placeholder="t('common.search')"
-                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                        @input="applySearch"
-                    />
-                </div>
-
-                <div class="flex items-end">
-                    <button
-                        type="button"
-                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                        @click="resetFilters"
-                    >
-                        {{ t('common.reset_filters') }}
-                    </button>
-                </div>
-            </div>
-        </div>
+            </template>
+        </AppFilters>
 
         <DataTable :columns="columns" :data="roles.data" :actions="actions" :pagination="roles" />
     </AppLayout>
@@ -59,6 +45,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
+import AppFilters from '@/components/admin/AppFilters.vue';
 import { toast } from '@/composables/useToast';
 import { usePermissions } from '@/composables/usePermissions';
 import { useConfirm } from '@/composables/useConfirm';

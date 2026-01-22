@@ -13,35 +13,29 @@
         </div>
 
         <!-- Filters -->
-        <div class="rounded-lg border border-border bg-card p-4">
-            <div class="grid gap-4 md:grid-cols-4">
+        <AppFilters
+            v-model:search="search"
+            :search-label="t('common.search')"
+            :search-placeholder="t('faqs.filters.search_placeholder')"
+            :reset-text="t('common.reset_filters')"
+            @search="handleSearch"
+            @reset="resetFilters"
+        >
+            <template #filters>
                 <div>
                     <label class="mb-2 block text-sm font-medium">{{ t('faqs.filters.status') }}</label>
-                    <select v-model="selectedStatus"
+                    <select
+                        v-model="selectedStatus"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                        @change="handleFilter">
+                        @change="handleFilter"
+                    >
                         <option value="">{{ t('faqs.filters.all_status') }}</option>
                         <option value="1">{{ t('faqs.status.active') }}</option>
                         <option value="0">{{ t('faqs.status.inactive') }}</option>
                     </select>
-                </div>  
-
-                <div>
-                    <label class="mb-2 block text-sm font-medium">{{ t('common.search') }}</label>
-                    <input v-model="search" type="text" :placeholder="t('faqs.filters.search_placeholder')"
-                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                        @input="handleSearch" />
                 </div>
-
-                <div class="flex items-end">
-                    <button type="button"
-                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                        @click="resetFilters">
-                        {{ t('common.reset_filters') }}
-                    </button>
-                </div>
-            </div>
-        </div>
+            </template>
+        </AppFilters>
 
         <!-- DataTable -->
         <DataTable :columns="columns" :data="faqs.data" :actions="actions" :pagination="pagination">
@@ -106,6 +100,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
+import AppFilters from '@/components/admin/AppFilters.vue';
 import { usePermissions } from '@/composables/usePermissions';
 import { useConfirm } from '@/composables/useConfirm';
 import { useI18n } from 'vue-i18n';
