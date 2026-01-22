@@ -3,15 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Services\UserService;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class UserController extends Controller implements HasMiddleware
 {
@@ -24,12 +27,9 @@ class UserController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request, UserService $userService): Response
     {
-        $users = User::query()
-            ->orderBy('id', 'desc')
-            ->paginate(15)
-            ->withQueryString();
+        $users = $userService->index($request);
 
         return Inertia::render('admin/Users/Index', [
             'users' => $users,
@@ -43,27 +43,21 @@ class UserController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreUserRequest $request, UserService $userService): RedirectResponse
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'roles' => ['array'],
-            'roles.*' => ['integer', 'exists:roles,id'],
-        ]);
+        try {
+            $userService->store($request->validated());
 
-        $user = User::query()->create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'User created successfully.');
+        } catch (Throwable $e) {
+            report($e);
 
-        $user->roles()->sync($data['roles'] ?? []);
-
-        return redirect()
-            ->route('admin.users.index')
-            ->with('success', 'User created successfully.');
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to create user. Please try again.');
+        }
     }
 
     public function edit(User $user): Response
@@ -77,16 +71,20 @@ class UserController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(UpdateUserRequest $request, User $user, UserService $userService): RedirectResponse
     {
-        $data = $request->validate([
-            'roles' => ['array'],
-            'roles.*' => ['integer', 'exists:roles,id'],
-        ]);
+        try {
+            $userService->update($user, $request->validated());
 
-        $user->roles()->sync($data['roles'] ?? []);
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'User roles updated successfully.');
+        } catch (Throwable $e) {
+            report($e);
 
-        return redirect()->route('admin.users.index')->with('success', 'User roles updated successfully.');
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update user. Please try again.');
+        }
     }
 }
-

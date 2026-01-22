@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FAQController;
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -11,6 +12,8 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
     ->name('admin.')
     ->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
+
+    Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 
     Route::resource('faqs', FAQController::class)->except(['show']);
 

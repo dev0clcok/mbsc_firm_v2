@@ -15,7 +15,7 @@ import { dashboard } from '@/routes/admin';
 import { index as faqsIndex } from '@/routes/admin/faqs';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import {LayoutGrid, HelpCircle, Users, Shield} from 'lucide-vue-next';
+import { LayoutGrid, HelpCircle, Users, Shield, ScrollText } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
@@ -31,6 +31,10 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (canAny(['faqs.list', 'faqs.view', 'faqs.create', 'faqs.update', 'faqs.delete'])) {
         items.push({ title: 'FAQs', href: faqsIndex(), icon: HelpCircle });
+    }
+
+    if (canAny(['audit.list', 'audit.view'])) {
+        items.push({ title: 'Audit Logs', href: '/admin/audit-logs', icon: ScrollText });
     }
 
     return items;

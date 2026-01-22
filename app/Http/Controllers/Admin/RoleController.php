@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
+use App\Http\Requests\Admin\StoreRoleRequest;
+use App\Http\Requests\Admin\UpdateRoleRequest;
+use App\Http\Services\RoleService;
 use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +13,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Str;
+use Throwable;
 
 class RoleController extends Controller implements HasMiddleware
 {
@@ -25,13 +27,9 @@ class RoleController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request, RoleService $roleService): Response
     {
-        $roles = Role::query()
-            ->withCount('users')
-            ->orderBy('id', 'desc')
-            ->paginate(15)
-            ->withQueryString();
+        $roles = $roleService->index($request);
 
         return Inertia::render('admin/Roles/Index', [
             'roles' => $roles,
@@ -45,30 +43,21 @@ class RoleController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreRoleRequest $request, RoleService $roleService): RedirectResponse
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:roles,slug'],
-            'description' => ['nullable', 'string'],
-            'permissions' => ['array'],
-            'permissions.*' => ['string'],
-        ]);
+        try {
+            $roleService->store($request->validated());
 
-        $role = Role::create([
-            'name' => $data['name'],
-            'slug' => $data['slug'] ?: Str::slug($data['name']),
-            'description' => $data['description'] ?? null,
-        ]);
+            return redirect()
+                ->route('admin.roles.index')
+                ->with('success', 'Role created successfully.');
+        } catch (Throwable $e) {
+            report($e);
 
-        $permIds = Permission::query()
-            ->whereIn('slug', $data['permissions'] ?? [])
-            ->pluck('id')
-            ->all();
-
-        $role->permissions()->sync($permIds);
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role created successfully.');
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to create role. Please try again.');
+        }
     }
 
     public function edit(Role $role): Response
@@ -82,30 +71,21 @@ class RoleController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function update(Request $request, Role $role): RedirectResponse
+    public function update(UpdateRoleRequest $request, Role $role, RoleService $roleService): RedirectResponse
     {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', 'unique:roles,slug,'.$role->id],
-            'description' => ['nullable', 'string'],
-            'permissions' => ['array'],
-            'permissions.*' => ['string'],
-        ]);
+        try {
+            $roleService->update($role, $request->validated());
 
-        $role->update([
-            'name' => $data['name'],
-            'slug' => $data['slug'] ?: Str::slug($data['name']),
-            'description' => $data['description'] ?? null,
-        ]);
+            return redirect()
+                ->route('admin.roles.index')
+                ->with('success', 'Role updated successfully.');
+        } catch (Throwable $e) {
+            report($e);
 
-        $permIds = Permission::query()
-            ->whereIn('slug', $data['permissions'] ?? [])
-            ->pluck('id')
-            ->all();
-
-        $role->permissions()->sync($permIds);
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully.');
+            return back()
+                ->withInput()
+                ->with('error', 'Failed to update role. Please try again.');
+        }
     }
 
     public function destroy(Role $role): RedirectResponse
