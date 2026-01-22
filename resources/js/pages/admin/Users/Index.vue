@@ -1,16 +1,16 @@
 <template>
     <AppLayout>
-        <Head title="Users" />
+        <Head :title="t('users.title')" />
 
         <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">Users</h1>
+            <h1 class="text-3xl font-bold">{{ t('users.title') }}</h1>
 
             <Link
                 v-if="canCreate"
                 href="/admin/users/create"
                 class="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
-                Create User
+                {{ t('users.create_user') }}
             </Link>
         </div>
 
@@ -18,13 +18,13 @@
         <div class="rounded-lg border border-border bg-card p-4">
             <div class="grid gap-4 md:grid-cols-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Role</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('users.filters.role') }}</label>
                     <select
                         v-model="roleId"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @change="applyFilters"
                     >
-                        <option value="">All roles</option>
+                        <option value="">{{ t('common.all') }}</option>
                         <option v-for="r in roleOptions" :key="r.id" :value="String(r.id)">
                             {{ r.name }} ({{ r.slug }})
                         </option>
@@ -32,24 +32,24 @@
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Verified</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('users.filters.verified') }}</label>
                     <select
                         v-model="verified"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @change="applyFilters"
                     >
-                        <option value="">All</option>
-                        <option value="1">Verified</option>
-                        <option value="0">Unverified</option>
+                        <option value="">{{ t('users.verified.all') }}</option>
+                        <option value="1">{{ t('users.verified.verified') }}</option>
+                        <option value="0">{{ t('users.verified.unverified') }}</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Search</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('common.search') }}</label>
                     <input
                         v-model="search"
                         type="text"
-                        placeholder="Search name or email..."
+                        :placeholder="t('common.search')"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @input="applySearch"
                     />
@@ -61,7 +61,7 @@
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         @click="resetFilters"
                     >
-                        Reset filters
+                        {{ t('common.reset_filters') }}
                     </button>
                 </div>
             </div>
@@ -77,12 +77,15 @@ import DataTable from '@/components/admin/DataTable.vue';
 import { usePermissions } from '@/composables/usePermissions';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     users: any;
     filters: { search?: string; role_id?: string | number | null; verified?: string };
     roleOptions: Array<{ id: number; name: string; slug: string }>;
 }>();
+
+const { t } = useI18n();
 
 const { can } = usePermissions();
 const canEdit = computed(() => can('users.update'));
@@ -92,12 +95,12 @@ const search = ref(props.filters?.search || '');
 const roleId = ref(props.filters?.role_id ? String(props.filters.role_id) : '');
 const verified = ref(props.filters?.verified || '');
 
-const columns = [
-    { key: 'name', label: 'Name' },
-    { key: 'email', label: 'Email' },
-    { key: 'email_verified_at', label: 'Verified' },
-    { key: 'created_at', label: 'Created' },
-];
+const columns = computed(() => [
+    { key: 'name', label: t('users.columns.name') },
+    { key: 'email', label: t('users.columns.email') },
+    { key: 'email_verified_at', label: t('users.columns.verified') },
+    { key: 'created_at', label: t('users.columns.created') },
+]);
 
 let searchTimer: number | undefined;
 
@@ -130,7 +133,7 @@ const actions = computed(() => {
     return [
         {
             type: 'button',
-            label: 'Edit',
+            label: t('common.edit'),
             icon: 'pencil',
             onClick: (row: any) => router.visit(`/admin/users/${row.id}/edit`),
         },

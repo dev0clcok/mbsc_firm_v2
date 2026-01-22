@@ -1,12 +1,12 @@
 <template>
     <AppLayout>
-        <Head title="Audit Logs" />
+        <Head :title="t('audit.title')" />
 
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-3xl font-bold">Audit Logs</h1>
+                <h1 class="text-3xl font-bold">{{ t('audit.title') }}</h1>
                 <p class="mt-1 text-sm text-muted-foreground">
-                    Track user actions, request changes, and model events.
+                    {{ t('audit.subtitle') }}
                 </p>
             </div>
         </div>
@@ -15,13 +15,13 @@
         <div class="rounded-lg border border-border bg-card p-4">
             <div class="grid gap-4 md:grid-cols-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Event</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('audit.filters.event') }}</label>
                     <select
                         v-model="event"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @change="applyFilters"
                     >
-                        <option value="">All events</option>
+                        <option value="">{{ t('audit.filters.all_events') }}</option>
                         <option v-for="e in eventOptions" :key="e" :value="e">
                             {{ e }}
                         </option>
@@ -29,13 +29,13 @@
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Method</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('audit.filters.method') }}</label>
                     <select
                         v-model="method"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @change="applyFilters"
                     >
-                        <option value="">All methods</option>
+                        <option value="">{{ t('audit.filters.all_methods') }}</option>
                         <option value="GET">GET</option>
                         <option value="POST">POST</option>
                         <option value="PUT">PUT</option>
@@ -45,11 +45,11 @@
                 </div>
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Search</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('common.search') }}</label>
                     <input
                         v-model="search"
                         type="text"
-                        placeholder="User, route, event, IP, model..."
+                        :placeholder="t('common.search')"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @input="applySearch"
                     />
@@ -61,7 +61,7 @@
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         @click="reset"
                     >
-                        Reset filters
+                        {{ t('common.reset_filters') }}
                     </button>
                 </div>
             </div>
@@ -167,7 +167,8 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     auditLogs: any;
@@ -175,20 +176,22 @@ const props = defineProps<{
     eventOptions: string[];
 }>();
 
+const { t } = useI18n();
+
 const search = ref(props.filters?.search || '');
 const event = ref(props.filters?.event || '');
 const method = ref(props.filters?.method || '');
 
-const columns = [
-    { key: 'created_at', label: 'Time' },
-    { key: 'user', label: 'User' },
-    { key: 'event', label: 'Event' },
-    { key: 'method', label: 'Method', align: 'center' },
-    { key: 'route', label: 'Route / URL' },
-    { key: 'model', label: 'Model' },
-    { key: 'status_code', label: 'Status', align: 'center' },
-    { key: 'ip', label: 'IP', align: 'right' },
-];
+const columns = computed(() => [
+    { key: 'created_at', label: t('audit.columns.time') },
+    { key: 'user', label: t('audit.columns.user') },
+    { key: 'event', label: t('audit.columns.event') },
+    { key: 'method', label: t('audit.columns.method'), align: 'center' },
+    { key: 'route', label: t('audit.columns.route_url') },
+    { key: 'model', label: t('audit.columns.model') },
+    { key: 'status_code', label: t('audit.columns.status'), align: 'center' },
+    { key: 'ip', label: t('audit.columns.ip'), align: 'right' },
+]);
 
 let searchTimer: number | undefined;
 

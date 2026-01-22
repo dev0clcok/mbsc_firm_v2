@@ -1,0 +1,123 @@
+{
+    "app": {
+        "name": "RoleGuard"
+    },
+    "common": {
+        "search": "Search",
+        "reset_filters": "Reset filters",
+        "all": "All",
+        "back": "Back",
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "edit": "Edit",
+        "delete": "Delete",
+        "created": "Created"
+    },
+    "nav": {
+        "main": "Main",
+        "dashboard": "Dashboard",
+        "faqs": "FAQs",
+        "audit_logs": "Audit Logs",
+        "users_roles": "Users & Roles",
+        "users": "Users",
+        "roles": "Roles"
+    },
+    "language": {
+        "label": "Language",
+        "en": "English",
+        "bn": "বাংলা"
+    },
+    "users": {
+        "title": "Users",
+        "create_user": "Create User",
+        "filters": {
+            "role": "Role",
+            "verified": "Verified"
+        },
+        "verified": {
+            "all": "All",
+            "verified": "Verified",
+            "unverified": "Unverified"
+        },
+        "columns": {
+            "name": "Name",
+            "email": "Email",
+            "verified": "Verified",
+            "created": "Created"
+        }
+    },
+    "roles": {
+        "title": "Roles",
+        "create_role": "Create Role",
+        "filters": {
+            "users": "Users",
+            "with_users": "With users",
+            "without_users": "Without users"
+        },
+        "columns": {
+            "name": "Name",
+            "slug": "Slug",
+            "users": "Users"
+        }
+    },
+    "audit": {
+        "title": "Audit Logs",
+        "subtitle": "Track user actions, request changes, and model events.",
+        "filters": {
+            "event": "Event",
+            "method": "Method",
+            "all_events": "All events",
+            "all_methods": "All methods"
+        },
+        "columns": {
+            "time": "Time",
+            "user": "User",
+            "event": "Event",
+            "method": "Method",
+            "route_url": "Route / URL",
+            "model": "Model",
+            "status": "Status",
+            "ip": "IP"
+        }
+    },
+    "faqs": {
+        "title": "FAQs Management",
+        "add_new": "Add New FAQ",
+        "delete": {
+            "title": "Delete FAQ?",
+            "description": "This will permanently delete the FAQ. This action cannot be undone.",
+            "confirm": "Delete",
+            "loading": "Deleting..."
+        },
+        "filters": {
+            "status": "Status",
+            "all_status": "All Status",
+            "search_placeholder": "Search questions or answers..."
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "columns": {
+            "question": "Question",
+            "status": "Status",
+            "sort": "Sort"
+        },
+        "empty": {
+            "no_faqs": "No FAQs found.",
+            "create_first": "Create your first FAQ"
+        }
+    },
+    "datatable": {
+        "actions": "Actions",
+        "no_data_found": "No data found",
+        "try_adjusting": "Try adjusting your filters or create a new entry.",
+        "showing": "Showing",
+        "to": "to",
+        "of": "of",
+        "results": "results",
+        "total": "total"
+    }
+}
+

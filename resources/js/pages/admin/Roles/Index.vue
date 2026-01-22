@@ -1,15 +1,15 @@
 <template>
     <AppLayout>
-        <Head title="Roles" />
+        <Head :title="t('roles.title')" />
 
         <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">Roles</h1>
+            <h1 class="text-3xl font-bold">{{ t('roles.title') }}</h1>
             <Link
                 v-if="canCreate"
                 href="/admin/roles/create"
                 class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
             >
-                Create Role
+                {{ t('roles.create_role') }}
             </Link>
         </div>
 
@@ -17,24 +17,24 @@
         <div class="rounded-lg border border-border bg-card p-4">
             <div class="grid gap-4 md:grid-cols-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Users</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('roles.filters.users') }}</label>
                     <select
                         v-model="hasUsers"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @change="applyFilters"
                     >
-                        <option value="">All</option>
-                        <option value="1">With users</option>
-                        <option value="0">Without users</option>
+                        <option value="">{{ t('common.all') }}</option>
+                        <option value="1">{{ t('roles.filters.with_users') }}</option>
+                        <option value="0">{{ t('roles.filters.without_users') }}</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="mb-2 block text-sm font-medium">Search</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('common.search') }}</label>
                     <input
                         v-model="search"
                         type="text"
-                        placeholder="Search name, slug, description..."
+                        :placeholder="t('common.search')"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @input="applySearch"
                     />
@@ -46,7 +46,7 @@
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         @click="resetFilters"
                     >
-                        Reset filters
+                        {{ t('common.reset_filters') }}
                     </button>
                 </div>
             </div>
@@ -75,11 +75,14 @@ import { toast } from '@/composables/useToast';
 import { usePermissions } from '@/composables/usePermissions';
 import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     roles: any;
     filters: { search?: string; has_users?: string };
 }>();
+
+const { t } = useI18n();
 
 const { can } = usePermissions();
 
@@ -94,11 +97,11 @@ const confirmOpen = ref(false);
 const pendingDeleteId = ref<number | null>(null);
 const deleting = ref(false);
 
-const columns = [
-    { key: 'name', label: 'Name' },
-    { key: 'slug', label: 'Slug' },
-    { key: 'users_count', label: 'Users' },
-];
+const columns = computed(() => [
+    { key: 'name', label: t('roles.columns.name') },
+    { key: 'slug', label: t('roles.columns.slug') },
+    { key: 'users_count', label: t('roles.columns.users') },
+]);
 
 let searchTimer: number | undefined;
 
@@ -130,7 +133,7 @@ const actions = computed(() => {
     if (canEdit.value) {
         base.push({
             type: 'button',
-            label: 'Edit',
+            label: t('common.edit'),
             icon: 'pencil',
             onClick: (row: any) => router.visit(`/admin/roles/${row.id}/edit`),
         });
@@ -139,7 +142,7 @@ const actions = computed(() => {
     if (canDelete.value) {
         base.push({
             type: 'button',
-            label: 'Delete',
+            label: t('common.delete'),
             icon: 'trash',
             variant: 'destructive',
             onClick: (row: any) => {

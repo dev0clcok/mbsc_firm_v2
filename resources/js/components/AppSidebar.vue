@@ -19,22 +19,24 @@ import { LayoutGrid, HelpCircle, Users, Shield, ScrollText } from 'lucide-vue-ne
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 const page = usePage<any>();
+const { t } = useI18n();
 const permissions = computed<string[]>(() => page.props.auth?.permissions || []);
 const canAny = (slugs: string[]) => slugs.some((s) => permissions.value.includes(s));
 
 const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [
-        { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+        { title: t('nav.dashboard'), href: dashboard(), icon: LayoutGrid },
     ];
 
     if (canAny(['faqs.list', 'faqs.view', 'faqs.create', 'faqs.update', 'faqs.delete'])) {
-        items.push({ title: 'FAQs', href: faqsIndex(), icon: HelpCircle });
+        items.push({ title: t('nav.faqs'), href: faqsIndex(), icon: HelpCircle });
     }
 
     if (canAny(['audit.list', 'audit.view'])) {
-        items.push({ title: 'Audit Logs', href: '/admin/audit-logs', icon: ScrollText });
+        items.push({ title: t('nav.audit_logs'), href: '/admin/audit-logs', icon: ScrollText });
     }
 
     return items;
@@ -46,11 +48,11 @@ const userRoleNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [];
 
     if (canAny(['users.list', 'users.update', 'users.view'])) {
-        items.push({ title: 'Users', href: '/admin/users', icon: Users });
+        items.push({ title: t('nav.users'), href: '/admin/users', icon: Users });
     }
 
     if (canAny(['roles.list', 'roles.create', 'roles.update', 'roles.delete'])) {
-        items.push({ title: 'Roles', href: '/admin/roles', icon: Shield });
+        items.push({ title: t('nav.roles'), href: '/admin/roles', icon: Shield });
     }
 
     return items;
@@ -85,8 +87,8 @@ const userRoleNavItems = computed<NavItem[]>(() => {
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain label="Main" :items="mainNavItems" />
-            <NavMain v-if="userRoleNavItems.length" label="Users & Roles" :items="userRoleNavItems" />
+            <NavMain :label="t('nav.main')" :items="mainNavItems" />
+            <NavMain v-if="userRoleNavItems.length" :label="t('nav.users_roles')" :items="userRoleNavItems" />
         </SidebarContent>
 
         <SidebarFooter>

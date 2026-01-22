@@ -1,0 +1,123 @@
+{
+    "app": {
+        "name": "RoleGuard"
+    },
+    "common": {
+        "search": "অনুসন্ধান",
+        "reset_filters": "ফিল্টার রিসেট",
+        "all": "সব",
+        "back": "ফিরে যান",
+        "cancel": "বাতিল",
+        "save": "সংরক্ষণ",
+        "create": "তৈরি করুন",
+        "edit": "সম্পাদনা",
+        "delete": "মুছুন",
+        "created": "তৈরি হয়েছে"
+    },
+    "nav": {
+        "main": "মেনু",
+        "dashboard": "ড্যাশবোর্ড",
+        "faqs": "এফএকিউ",
+        "audit_logs": "অডিট লগ",
+        "users_roles": "ইউজার ও রোল",
+        "users": "ইউজার",
+        "roles": "রোল"
+    },
+    "language": {
+        "label": "ভাষা",
+        "en": "English",
+        "bn": "বাংলা"
+    },
+    "users": {
+        "title": "ইউজার",
+        "create_user": "ইউজার তৈরি করুন",
+        "filters": {
+            "role": "রোল",
+            "verified": "ভেরিফাইড"
+        },
+        "verified": {
+            "all": "সব",
+            "verified": "ভেরিফাইড",
+            "unverified": "আনভেরিফাইড"
+        },
+        "columns": {
+            "name": "নাম",
+            "email": "ইমেইল",
+            "verified": "ভেরিফাইড",
+            "created": "তৈরি হয়েছে"
+        }
+    },
+    "roles": {
+        "title": "রোল",
+        "create_role": "রোল তৈরি করুন",
+        "filters": {
+            "users": "ইউজার",
+            "with_users": "ইউজার আছে",
+            "without_users": "ইউজার নেই"
+        },
+        "columns": {
+            "name": "নাম",
+            "slug": "স্লাগ",
+            "users": "ইউজার"
+        }
+    },
+    "audit": {
+        "title": "অডিট লগ",
+        "subtitle": "ইউজারের অ্যাকশন, রিকোয়েস্ট পরিবর্তন এবং মডেল ইভেন্ট ট্র্যাক করুন।",
+        "filters": {
+            "event": "ইভেন্ট",
+            "method": "মেথড",
+            "all_events": "সব ইভেন্ট",
+            "all_methods": "সব মেথড"
+        },
+        "columns": {
+            "time": "সময়",
+            "user": "ইউজার",
+            "event": "ইভেন্ট",
+            "method": "মেথড",
+            "route_url": "রুট / ইউআরএল",
+            "model": "মডেল",
+            "status": "স্ট্যাটাস",
+            "ip": "আইপি"
+        }
+    },
+    "faqs": {
+        "title": "এফএকিউ ম্যানেজমেন্ট",
+        "add_new": "নতুন এফএকিউ যোগ করুন",
+        "delete": {
+            "title": "এফএকিউ মুছবেন?",
+            "description": "এটি স্থায়ীভাবে এফএকিউ মুছে ফেলবে। এই কাজটি আর ফিরিয়ে আনা যাবে না।",
+            "confirm": "মুছুন",
+            "loading": "মুছছে..."
+        },
+        "filters": {
+            "status": "স্ট্যাটাস",
+            "all_status": "সব স্ট্যাটাস",
+            "search_placeholder": "প্রশ্ন বা উত্তর অনুসন্ধান করুন..."
+        },
+        "status": {
+            "active": "অ্যাক্টিভ",
+            "inactive": "ইনঅ্যাক্টিভ"
+        },
+        "columns": {
+            "question": "প্রশ্ন",
+            "status": "স্ট্যাটাস",
+            "sort": "সোর্ট"
+        },
+        "empty": {
+            "no_faqs": "কোনো এফএকিউ পাওয়া যায়নি।",
+            "create_first": "আপনার প্রথম এফএকিউ তৈরি করুন"
+        }
+    },
+    "datatable": {
+        "actions": "অ্যাকশন",
+        "no_data_found": "কোনো ডেটা পাওয়া যায়নি",
+        "try_adjusting": "ফিল্টার পরিবর্তন করে দেখুন অথবা নতুন এন্ট্রি তৈরি করুন।",
+        "showing": "দেখাচ্ছে",
+        "to": "থেকে",
+        "of": "মোট",
+        "results": "ফলাফল",
+        "total": "মোট"
+    }
+}
+

@@ -22,7 +22,7 @@
                             v-if="actions && actions.length > 0"
                             class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                         >
-                            Actions
+                            {{ t('datatable.actions') }}
                         </th>
                     </tr>
                 </thead>
@@ -122,8 +122,8 @@
                                             />
                                         </svg>
                                     </div>
-                                    <p class="text-sm font-medium">No data found</p>
-                                    <p class="mt-1 text-xs">Try adjusting your filters or create a new entry.</p>
+                                    <p class="text-sm font-medium">{{ t('datatable.no_data_found') }}</p>
+                                    <p class="mt-1 text-xs">{{ t('datatable.try_adjusting') }}</p>
                                 </div>
                             </slot>
                         </td>
@@ -140,17 +140,17 @@
             <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <div class="text-sm text-muted-foreground">
                     <span v-if="pagination.from && pagination.to" class="font-medium">
-                        Showing
+                        {{ t('datatable.showing') }}
                         <span class="font-semibold text-foreground">{{ pagination.from }}</span>
-                        to
+                        {{ t('datatable.to') }}
                         <span class="font-semibold text-foreground">{{ pagination.to }}</span>
-                        of
+                        {{ t('datatable.of') }}
                         <span class="font-semibold text-foreground">{{ pagination.total }}</span>
-                        results
+                        {{ t('datatable.results') }}
                     </span>
                     <span v-else class="font-medium">
                         <span class="font-semibold text-foreground">{{ pagination.total }}</span>
-                        total
+                        {{ t('datatable.total') }}
                     </span>
                 </div>
                 <nav class="flex items-center gap-1" aria-label="Pagination">
@@ -177,6 +177,7 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import Icon from '@/components/Icon.vue';
+import { useI18n } from 'vue-i18n';
 
 interface Column {
     key: string;
@@ -217,6 +218,8 @@ const props = withDefaults(defineProps<Props>(), {
     actions: () => [],
     rowKey: 'id',
 });
+
+const { t } = useI18n();
 
 const getRowKey = (row: any, index: number) => {
     if (typeof props.rowKey === 'function') {

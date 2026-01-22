@@ -1,25 +1,25 @@
 <template>
     <AppLayout>
 
-        <Head title="FAQs Management" />
+        <Head :title="t('faqs.title')" />
         <ConfirmDialog
             v-model:open="confirmOpen"
-            title="Delete FAQ?"
-            description="This will permanently delete the FAQ. This action cannot be undone."
+            :title="t('faqs.delete.title')"
+            :description="t('faqs.delete.description')"
             :details="confirmDetails"
-            confirm-text="Delete"
+            :confirm-text="t('faqs.delete.confirm')"
             confirm-variant="destructive"
             :loading="deleting"
-            loading-text="Deleting..."
+            :loading-text="t('faqs.delete.loading')"
             @confirm="confirmDelete"
         />
         <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">FAQs Management</h1>
+            <h1 class="text-3xl font-bold">{{ t('faqs.title') }}</h1>
             <Link
                 v-if="canCreate"
                 :href="faqsCreate().url"
                 class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
-                Add New FAQ
+                {{ t('faqs.add_new') }}
             </Link>
         </div>
 
@@ -27,19 +27,19 @@
         <div class="rounded-lg border border-border bg-card p-4">
             <div class="grid gap-4 md:grid-cols-4">
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Status</label>
+                    <label class="mb-2 block text-sm font-medium">{{ t('faqs.filters.status') }}</label>
                     <select v-model="selectedStatus"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @change="handleFilter">
-                        <option value="">All Status</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
+                        <option value="">{{ t('faqs.filters.all_status') }}</option>
+                        <option value="1">{{ t('faqs.status.active') }}</option>
+                        <option value="0">{{ t('faqs.status.inactive') }}</option>
                     </select>
                 </div>  
 
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Search</label>
-                    <input v-model="search" type="text" placeholder="Search questions or answers..."
+                    <label class="mb-2 block text-sm font-medium">{{ t('common.search') }}</label>
+                    <input v-model="search" type="text" :placeholder="t('faqs.filters.search_placeholder')"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                         @input="handleSearch" />
                 </div>
@@ -48,7 +48,7 @@
                     <button type="button"
                         class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
                         @click="resetFilters">
-                        Reset filters
+                        {{ t('common.reset_filters') }}
                     </button>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                         'h-2 w-2 rounded-full',
                         value ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400',
                     ]" />
-                    {{ value ? 'Active' : 'Inactive' }}
+                    {{ value ? t('faqs.status.active') : t('faqs.status.inactive') }}
                 </span>
             </template>
 
@@ -98,13 +98,13 @@
 
             <template #empty>
                 <div class="text-muted-foreground">
-                    <p class="text-sm">No FAQs found.</p>
+                    <p class="text-sm">{{ t('faqs.empty.no_faqs') }}</p>
                     <Link
                         v-if="canCreate"
                         :href="faqsCreate().url"
                         class="mt-2 inline-block text-sm text-primary hover:underline"
                     >
-                        Create your first FAQ
+                        {{ t('faqs.empty.create_first') }}
                     </Link>
                 </div>
             </template>
@@ -119,6 +119,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import ConfirmDialog from '@/components/admin/ConfirmDialog.vue';
 import { usePermissions } from '@/composables/usePermissions';
+import { useI18n } from 'vue-i18n';
 import {
     index as faqsIndex,
     destroy as faqsDestroy,
@@ -152,6 +153,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const { can } = usePermissions();
+const { t } = useI18n();
 
 const search = ref(props.filters?.search || '');
 const selectedStatus = ref(props.filters?.status || '');
@@ -160,18 +162,18 @@ const canCreate = computed(() => can('faqs.create'));
 const canEdit = computed(() => can('faqs.update'));
 const canDelete = computed(() => can('faqs.delete'));
 
-const columns = [
-    { key: 'question', label: 'Question' },
-    { key: 'is_active', label: 'Status', align: 'center' as const },
-    { key: 'sort_order', label: 'Sort', align: 'center' as const },
-];
+const columns = computed(() => [
+    { key: 'question', label: t('faqs.columns.question') },
+    { key: 'is_active', label: t('faqs.columns.status'), align: 'center' as const },
+    { key: 'sort_order', label: t('faqs.columns.sort'), align: 'center' as const },
+]);
 
 const actions = computed(() => {
     const a: any[] = [];
     if (canEdit.value) {
         a.push({
             type: 'link' as const,
-            label: 'Edit',
+            label: t('common.edit'),
             icon: 'pencil',
             href: (row: any) => faqsEdit({ faq: row.id }),
         });
@@ -179,7 +181,7 @@ const actions = computed(() => {
     if (canDelete.value) {
         a.push({
             type: 'button' as const,
-            label: 'Delete',
+            label: t('common.delete'),
             icon: 'trash2',
             variant: 'destructive' as const,
             onClick: (row: any) => openDeleteDialog(row),
