@@ -42,7 +42,7 @@ class FAQController extends Controller implements HasMiddleware
 
         $faqs = $query->orderBy('sort_order')
             ->orderBy('id')
-            ->paginate(15)
+            ->paginate(config('app.settings.pagination.per_page'))
             ->withQueryString();
 
         return Inertia::render('admin/FAQs/Index', [

@@ -104,8 +104,8 @@
                         <Button as-child variant="secondary">
                             <Link :href="rolesIndex().url">Cancel</Link>
                         </Button>
-                        <Button type="submit" :disabled="form.processing">
-                            {{ form.processing ? 'Creating...' : 'Create Role' }}
+                        <Button type="submit" :loading="form.processing">
+                            Create Role
                         </Button>
                     </div>
                 </div>

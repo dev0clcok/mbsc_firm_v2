@@ -11,7 +11,9 @@ class StoreUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return (bool) $this->user()?->can('users.create');
+        $user = $this->user();
+
+        return (bool) ($user?->isSuperAdmin() || $user?->can('users.create'));
     }
 
     /**

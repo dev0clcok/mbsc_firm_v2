@@ -30,7 +30,7 @@ class RoleService
             ->when($hasUsers === '1', fn (Builder $q) => $q->having('users_count', '>', 0))
             ->when($hasUsers === '0', fn (Builder $q) => $q->having('users_count', '=', 0))
             ->orderBy('id', 'desc')
-            ->paginate(15)
+            ->paginate(config('app.settings.pagination.per_page'))
             ->withQueryString();
     }
 

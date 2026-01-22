@@ -49,12 +49,12 @@ class UserService
             ->when($verified === '1', fn (Builder $q) => $q->whereNotNull('email_verified_at'))
             ->when($verified === '0', fn (Builder $q) => $q->whereNull('email_verified_at'))
             ->orderBy('id', 'desc')
-            ->paginate(15)
+            ->paginate(config('app.settings.pagination.per_page'))
             ->through(fn (User $u) => [
                 'id' => $u->id,
                 'name' => $u->name,
                 'email' => $u->email,
-                'email_verified_at' => $u->email_verified_at,
+                'email_verified_at' => $u->email_verified_at?->format($dateFormat),
                 'created_at' => $u->created_at?->format($dateFormat),
             ])
             ->withQueryString();

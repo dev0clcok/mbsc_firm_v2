@@ -2,7 +2,6 @@
 import TextLink from '@/components/TextLink.vue';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { logout } from '@/routes';
 import { send } from '@/routes/verification';
@@ -37,8 +36,7 @@ defineProps<{
             class="space-y-6 text-center"
             v-slot="{ processing }"
         >
-            <Button :disabled="processing" variant="secondary">
-                <Spinner v-if="processing" />
+            <Button :loading="processing" variant="secondary">
                 Resend verification email
             </Button>
 

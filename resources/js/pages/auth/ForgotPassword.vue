@@ -5,7 +5,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
@@ -51,10 +50,9 @@ defineProps<{
                 <div class="flex items-center justify-start">
                     <Button
                         class="w-full"
-                        :disabled="processing"
+                        :loading="processing"
                         data-test="email-password-reset-link-button"
                     >
-                        <Spinner v-if="processing" />
                         Email password reset link
                     </Button>
                 </div>

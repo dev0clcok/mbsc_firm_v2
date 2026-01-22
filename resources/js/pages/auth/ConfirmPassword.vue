@@ -3,7 +3,6 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/password/confirm';
 import { Form, Head } from '@inertiajs/vue3';
@@ -41,10 +40,9 @@ import { Form, Head } from '@inertiajs/vue3';
                 <div class="flex items-center">
                     <Button
                         class="w-full"
-                        :disabled="processing"
+                        :loading="processing"
                         data-test="confirm-password-button"
                     >
-                        <Spinner v-if="processing" />
                         Confirm Password
                     </Button>
                 </div>

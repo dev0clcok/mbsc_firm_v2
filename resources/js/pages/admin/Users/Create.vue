@@ -136,8 +136,8 @@
                         <Button as-child variant="secondary">
                             <Link href="/admin/users">Cancel</Link>
                         </Button>
-                        <Button type="submit" :disabled="form.processing">
-                            {{ form.processing ? 'Creating...' : 'Create User' }}
+                        <Button type="submit" :loading="form.processing">
+                            Create User
                         </Button>
                     </div>
                 </div>

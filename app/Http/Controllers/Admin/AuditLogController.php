@@ -46,7 +46,7 @@ class AuditLogController extends Controller implements HasMiddleware
                 });
             })
             ->orderByDesc('id')
-            ->paginate(20)
+            ->paginate(config('app.settings.pagination.per_page'))
             ->withQueryString();
 
         return Inertia::render('admin/AuditLogs/Index', [

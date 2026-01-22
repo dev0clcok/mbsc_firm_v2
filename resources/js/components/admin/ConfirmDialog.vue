@@ -21,11 +21,10 @@
 
                 <Button
                     :variant="confirmVariant"
-                    :disabled="loading"
+                    :loading="loading"
                     @click="emit('confirm')"
                 >
-                    <span v-if="loading">{{ loadingText }}</span>
-                    <span v-else>{{ confirmText }}</span>
+                    {{ loading ? loadingText : confirmText }}
                 </Button>
             </DialogFooter>
         </DialogContent>

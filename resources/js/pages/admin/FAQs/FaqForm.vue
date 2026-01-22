@@ -65,19 +65,17 @@
             </div>
 
             <div class="flex items-center justify-end gap-4">
-                <Link :href="faqsIndex().url"
-                    class="rounded-md border border-border bg-background px-4 py-2 hover:bg-muted">
-                    Cancel
-                </Link>
-                <button type="submit" :disabled="processing"
-                    class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
+                <Button as-child variant="secondary">
+                    <Link :href="faqsIndex().url">Cancel</Link>
+                </Button>
+                <Button type="submit" :loading="processing">
                     <span v-if="mode === 'edit'">
-                        {{ processing ? 'Updating...' : 'Update FAQ' }}
+                        Update FAQ
                     </span>
                     <span v-else>
-                        {{ processing ? 'Creating...' : 'Create FAQ' }}
+                        Create FAQ
                     </span>
-                </button>
+                </Button>
             </div>
         </form>
     </div>
@@ -88,6 +86,7 @@ import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import RichTextEditor from '@/components/admin/RichTextEditor.vue';
 import { index as faqsIndex } from '@/routes/admin/faqs';
+import { Button } from '@/components/ui/button';
 
 const props = defineProps<{
     mode: 'create' | 'edit';
