@@ -248,7 +248,7 @@ const blogPosts = [
                                 Comprehensive VAT, Tax, and Business Registration services in Bangladesh. We help businesses navigate complex regulations with ease and confidence.
                             </p>
                             <div class="mt-8 flex flex-wrap items-center gap-4">
-                                <a href="#contact" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-7 py-4 text-base font-semibold text-white shadow-lg shadow-rose-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-rose-500/40">
+                                <a href="#contact" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-7 py-4 text-base font-semibold text-white shadow-lg shadow-gray-900/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-rose-500/40">
                                     Free Consultation
                                     <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
@@ -327,50 +327,7 @@ const blogPosts = [
                 </div>
             </section>
 
-            <!-- Trusted Partners Banner -->
-            <section class="relative overflow-hidden py-10">
-                <!-- <div class="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&q=80" alt="" class="h-full w-full object-cover" />
-                </div> -->
-                <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="text-center">
-                        <p class="mb-6 text-sm font-medium uppercase tracking-wider text-rose-400">Licensed With</p>
-                        <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-16">
-                            <div class="flex flex-col items-center gap-2">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/64px-Flag_of_Bangladesh.svg.png" alt="NBR" class="h-10 w-auto" />
-                                </div>
-                                <span class="text-sm font-medium text-slate-900">NBR</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-2">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
-                                    <div class="text-2xl font-bold text-rose-400">RJSC</div>
-                                </div>
-                                <span class="text-sm font-medium text-slate-900">RJSC</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-2">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
-                                    <div class="text-2xl font-bold text-rose-400">BIDA</div>
-                                </div>
-                                <span class="text-sm font-medium text-slate-900">BIDA</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-2">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
-                                    <svg class="h-10 w-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                                </div>
-                                <span class="text-sm font-medium text-slate-900">City Corp</span>
-                            </div>
-                            <div class="flex flex-col items-center gap-2">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
-                                    <svg class="h-10 w-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                                </div>
-                                <span class="text-sm font-medium text-slate-900">Licensed</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+      
             <!-- Services Section -->
             <section id="services" class="relative py-20 sm:py-24">
                 <!-- Background -->
@@ -438,6 +395,49 @@ const blogPosts = [
                                     Learn more
                                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                                 </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+      <!-- Trusted Partners Banner -->
+            <section class="relative overflow-hidden py-10 bg-red-50">
+                <!-- <div class="absolute inset-0 opacity-10">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&q=80" alt="" class="h-full w-full object-cover" />
+                </div> -->
+                <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="text-center">
+                        <p class="mb-6 text-sm font-medium uppercase tracking-wider text-rose-400">Licensed With</p>
+                        <div class="flex flex-wrap items-center justify-center gap-8 lg:gap-16">
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Flag_of_Bangladesh.svg/64px-Flag_of_Bangladesh.svg.png" alt="NBR" class="h-10 w-auto" />
+                                </div>
+                                <span class="text-sm font-medium text-slate-900">NBR</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
+                                    <div class="text-2xl font-bold text-rose-400">RJSC</div>
+                                </div>
+                                <span class="text-sm font-medium text-slate-900">RJSC</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
+                                    <div class="text-2xl font-bold text-rose-400">BIDA</div>
+                                </div>
+                                <span class="text-sm font-medium text-slate-900">BIDA</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
+                                    <svg class="h-10 w-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                </div>
+                                <span class="text-sm font-medium text-slate-900">City Corp</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 p-3 backdrop-blur-sm">
+                                    <svg class="h-10 w-10 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                                </div>
+                                <span class="text-sm font-medium text-slate-900">Licensed</span>
                             </div>
                         </div>
                     </div>
