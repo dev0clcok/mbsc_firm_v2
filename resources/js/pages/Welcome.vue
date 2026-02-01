@@ -116,12 +116,12 @@ const teamMembers = [
         name: 'Ms. Fatima',
         position: 'Senior Consultant',
         specialization: 'VAT & Customs',
-        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=300'
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400'
     },
     {
         name: 'Mr. Hossain', position: 'Legal Advisor',
         specialization: 'Business Registration',
-        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=300'
+        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400'
     },
 ];
 
@@ -746,7 +746,7 @@ const blogPosts = [
                 <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     <div v-for="(member, index) in teamMembers" :key="index"
                         class="group relative overflow-hidden rounded-2xl bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl">
-                        <div class="aspect-[4/3] overflow-hidden">
+                        <div class="aspect-[1/1] overflow-hidden">
                             <img :src="member.image"
                                 :alt="member.name"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" />
