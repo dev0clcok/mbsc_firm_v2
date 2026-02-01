@@ -16,9 +16,9 @@ const dashboard = () => '/dashboard';
 
 const navLinks = [
     { name: 'Home', href: '/', page: 'home' },
-    { name: 'Services', href: '/services', page: 'services' },
-    { name: 'About Us', href: '/about', page: 'about' },
-    { name: 'Contact', href: '/contact', page: 'contact' },
+    { name: 'Services', href: '#', page: 'services' },
+    { name: 'About Us', href: '#', page: 'about' },
+    { name: 'Contact', href: '#', page: 'contact' },
 ];
 // const navLinks = [
 //     { name: 'Home', href: '/', page: 'home' },
@@ -169,9 +169,9 @@ const navLinks = [
                         <h4 class="text-sm font-semibold uppercase tracking-wider text-white">Quick Links</h4>
                         <ul class="mt-6 space-y-3">
                             <li><Link href="/" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Home</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Services</Link></li>
-                            <li><Link href="/about" class="text-sm text-slate-400 transition-colors hover:text-rose-400">About Us</Link></li>
-                            <li><Link href="/contact" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Contact</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Services</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">About Us</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Contact</Link></li>
                         </ul>
                     </div>
                     
@@ -179,12 +179,12 @@ const navLinks = [
                     <div>
                         <h4 class="text-sm font-semibold uppercase tracking-wider text-white">Our Services</h4>
                         <ul class="mt-6 space-y-3">
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">RJSC Limited Company</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Partnership Firm</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Foundation / Trust / Society</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Income Tax Consultancy & Litigation</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">VAT Advisory & Compliance</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Audit Support & Assurance</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">RJSC Limited Company</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Partnership Firm</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Foundation / Trust / Society</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Income Tax Consultancy & Litigation</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">VAT Advisory & Compliance</Link></li>
+                            <li><Link href="#" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Audit Support & Assurance</Link></li>
                         </ul>
                     </div>
                     
