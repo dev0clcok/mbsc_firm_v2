@@ -20,6 +20,12 @@ const navLinks = [
     { name: 'About Us', href: '/about', page: 'about' },
     { name: 'Contact', href: '/contact', page: 'contact' },
 ];
+// const navLinks = [
+//     { name: 'Home', href: '/', page: 'home' },
+//     { name: 'Services', href: '/services', page: 'services' },
+//     { name: 'About Us', href: '/about', page: 'about' },
+//     { name: 'Contact', href: '/contact', page: 'contact' },
+// ];
 </script>
 
 <template>
@@ -28,15 +34,15 @@ const navLinks = [
         <div class="bg-gradient-to-r from-zinc-950 to-slate-900">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 lg:px-8">
                 <div class="flex items-center gap-6 text-sm text-slate-300">
-                    <a href="mailto:info@mbscfirm.com" class="flex items-center gap-2 transition-colors hover:text-rose-400">
+                    <a href="mailto:mbscfirm@gmail.com" class="flex items-center gap-2 transition-colors hover:text-rose-400">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        info@mbscfirm.com
+                        mbscfirm@gmail.com
                     </a>
                     <span class="hidden text-slate-600 sm:inline">|</span>
                     <span class="hidden sm:inline">Sun - Thu: 9:00 AM - 6:00 PM</span>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="#" class="text-slate-400 transition-colors hover:text-rose-400">
+                    <a href="https://www.facebook.com/profile.php?id=61578616047092" target="_blank" rel="noopener noreferrer" class="text-slate-400 transition-colors hover:text-rose-400">
                         <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                     </a>
                     <a href="#" class="text-slate-400 transition-colors hover:text-rose-400">
@@ -71,9 +77,9 @@ const navLinks = [
                 </nav>
 
                 <div class="flex items-center gap-3">
-                    <a href="tel:+8801234567890" class="hidden items-center gap-2 rounded-full bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition-colors hover:bg-rose-100 lg:flex">
+                    <a href="tel:+8801868196716" class="hidden items-center gap-2 rounded-full bg-rose-50 px-4 py-2 text-sm font-medium text-rose-700 transition-colors hover:bg-rose-100 lg:flex">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                        +880 1234-567890
+                        +88 01868-196716
                     </a>
                     <Link
                         v-if="$page.props.auth.user"
@@ -146,7 +152,7 @@ const navLinks = [
                             Your trusted partner for comprehensive legal and tax solutions in Bangladesh. Expert guidance for business growth.
                         </p>
                         <div class="mt-6 flex gap-4">
-                            <a href="#" class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-slate-400 transition-all hover:bg-rose-500 hover:text-white">
+                            <a href="https://www.facebook.com/profile.php?id=61578616047092" target="_blank" rel="noopener noreferrer" class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-slate-400 transition-all hover:bg-rose-500 hover:text-white">
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                             </a>
                             <a href="#" class="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 text-slate-400 transition-all hover:bg-rose-500 hover:text-white">
@@ -173,10 +179,12 @@ const navLinks = [
                     <div>
                         <h4 class="text-sm font-semibold uppercase tracking-wider text-white">Our Services</h4>
                         <ul class="mt-6 space-y-3">
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">VAT Registration</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Tax Consultancy</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Company Formation</Link></li>
-                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Trade License</Link></li>
+                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">RJSC Limited Company</Link></li>
+                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Partnership Firm</Link></li>
+                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Foundation / Trust / Society</Link></li>
+                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Income Tax Consultancy & Litigation</Link></li>
+                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">VAT Advisory & Compliance</Link></li>
+                            <li><Link href="/services" class="text-sm text-slate-400 transition-colors hover:text-rose-400">Audit Support & Assurance</Link></li>
                         </ul>
                     </div>
                     
@@ -186,15 +194,15 @@ const navLinks = [
                         <ul class="mt-6 space-y-4">
                             <li class="flex items-start gap-3">
                                 <svg class="h-5 w-5 shrink-0 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span class="text-sm text-slate-400">123 Business District, Dhaka, Bangladesh</span>
+                                <span class="text-sm text-slate-400">Burma Razu Building (02nd Floor), Besides Fancy Tailors, Kotowali, Chattogram</span>
                             </li>
                             <li class="flex items-center gap-3">
                                 <svg class="h-5 w-5 shrink-0 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                <span class="text-sm text-slate-400">+880 1234-567890</span>
+                                <span class="text-sm text-slate-400">+88 01868-196716</span>
                             </li>
                             <li class="flex items-center gap-3">
                                 <svg class="h-5 w-5 shrink-0 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                <span class="text-sm text-slate-400">info@mbscfirm.com</span>
+                                <span class="text-sm text-slate-400">mbscfirm@gmail.com</span>
                             </li>
                         </ul>
                     </div>

@@ -103,7 +103,7 @@ const certifications = [
                             Excellence
                         </h1>
                         <p class="mt-6 text-lg leading-relaxed text-slate-300">
-                            For over 15 years, MBSC Firm has been at the forefront of providing exceptional legal and tax consultancy services in Bangladesh. We combine expertise, integrity, and innovation to deliver solutions that drive your success.
+                            MBSC Firm provides compliance-first professional services in Bangladesh across RJSC matters, Income Tax consultancy & litigation, VAT advisory & compliance, and audit support. We combine precision, documentation discipline, and practical execution so clients stay confident with regulators and stakeholders.
                         </p>
                     </div>
 
@@ -201,26 +201,26 @@ const certifications = [
                                     </div>
                                     <h3 class="text-2xl font-bold text-slate-900">Our Mission</h3>
                                     <p class="mt-4 text-lg leading-relaxed text-slate-600">
-                                        To empower businesses and individuals with expert legal and tax solutions that ensure compliance, minimize risks, and maximize opportunities for growth. We are committed to delivering personalized services that meet the unique needs of each client.
+                                        To deliver reliable RJSC, Tax, VAT, and audit support services with strong documentation and compliance discipline—minimizing regulatory risk and enabling clients to focus on growth.
                                     </p>
                                     <ul class="mt-6 space-y-3">
                                         <li class="flex items-center gap-3 text-slate-700">
                                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-rose-100">
                                                 <svg class="h-3.5 w-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                             </div>
-                                            Provide expert guidance in tax and legal matters
+                                            Provide expert guidance in RJSC, Income Tax and VAT compliance
                                         </li>
                                         <li class="flex items-center gap-3 text-slate-700">
                                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-rose-100">
                                                 <svg class="h-3.5 w-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                             </div>
-                                            Build lasting relationships based on trust
+                                            Maintain audit-ready documentation and transparent communication
                                         </li>
                                         <li class="flex items-center gap-3 text-slate-700">
                                             <div class="flex h-6 w-6 items-center justify-center rounded-full bg-rose-100">
                                                 <svg class="h-3.5 w-3.5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                             </div>
-                                            Contribute to economic growth of Bangladesh
+                                            Resolve disputes efficiently through appeals, tribunal and ADR support
                                         </li>
                                     </ul>
                                 </div>
@@ -236,7 +236,7 @@ const certifications = [
                                     </div>
                                     <h3 class="text-2xl font-bold text-slate-900">Our Vision</h3>
                                     <p class="mt-4 text-lg leading-relaxed text-slate-600">
-                                        To be the most trusted and innovative legal and tax consultancy firm in Bangladesh, setting the standard for excellence in professional services. We envision a future where every business has access to world-class consultancy.
+                                        To be a trusted standard for compliance and dispute support in Bangladesh—known for strong technical execution in RJSC, Income Tax, VAT, and audit support, and for making complex regulatory processes easier for clients.
                                     </p>
                                     <div class="mt-8 rounded-2xl border border-violet-100 bg-violet-50 p-6">
                                         <p class="text-sm font-medium text-violet-900">

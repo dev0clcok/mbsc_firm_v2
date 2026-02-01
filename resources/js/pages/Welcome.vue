@@ -12,33 +12,33 @@ const toggleAccordion = (index: number) => {
 const services = [
     {
         icon: '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>',
-        title: 'VAT Registration & Compliance',
-        description: 'Complete VAT registration, return filing, and compliance management for businesses of all sizes.',
+        title: 'VAT Advisory & Compliance',
+        description: 'BIN registration, Mushak filings, VAT books, audit support and appeals under VAT & SD Act, 2012.',
     },
     {
         icon: '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
-        title: 'Company Formation',
-        description: 'End-to-end company registration services including RJSC registration and trade license.',
+        title: 'RJSC Limited Company Services',
+        description: 'MoA/AoA, incorporation, director/share changes, charges, annual return, and winding up support.',
     },
     {
         icon: '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-        title: 'Tax Consultancy',
-        description: 'Expert tax planning and advisory services to optimize your tax obligations legally.',
+        title: 'Income Tax Consultancy & Litigation',
+        description: 'e-TIN, returns (all heads), IT-10B, corporate tax, audits, appeals/tribunal, and ADR support.',
     },
     {
         icon: '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
-        title: 'BIDA Registration',
-        description: 'Foreign investment registration and approval services through BIDA.',
+        title: 'Foundation, Trust & Society',
+        description: 'Registration, trust deed drafting, and annual compliance for social welfare entities.',
     },
     {
         icon: '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>',
-        title: 'Trade License & IRC/ERC',
-        description: 'Quick processing of trade licenses and import/export registration certificates.',
+        title: 'Partnership Firm Services',
+        description: 'Partnership deed, RJSC registration, amendments, and dissolution support.',
     },
     {
         icon: '<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>',
-        title: 'Legal Services',
-        description: 'Comprehensive legal support for business contracts, agreements, and disputes.',
+        title: 'Audit Support & Financial Assurance',
+        description: 'Internal audit, statutory audit readiness, reporting and IAS/IFRS financial statements support.',
     },
 ];
 
@@ -158,16 +158,16 @@ const blogPosts = [
                                 Solutions for Your Business
                             </h1>
                             <p class="mt-6 text-lg leading-relaxed text-slate-300">
-                                Comprehensive VAT, Tax, and Business Registration services in Bangladesh. We help businesses navigate complex regulations with ease and confidence.
+                                RJSC, Income Tax, VAT, and Audit Support services in Bangladesh—built for compliance-first execution, clear documentation, and confident regulatory communication.
                             </p>
                             <div class="mt-8 flex flex-wrap items-center gap-4">
-                                <a href="/contact" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-7 py-4 text-base font-semibold text-white shadow-lg shadow-gray-900/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-rose-500/40">
+                                <a href="/#" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-7 py-4 text-base font-semibold text-white shadow-lg shadow-gray-900/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-rose-500/40">
                                     Free Consultation
                                     <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
-                                <a href="tel:+8801234567890" class="inline-flex items-center gap-2 rounded-xl border-2 border-white/20 bg-white/5 px-6 py-3.5 text-base font-medium text-white backdrop-blur-sm transition-all hover:border-rose-400/40 hover:bg-white/10">
+                                <a href="tel:+8801868196716" class="inline-flex items-center gap-2 rounded-xl border-2 border-white/20 bg-white/5 px-6 py-3.5 text-base font-medium text-white backdrop-blur-sm transition-all hover:border-rose-400/40 hover:bg-white/10">
                                     <svg class="h-5 w-5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                    +880 1234-567890
+                                    +88 01868-196716
                                 </a>
                             </div>
                             
@@ -219,7 +219,7 @@ const blogPosts = [
                                 <form class="space-y-3">
                                     <input type="text" placeholder="Your name" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none" />
                                     <input type="tel" placeholder="Phone number" class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none" />
-                                    <button type="submit" class="w-full rounded-lg bg-gradient-to-r from-zinc-900 to-slate-800 py-2.5 text-sm font-medium text-white transition-shadow hover:shadow-lg">
+                                    <button type="submit" disabled class="w-full rounded-lg bg-gradient-to-r from-zinc-900 to-slate-800 py-2.5 text-sm font-medium text-white transition-shadow hover:shadow-lg">
                                         Request Callback
                                     </button>
                                 </form>
@@ -304,7 +304,7 @@ const blogPosts = [
                                 <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-900 to-slate-800 text-rose-400 shadow-lg shadow-slate-300" v-html="service.icon"></div>
                                 <h3 class="mb-2 text-lg font-semibold text-slate-900">{{ service.title }}</h3>
                                 <p class="text-sm text-slate-600">{{ service.description }}</p>
-                                <a href="/contact" class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-rose-600 transition-colors hover:text-rose-700">
+                                <a href="#" class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-rose-600 transition-colors hover:text-rose-700">
                                     Learn more
                                     <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                                 </a>
@@ -428,13 +428,13 @@ const blogPosts = [
                                 </div>
                             </div>
                             <div class="mt-8 flex items-center gap-4">
-                                <a href="/contact" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl">
+                                <a href="#" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl">
                                     Get Started
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
-                                <a href="tel:+8801234567890" class="inline-flex items-center gap-2 text-sm font-medium text-rose-300 transition-colors hover:text-rose-200">
+                                <a href="tel:+8801868196716" class="inline-flex items-center gap-2 text-sm font-medium text-rose-300 transition-colors hover:text-rose-200">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                    +880 1234-567890
+                                    +88 01868-196716
                                 </a>
                             </div>
                         </div>
@@ -668,11 +668,11 @@ const blogPosts = [
                                 Let us help you with your business registration and compliance needs. Get expert guidance today and take your business to the next level.
                             </p>
                             <div class="mt-8 flex flex-wrap justify-center gap-4 lg:justify-start">
-                                <a href="https://wa.me/8801234567890" target="_blank" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-green-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+                                <a href="https://wa.me/8801868196716" target="_blank" class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-green-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-green-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl">
                                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                                     WhatsApp Us
                                 </a>
-                                <a href="/contact" class="inline-flex items-center gap-2 rounded-xl border-2 border-rose-400/40 bg-rose-500/10 px-6 py-3.5 text-base font-semibold text-rose-300 backdrop-blur-sm transition-all hover:border-rose-400/60 hover:bg-rose-500/20">
+                                <a href="#" class="inline-flex items-center gap-2 rounded-xl border-2 border-rose-400/40 bg-rose-500/10 px-6 py-3.5 text-base font-semibold text-rose-300 backdrop-blur-sm transition-all hover:border-rose-400/60 hover:bg-rose-500/20">
                                     Contact Us
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
@@ -742,7 +742,7 @@ const blogPosts = [
                             <div class="mt-6 rounded-xl bg-gradient-to-br from-zinc-900 to-slate-800 p-6">
                                 <h4 class="font-semibold text-white">Still have questions?</h4>
                                 <p class="mt-2 text-sm text-slate-300">Our team is ready to help you with any inquiries.</p>
-                                <a href="/contact" class="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-600">
+                                <a href="/#" class="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-600">
                                     Contact Us
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
@@ -792,7 +792,7 @@ const blogPosts = [
                                     </div>
                                     <div>
                                         <h4 class="font-semibold text-white">Office Address</h4>
-                                        <p class="mt-1 text-slate-300">House 123, Road 45, Gulshan-2<br/>Dhaka 1212, Bangladesh</p>
+                                        <p class="mt-1 text-slate-300">Burma Razu Building (02nd Floor), Besides Fancy Tailors, Kotowali<br/>Chattogram, Bangladesh</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-4 rounded-xl bg-white/5 p-5 backdrop-blur-sm transition-colors hover:bg-white/10">
@@ -801,7 +801,7 @@ const blogPosts = [
                                     </div>
                                     <div>
                                         <h4 class="font-semibold text-white">Phone Number</h4>
-                                        <p class="mt-1 text-slate-300">+880 1234-567890</p>
+                                        <p class="mt-1 text-slate-300">+88 01868-196716</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-4 rounded-xl bg-white/5 p-5 backdrop-blur-sm transition-colors hover:bg-white/10">
@@ -810,7 +810,7 @@ const blogPosts = [
                                     </div>
                                     <div>
                                         <h4 class="font-semibold text-white">Email Address</h4>
-                                        <p class="mt-1 text-slate-300">info@mbscfirm.com</p>
+                                        <p class="mt-1 text-slate-300">mbscfirm@gmail.com</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-4 rounded-xl bg-white/5 p-5 backdrop-blur-sm transition-colors hover:bg-white/10">
@@ -825,9 +825,9 @@ const blogPosts = [
                             </div>
                             
                             <!-- Map Placeholder -->
-                            <div class="mt-8 overflow-hidden rounded-2xl">
+                            <!-- <div class="mt-8 overflow-hidden rounded-2xl">
                                 <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69c07a?w=600&h=300&fit=crop" alt="Dhaka Location" class="h-48 w-full object-cover opacity-80" />
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="rounded-2xl border border-white/10 bg-white p-8 shadow-2xl">
@@ -863,7 +863,7 @@ const blogPosts = [
                                     <label class="mb-2 block text-sm font-medium text-slate-700">Your Message</label>
                                     <textarea rows="4" placeholder="Tell us about your requirements..." class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm transition-colors focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20"></textarea>
                                 </div>
-                                <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-zinc-900 to-slate-800 py-3.5 text-sm font-semibold text-white shadow-lg shadow-zinc-900/25 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+                                <button type="submit" disabled class="w-full rounded-xl bg-gradient-to-r from-zinc-900 to-slate-800 py-3.5 text-sm font-semibold text-white shadow-lg shadow-zinc-900/25 transition-all hover:-translate-y-0.5 hover:shadow-xl">
                                     Send Message
                                 </button>
                             </form>

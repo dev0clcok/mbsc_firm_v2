@@ -17,174 +17,139 @@ interface Service {
 
 const services: Service[] = [
     {
-        id: 'vat-registration',
-        title: 'VAT Registration & Compliance',
-        shortDescription: 'Complete VAT registration, return filing, and compliance management.',
-        description: 'We provide many kinds of VAT assignment services such as Individual, Corporate, Property, Group etc. We ensure the best quality for calculating your tax using our own tax automation software. So the thing is that according to the law you will get the best advantage to us.',
+        id: 'rjsc-limited-company',
+        title: 'RJSC Limited Company Services',
+        shortDescription: 'Complete incorporation, changes, charges, annual compliance and winding up support.',
+        description:
+            'Professional support for RJSC matters including drafting constitutional documents (MoA/AoA), end-to-end incorporation of private/public limited companies, director changes, share transfer/allotment, conversion from private to public, mortgage & charge creation/registration, annual return preparation and submission, and full winding up & liquidation formalities.',
         icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>',
         features: [
-            'Registration of the new e-TIN certificate',
-            'Computation of Income tax and Tax Rebate',
-            'Preparation, review, submission of corporate income tax return',
-            'Advising and attending hearings called by tax authority',
-            'Advising quarterly payment of tax',
-            'Guidance regarding new tax rules and regulations',
-            'All kinds of Tax file Audit, Appeal & Tribunal related works',
+            'Drafting MoA & AoA tailored to business objectives',
+            'Private & Public Limited Company incorporation',
+            'Appointment/resignation/removal of directors',
+            'Share transfer & share allotment processing',
+            'Conversion: Private Limited to Public Limited',
+            'Mortgage deed drafting and charge registration',
+            'Annual return preparation and submission to RJSC',
+            'Winding up & liquidation (including voluntary winding up)',
         ],
         image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&h=400&fit=crop',
     },
     {
-        id: 'individual-taxation',
-        title: 'Local Individual Taxation',
-        shortDescription: 'Personal tax planning, filing, and compliance services.',
-        description: 'Prepare tax registration, return and filling with proper guidance and support thereof in a timely manner at relevant tax zone. Including the following supporting activities.',
-        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>',
+        id: 'rjsc-partnership-firm',
+        title: 'Partnership Firm Services',
+        shortDescription: 'Partnership deed drafting, registration, amendments and dissolution support.',
+        description:
+            'Complete partnership support including professional partnership deed drafting, RJSC registration, legal handling of amendments (name/address/constitution changes), and managed dissolution with settlement of accounts and formal cancellation of RJSC registration.',
+        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
         features: [
-            'Registration of the new e-TIN certificate',
-            'Computation of Income tax and Tax Rebate',
-            'Preparation, review, submission of income tax return',
-            'Issuing tax withholding certificates along with relevant schedules',
-            'Advising and attending hearings by tax authority',
-            'Advising quarterly payment of tax',
-            'Guidance regarding new tax rules and regulations',
+            'Partnership deed drafting',
+            'Partnership firm registration with RJSC',
+            'Changes in firm name / office address / constitution',
+            'Dissolution management and formal cancellation at RJSC',
         ],
         image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop',
     },
     {
-        id: 'company-formation',
-        title: 'Company Formation',
-        shortDescription: 'End-to-end company registration including RJSC and trade license.',
-        description: 'We provide comprehensive company formation services including all legal documentation, RJSC registration, and obtaining necessary licenses to start your business legally in Bangladesh.',
+        id: 'foundation-trust-society',
+        title: 'Foundation, Trust & Society Services',
+        shortDescription: 'Formation, deed drafting, and annual compliance for welfare entities.',
+        description:
+            'We assist in establishing and maintaining social welfare entities with high legal precision. Services include foundation registration, trust registration and trust deed drafting (private or charitable trusts), and managing annual return filing and regulatory reporting for trusts and foundations.',
         icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
         features: [
-            'Private Limited Company Registration',
-            'Public Limited Company Registration',
-            'Partnership Firm Registration',
-            'One Person Company (OPC) Registration',
-            'Branch Office Setup for Foreign Companies',
-            'Liaison Office Establishment',
-            'Trade License Procurement',
+            'Foundation registration support',
+            'Trust registration and trust deed drafting',
+            'Private and charitable trust formation',
+            'Annual return filing & regulatory reporting',
         ],
         image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop',
     },
     {
-        id: 'commercial-irc',
-        title: 'Commercial IRC',
-        shortDescription: 'Import Registration Certificate processing and renewal.',
-        description: 'Get your Import Registration Certificate (IRC) with our expert assistance. We handle all documentation and liaison with relevant authorities for smooth processing.',
+        id: 'club-limited-company',
+        title: 'Club Limited Company Services',
+        shortDescription: 'Section 28 registration, annual return, amendments and winding up support.',
+        description:
+            'Full support for registering Club Limited Companies as per Section 28 of the Companies Act, 1994, including annual return preparation/submission, amendment support (name/address/management changes), and expert handling of winding up proceedings.',
         icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
         features: [
-            'New IRC Application Processing',
-            'IRC Renewal Services',
-            'IRC Amendment & Modification',
-            'AD (Authorized Dealer) Certificate',
-            'Bond License Processing',
-            'Import Permit Assistance',
-            'Customs Documentation Support',
+            'Registration as per Section 28 (Companies Act, 1994)',
+            'Annual return preparation and submission to RJSC',
+            'Amendments: name, office address, management modifications',
+            'Winding up proceedings management',
         ],
         image: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&h=400&fit=crop',
     },
     {
-        id: 'foreigner-taxation',
-        title: 'Foreigner Individual Taxation',
-        shortDescription: 'Tax services for expatriates and foreign nationals.',
-        description: 'Specialized tax services for foreign nationals working in Bangladesh, ensuring compliance with local tax laws while optimizing their tax obligations.',
-        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+        id: 'trade-organization',
+        title: 'Trade Organization Services',
+        shortDescription: 'Section 29 registration, annual return and organization amendments support.',
+        description:
+            'Full support for Trade Organization registration as per Section 29 of the Companies Act, 1994, including annual return preparation/submission to RJSC and legal handling of amendments and management modifications.',
+        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/></svg>',
         features: [
-            'Tax Registration for Expatriates',
-            'Double Taxation Avoidance Advisory',
-            'Tax Return Filing for Foreign Nationals',
-            'Tax Clearance Certificate',
-            'Salary Structuring for Tax Efficiency',
-            'Repatriation Documentation',
-            'Compliance with Immigration Requirements',
+            'Registration as per Section 29 (Companies Act, 1994)',
+            'Annual return preparation and submission to RJSC',
+            'Amendments and organization management modifications',
         ],
         image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=400&fit=crop',
     },
     {
-        id: 'license-certificate',
-        title: 'License and Certificate',
-        shortDescription: 'All types of business licenses and certifications.',
-        description: 'We assist in obtaining various business licenses and certificates required for smooth business operations in Bangladesh.',
-        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+        id: 'income-tax',
+        title: 'Income Tax Consultancy & Litigation',
+        shortDescription: 'Registration, return preparation, corporate tax, planning and full appeal representation.',
+        description:
+            'Full-spectrum income tax support for individuals, partnership firms, companies, and trusts under the Income Tax Act, 2023—from e-TIN and compliance to return preparation (all heads of income), asset & liability statement (IT-10B), investment allowance/rebates, corporate withholding tax (TDS/VDS), deferred tax computation, tax planning, and representation through audits, appeals, tribunal and High Court references including ADR.',
+        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
         features: [
-            'Trade License (New & Renewal)',
-            'Fire License',
-            'Environment Clearance Certificate',
-            'BSTI Certification',
-            'ISO Certification Assistance',
-            'Factory License',
-            'Drug License (for Pharmaceutical)',
+            'E-TIN registration and updates',
+            'Tax clearance certificates (visa, bank loans, renewals)',
+            'Return preparation across all heads of income',
+            'Asset & liability statement (IT-10B)',
+            'Investment allowance & tax rebate optimization',
+            'Withholding tax (TDS/VDS) advisory and compliance',
+            'Tax audits, appeals, tribunal representation and ADR',
+            'Specialized support: transfer pricing, gift tax, capital gains, exemptions',
         ],
         image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop',
     },
     {
-        id: 'rjsc-activities',
-        title: 'RJSC Related Activities',
-        shortDescription: 'All RJSC documentation and compliance services.',
-        description: 'Complete support for all Registrar of Joint Stock Companies and Firms (RJSC) related matters including filings, amendments, and annual compliance.',
-        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
+        id: 'vat',
+        title: 'VAT Advisory & Compliance',
+        shortDescription: 'BIN registration, monthly returns, VAT books, audits, appeals and refunds.',
+        description:
+            'Comprehensive VAT management under the VAT and Supplementary Duty Act, 2012. We support BIN registration/amendment, central vs branch registration strategy, price declaration (Mushak-4.3), monthly VAT return filing (Mushak 9.1) and amended returns (Mushak 9.2), VDS monitoring and Mushak 6.6 certificates, mandatory VAT books (Mushak 6.1/6.2/6.3/6.10), audit & investigation representation, demand notice defense, appeals and ADR, plus VAT refund and exemption consultancy.',
+        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>',
         features: [
-            'Annual Return Filing',
-            'Schedule X Filing',
-            'Director Change/Addition',
-            'Share Transfer',
-            'Registered Office Change',
-            'Memorandum & Articles Amendment',
-            'Company Name Change',
+            'BIN registration and amendment via online VAT portal',
+            'Price declaration (Mushak-4.3) preparation/submission',
+            'Monthly VAT return (Mushak 9.1) and amended return (Mushak 9.2)',
+            'VDS management and Mushak 6.6 certificates',
+            'VAT books: Mushak 6.1, 6.2, 6.3 and contractual register (Mushak 6.10)',
+            'Audit, intelligence & investigation representation',
+            'Appeals, tribunal representation and ADR',
+            'Refunds and exemption/zero-rate consultancy',
         ],
         image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=400&fit=crop',
     },
     {
-        id: 'corporate-taxation',
-        title: 'Public Limited Company Taxation',
-        shortDescription: 'Tax services for publicly listed companies.',
-        description: 'Comprehensive tax planning and compliance services tailored for public limited companies listed on stock exchanges.',
+        id: 'audit-support',
+        title: 'Audit Support & Financial Assurance',
+        shortDescription: 'Internal audit, statutory audit readiness, reporting, and financial statement support.',
+        description:
+            'We act as a bridge between your business and financial transparency. We provide internal audits and full documentation support to facilitate statutory audits through our Chartered Accountancy partners. Services include audit readiness (lead schedules, reconciliations, supporting documents), liaison with CA firms, internal audit & risk management (system/operational/compliance audit), management reporting (performance analysis, budgetary control), special purpose audits (due diligence, forensic review, inventory & fixed asset verification), and accounts/financial statement preparation in line with IAS/IFRS including consolidation.',
         icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>',
         features: [
-            'Corporate Tax Planning',
-            'Quarterly Tax Payment Advisory',
-            'Tax Return Preparation & Filing',
-            'Transfer Pricing Documentation',
-            'Tax Audit Support',
-            'Dividend Tax Computation',
-            'Capital Gains Tax Advisory',
+            'Statutory audit readiness and document preparation',
+            'Coordination with Chartered Accountants for timely audit',
+            'Internal audit: system, operational and compliance reviews',
+            'Risk management and compliance to BFRS',
+            'Management audit, performance analysis and reporting',
+            'Budgetary control and expenditure monitoring',
+            'Due diligence, forensic review, inventory & fixed asset audit',
+            'Accounts & financial statement preparation (IAS/IFRS) and consolidation',
         ],
         image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
-    },
-    {
-        id: 'private-company-taxation',
-        title: 'Private Limited Company Taxation',
-        shortDescription: 'Complete tax solutions for private companies.',
-        description: 'Expert tax services designed specifically for private limited companies to ensure compliance and optimize tax efficiency.',
-        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
-        features: [
-            'Annual Tax Return Filing',
-            'Advance Tax Computation',
-            'Withholding Tax Compliance',
-            'Tax Audit Representation',
-            'Tax Planning Strategies',
-            'Employee Tax Documentation',
-            'Statutory Compliance Review',
-        ],
-        image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop',
-    },
-    {
-        id: 'partnership-taxation',
-        title: 'Partnership Company Taxation',
-        shortDescription: 'Tax services for partnership firms.',
-        description: 'Specialized tax services for partnership firms including profit distribution, partner taxation, and firm compliance requirements.',
-        icon: '<svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
-        features: [
-            'Partnership Deed Drafting',
-            'Partner Profit Allocation',
-            'Partnership Tax Return',
-            'Partner Individual Returns',
-            'Registration with Tax Authority',
-            'Partnership Dissolution Tax',
-            'Capital Account Management',
-        ],
-        image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop',
     },
 ];
 
@@ -192,9 +157,9 @@ const sidebarServices = computed(() => services.map(s => ({ id: s.id, title: s.t
 
 const currentService = computed(() => {
     if (activeService.value) {
-        return services.find(s => s.id === activeService.value) || services[1];
+        return services.find(s => s.id === activeService.value) || services[0];
     }
-    return services[1]; // Default to Local Individual Taxation
+    return services[0]; // Default to first service
 });
 
 const setActiveService = (id: string) => {
@@ -323,13 +288,13 @@ const setActiveService = (id: string) => {
                         <h4 class="text-lg font-semibold text-slate-900">Need Help?</h4>
                         <p class="mt-2 text-sm text-slate-600">Please Feel Free To Contact Us. We Will Get Back To You With 1-2 Business Days.</p>
                         <div class="mt-4 space-y-2 text-sm">
-                            <a href="mailto:info@mbscfirm.com" class="flex items-center gap-2 text-slate-600 transition-colors hover:text-rose-600">
+                            <a href="mailto:mbscfirm@gmail.com" class="flex items-center gap-2 text-slate-600 transition-colors hover:text-rose-600">
                                 <svg class="h-4 w-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                info@mbscfirm.com
+                                mbscfirm@gmail.com
                             </a>
-                            <a href="tel:+8801234567890" class="flex items-center gap-2 text-slate-600 transition-colors hover:text-rose-600">
+                            <a href="tel:+8801868196716" class="flex items-center gap-2 text-slate-600 transition-colors hover:text-rose-600">
                                 <svg class="h-4 w-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                                +880 1234-567890
+                                +88 01868-196716
                             </a>
                         </div>
                     </div>
@@ -351,7 +316,7 @@ const setActiveService = (id: string) => {
                             <p class="text-base leading-relaxed text-slate-600">{{ currentService.description }}</p>
                             
                             <p class="mt-6 text-base leading-relaxed text-slate-600">
-                                Prepare tax registration, return and filling with proper guidance and support thereof in a timely manner at relevant tax zone. Including the following supporting activities.
+                                Each engagement is handled with clear documentation, compliance-first execution, and proactive updates—so you stay audit-ready and confident with regulators.
                             </p>
                         </div>
 
