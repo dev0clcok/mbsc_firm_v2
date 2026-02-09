@@ -16,16 +16,10 @@ const dashboard = () => '/dashboard';
 
 const navLinks = [
     { name: 'Home', href: '/', page: 'home' },
-    { name: 'Services', href: '#', page: 'services' },
-    { name: 'About Us', href: '#', page: 'about' },
-    { name: 'Contact', href: '#', page: 'contact' },
+    { name: 'Services', href: '/services', page: 'services' },
+    { name: 'About Us', href: '/about', page: 'about' },
+    { name: 'Contact', href: '/contact', page: 'contact' },
 ];
-// const navLinks = [
-//     { name: 'Home', href: '/', page: 'home' },
-//     { name: 'Services', href: '/services', page: 'services' },
-//     { name: 'About Us', href: '/about', page: 'about' },
-//     { name: 'Contact', href: '/contact', page: 'contact' },
-// ];
 </script>
 
 <template>
