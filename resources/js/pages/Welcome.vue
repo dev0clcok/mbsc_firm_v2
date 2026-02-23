@@ -39,35 +39,17 @@ interface Props {
         description: string | null;
         icon: string | null;
     }>;
+    faqs: Array<{
+        question: string;
+        answer: string;
+    }>;
 }
 
 const props = defineProps<Props>();
 
 const testimonials = computed(() => props.testimonials || []);
 const services = computed(() => props.services || []);
-
-const faqs = [
-    {
-        question: 'What documents are required for company registration?',
-        answer: 'For company registration, you typically need NID copies of directors, passport-size photos, proposed company names, memorandum of association, and proof of registered office address.',
-    },
-    {
-        question: 'How long does VAT registration take?',
-        answer: 'VAT registration usually takes 3-7 working days after submission of all required documents. We ensure expedited processing for urgent requirements.',
-    },
-    {
-        question: 'Do you provide services for foreign companies?',
-        answer: 'Yes, we specialize in assisting foreign companies with BIDA registration, branch office setup, liaison office establishment, and all regulatory compliance requirements.',
-    },
-    {
-        question: 'What are your consultation fees?',
-        answer: 'We offer free initial consultations. Our service fees vary based on the complexity and scope of work. Contact us for a detailed quotation tailored to your needs.',
-    },
-    {
-        question: 'Do you provide ongoing compliance support?',
-        answer: 'Yes, we offer comprehensive ongoing support including VAT return filing, tax compliance, annual filings, and regulatory updates to keep your business compliant.',
-    },
-];
+const faqs = computed(() => props.faqs || []);
 
 const processSteps = [
     { step: '1', title: 'Consultation', description: 'Free initial consultation to understand your needs.' },
@@ -975,14 +957,14 @@ const blogPosts = [
                         <div class="mt-6 rounded-xl bg-gradient-to-br from-zinc-900 to-slate-800 p-6">
                             <h4 class="font-semibold text-white">Still have questions?</h4>
                             <p class="mt-2 text-sm text-slate-300">Our team is ready to help you with any inquiries.</p>
-                            <a href="/#"
+                            <Link href="/contact"
                                 class="mt-4 inline-flex items-center gap-2 rounded-lg bg-rose-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-600">
                                 Contact Us
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

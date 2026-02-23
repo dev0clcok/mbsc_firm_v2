@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\FAQService;
 use App\Http\Services\ServiceService;
 use App\Http\Services\TeamMemberService;
 use App\Http\Services\TestimonialService;
+use App\Models\FAQ;
 use App\Models\Service;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
@@ -17,7 +19,8 @@ class HomeController extends Controller
     public function index(
         TestimonialService $testimonialService,
         TeamMemberService $teamMemberService,
-        ServiceService $serviceService
+        ServiceService $serviceService,
+        FAQService $faqService
     ): Response {
         $request = request()->merge(['status' => 1]);
 
@@ -54,10 +57,18 @@ class HomeController extends Controller
             ])
             ->values();
 
+        $faqs = $faqService->index($request, false)
+            ->map(fn (FAQ $f) => [
+                'question' => $f->question,
+                'answer' => $f->answer,
+            ])
+            ->values();
+
         return Inertia::render('Welcome', [
             'testimonials' => $testimonials,
             'teamMembers' => $teamMembers,
             'services' => $services,
+            'faqs' => $faqs,
         ]);
     }
 
