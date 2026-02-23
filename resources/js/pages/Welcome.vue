@@ -386,10 +386,7 @@ const blogPosts = [
             </div>
         </section>
         <!-- Trusted Partners Banner -->
-        <section class="relative overflow-hidden py-10 bg-red-50">
-            <!-- <div class="absolute inset-0 opacity-10">
-                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&q=80" alt="" class="h-full w-full object-cover" />
-                </div> -->
+        <!-- <section class="relative overflow-hidden py-10 bg-red-50">
             <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <p class="mb-6 text-sm font-medium uppercase tracking-wider text-rose-400">Licensed With</p>
@@ -441,7 +438,7 @@ const blogPosts = [
                     </div>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- About Section -->
         <section id="about" class="relative overflow-hidden py-20 sm:py-24">
