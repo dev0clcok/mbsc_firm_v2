@@ -17,6 +17,7 @@
     "nav": {
         "main": "Main",
         "dashboard": "Dashboard",
+        "services": "Services",
         "faqs": "FAQs",
         "audit_logs": "Audit Logs",
         "users_roles": "Users & Roles",
@@ -117,6 +118,72 @@
         "empty": {
             "no_faqs": "No FAQs found.",
             "create_first": "Create your first FAQ"
+        }
+    },
+    "services": {
+        "title": "Services Management",
+        "add_new": "Add New Service",
+        "back_to_list": "Back to Services",
+        "delete": {
+            "title": "Delete Service?",
+            "description": "This will permanently delete the service. This action cannot be undone.",
+            "confirm": "Delete"
+        },
+        "filters": {
+            "status": "Status",
+            "all_status": "All Status",
+            "search_placeholder": "Search title, slug, or description..."
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "columns": {
+            "title": "Title",
+            "status": "Status",
+            "sort": "Sort"
+        },
+        "empty": {
+            "no_services": "No services found.",
+            "create_first": "Create your first service"
+        },
+        "create": {
+            "title": "Create Service",
+            "heading": "Create New Service",
+            "save": "Create Service"
+        },
+        "edit": {
+            "title": "Edit Service",
+            "heading": "Edit Service",
+            "save": "Update Service"
+        },
+        "form": {
+            "details": "Service Details",
+            "title": "Title",
+            "title_placeholder": "Enter service title...",
+            "slug": "Slug",
+            "slug_placeholder": "e.g. income-tax",
+            "slug_help": "Used in the URL/selection. Only letters, numbers, dashes and underscores.",
+            "short_description": "Short Description",
+            "short_description_placeholder": "Shown in related services cards...",
+            "description": "Description",
+            "description_placeholder": "Main description shown on the Services page...",
+            "features": "What We Offer",
+            "feature_placeholder": "Enter a feature...",
+            "add_feature": "Add feature",
+            "remove": "Remove",
+            "media": "Media",
+            "image": "Image",
+            "image_preview": "Image preview",
+            "image_help": "JPG, PNG or WebP. Max 2MB.",
+            "clear_image": "Clear",
+            "remove_image": "Remove current image",
+            "icon_svg": "Icon (SVG)",
+            "icon_svg_placeholder": "<svg ...>...</svg>",
+            "icon_svg_help": "Paste a trusted SVG string. This is rendered on the public page.",
+            "settings": "Settings",
+            "active": "Active",
+            "sort_order": "Sort Order"
         }
     },
     "datatable": {

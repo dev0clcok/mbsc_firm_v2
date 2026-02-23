@@ -13,9 +13,10 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes/admin';
 import { index as faqsIndex } from '@/routes/admin/faqs';
+import { index as servicesIndex } from '@/routes/admin/services';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid, HelpCircle, Users, Shield, ScrollText } from 'lucide-vue-next';
+import { LayoutGrid, HelpCircle, Users, Shield, ScrollText, Briefcase } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
@@ -24,12 +25,17 @@ import { useI18n } from 'vue-i18n';
 const page = usePage<any>();
 const { t } = useI18n();
 const permissions = computed<string[]>(() => page.props.auth?.permissions || []);
-const canAny = (slugs: string[]) => slugs.some((s) => permissions.value.includes(s));
+const isSuperAdmin = computed(() => Boolean(page.props.auth?.is_super_admin));
+const canAny = (slugs: string[]) => isSuperAdmin.value || slugs.some((s) => permissions.value.includes(s));
 
 const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [
         { title: t('nav.dashboard'), href: dashboard(), icon: LayoutGrid },
     ];
+
+    if (canAny(['services.list', 'services.view', 'services.create', 'services.update', 'services.delete'])) {
+        items.push({ title: t('nav.services'), href: servicesIndex().url, icon: Briefcase });
+    }
 
     if (canAny(['faqs.list', 'faqs.view', 'faqs.create', 'faqs.update', 'faqs.delete'])) {
         items.push({ title: t('nav.faqs'), href: faqsIndex(), icon: HelpCircle });

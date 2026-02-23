@@ -17,6 +17,7 @@
     "nav": {
         "main": "মেনু",
         "dashboard": "ড্যাশবোর্ড",
+        "services": "সার্ভিস",
         "faqs": "এফএকিউ",
         "audit_logs": "অডিট লগ",
         "users_roles": "ইউজার ও রোল",
@@ -117,6 +118,72 @@
         "empty": {
             "no_faqs": "কোনো এফএকিউ পাওয়া যায়নি।",
             "create_first": "আপনার প্রথম এফএকিউ তৈরি করুন"
+        }
+    },
+    "services": {
+        "title": "সার্ভিস ম্যানেজমেন্ট",
+        "add_new": "নতুন সার্ভিস যোগ করুন",
+        "back_to_list": "সার্ভিস তালিকায় ফিরে যান",
+        "delete": {
+            "title": "সার্ভিস মুছবেন?",
+            "description": "এটি স্থায়ীভাবে সার্ভিস মুছে ফেলবে। এই কাজটি আর ফিরিয়ে আনা যাবে না।",
+            "confirm": "মুছুন"
+        },
+        "filters": {
+            "status": "স্ট্যাটাস",
+            "all_status": "সব স্ট্যাটাস",
+            "search_placeholder": "শিরোনাম, স্লাগ বা বর্ণনা অনুসন্ধান করুন..."
+        },
+        "status": {
+            "active": "অ্যাক্টিভ",
+            "inactive": "ইনঅ্যাক্টিভ"
+        },
+        "columns": {
+            "title": "শিরোনাম",
+            "status": "স্ট্যাটাস",
+            "sort": "সোর্ট"
+        },
+        "empty": {
+            "no_services": "কোনো সার্ভিস পাওয়া যায়নি।",
+            "create_first": "আপনার প্রথম সার্ভিস তৈরি করুন"
+        },
+        "create": {
+            "title": "সার্ভিস তৈরি করুন",
+            "heading": "নতুন সার্ভিস তৈরি করুন",
+            "save": "সার্ভিস তৈরি করুন"
+        },
+        "edit": {
+            "title": "সার্ভিস সম্পাদনা",
+            "heading": "সার্ভিস সম্পাদনা",
+            "save": "সার্ভিস আপডেট করুন"
+        },
+        "form": {
+            "details": "সার্ভিসের তথ্য",
+            "title": "শিরোনাম",
+            "title_placeholder": "সার্ভিসের শিরোনাম লিখুন...",
+            "slug": "স্লাগ",
+            "slug_placeholder": "যেমন: income-tax",
+            "slug_help": "URL/selection এ ব্যবহৃত হবে। শুধু অক্ষর, সংখ্যা, ড্যাশ ও আন্ডারস্কোর।",
+            "short_description": "সংক্ষিপ্ত বর্ণনা",
+            "short_description_placeholder": "Related services কার্ডে দেখানো হবে...",
+            "description": "বিস্তারিত বর্ণনা",
+            "description_placeholder": "Services পেজে দেখানো মূল বর্ণনা...",
+            "features": "যা যা অফার করি",
+            "feature_placeholder": "একটি ফিচার লিখুন...",
+            "add_feature": "ফিচার যোগ করুন",
+            "remove": "মুছুন",
+            "media": "মিডিয়া",
+            "image": "ইমেজ",
+            "image_preview": "ইমেজ প্রিভিউ",
+            "image_help": "JPG, PNG বা WebP। সর্বোচ্চ ২MB।",
+            "clear_image": "মুছুন",
+            "remove_image": "বর্তমান ইমেজ সরান",
+            "icon_svg": "আইকন (SVG)",
+            "icon_svg_placeholder": "<svg ...>...</svg>",
+            "icon_svg_help": "বিশ্বস্ত SVG স্ট্রিং পেস্ট করুন। এটি পাবলিক পেজে রেন্ডার হয়।",
+            "settings": "সেটিংস",
+            "active": "অ্যাক্টিভ",
+            "sort_order": "সোর্ট অর্ডার"
         }
     },
     "datatable": {
