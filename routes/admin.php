@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -18,6 +19,8 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
     Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 
     Route::resource('faqs', FAQController::class)->except(['show']);
+
+    Route::resource('team-members', TeamMemberController::class)->except(['show']);
 
     Route::resource('testimonials', TestimonialController::class)->except(['show']);
 

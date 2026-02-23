@@ -36,6 +36,17 @@ return [
             'label' => 'CMS',
             'modules' => [
                 [
+                    'key' => 'team_members',
+                    'label' => 'Team Members',
+                    'permissions' => [
+                        ['slug' => 'team_members.list', 'label' => 'List'],
+                        ['slug' => 'team_members.view', 'label' => 'View'],
+                        ['slug' => 'team_members.create', 'label' => 'Create'],
+                        ['slug' => 'team_members.update', 'label' => 'Update'],
+                        ['slug' => 'team_members.delete', 'label' => 'Delete'],
+                    ],
+                ],
+                [
                     'key' => 'testimonials',
                     'label' => 'Testimonials',
                     'permissions' => [

@@ -18,6 +18,7 @@
         "main": "মেনু",
         "dashboard": "ড্যাশবোর্ড",
         "services": "সার্ভিস",
+        "team_members": "টিম",
         "testimonials": "ক্লায়েন্ট রিভিউ",
         "faqs": "এফএকিউ",
         "audit_logs": "অডিট লগ",
@@ -91,6 +92,64 @@
             "model": "মডেল",
             "status": "স্ট্যাটাস",
             "ip": "আইপি"
+        }
+    },
+    "team_members": {
+        "title": "আমাদের টিম",
+        "add_new": "টিম মেম্বার যোগ করুন",
+        "back_to_list": "টিম তালিকায় ফিরে যান",
+        "delete": {
+            "title": "টিম মেম্বার মুছবেন?",
+            "description": "এটি স্থায়ীভাবে টিম মেম্বার মুছে ফেলবে। এই কাজটি আর ফিরিয়ে আনা যাবে না।",
+            "confirm": "মুছুন"
+        },
+        "filters": {
+            "status": "স্ট্যাটাস",
+            "all_status": "সব স্ট্যাটাস",
+            "search_placeholder": "নাম, পদ বা স্পেশালাইজেশন অনুসন্ধান করুন..."
+        },
+        "status": {
+            "active": "অ্যাক্টিভ",
+            "inactive": "ইনঅ্যাক্টিভ"
+        },
+        "columns": {
+            "name": "সদস্য",
+            "status": "স্ট্যাটাস",
+            "sort": "সোর্ট"
+        },
+        "empty": {
+            "no_team_members": "কোনো টিম মেম্বার পাওয়া যায়নি।",
+            "create_first": "আপনার প্রথম টিম মেম্বার যোগ করুন"
+        },
+        "create": {
+            "title": "টিম মেম্বার যোগ করুন",
+            "heading": "নতুন টিম মেম্বার যোগ করুন",
+            "save": "টিম মেম্বার তৈরি করুন"
+        },
+        "edit": {
+            "title": "টিম মেম্বার সম্পাদনা",
+            "heading": "টিম মেম্বার সম্পাদনা",
+            "save": "টিম মেম্বার আপডেট করুন"
+        },
+        "form": {
+            "details": "সদস্যের তথ্য",
+            "name": "নাম",
+            "name_placeholder": "পুরো নাম...",
+            "position": "পদ",
+            "position_placeholder": "যেমন: ফাউন্ডার ও কনসালট্যান্ট",
+            "specialization": "স্পেশালাইজেশন",
+            "specialization_placeholder": "যেমন: কর্পোরেট ল ও ট্যাক্সেশন",
+            "social_links": "সোশ্যাল লিংক",
+            "select_platform": "প্ল্যাটফর্ম নির্বাচন করুন",
+            "add_social_link": "সোশ্যাল লিংক যোগ করুন",
+            "remove": "সরান",
+            "image": "ফটো",
+            "image_preview": "ইমেজ প্রিভিউ",
+            "image_help": "JPG, PNG বা WebP। সর্বোচ্চ ২MB।",
+            "clear_image": "মুছুন",
+            "remove_image": "বর্তমান ফটো সরান",
+            "active": "অ্যাক্টিভ",
+            "sort_order": "সোর্ট অর্ডার"
         }
     },
     "testimonials": {

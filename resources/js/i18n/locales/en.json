@@ -18,6 +18,7 @@
         "main": "Main",
         "dashboard": "Dashboard",
         "services": "Services",
+        "team_members": "Team",
         "testimonials": "Testimonials",
         "faqs": "FAQs",
         "audit_logs": "Audit Logs",
@@ -91,6 +92,64 @@
             "model": "Model",
             "status": "Status",
             "ip": "IP"
+        }
+    },
+    "team_members": {
+        "title": "Meet Our Team",
+        "add_new": "Add Team Member",
+        "back_to_list": "Back to Team",
+        "delete": {
+            "title": "Delete team member?",
+            "description": "This will permanently delete the team member. This action cannot be undone.",
+            "confirm": "Delete"
+        },
+        "filters": {
+            "status": "Status",
+            "all_status": "All Status",
+            "search_placeholder": "Search name, position or specialization..."
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "columns": {
+            "name": "Member",
+            "status": "Status",
+            "sort": "Sort"
+        },
+        "empty": {
+            "no_team_members": "No team members found.",
+            "create_first": "Add your first team member"
+        },
+        "create": {
+            "title": "Add Team Member",
+            "heading": "Add New Team Member",
+            "save": "Create Team Member"
+        },
+        "edit": {
+            "title": "Edit Team Member",
+            "heading": "Edit Team Member",
+            "save": "Update Team Member"
+        },
+        "form": {
+            "details": "Member Details",
+            "name": "Name",
+            "name_placeholder": "Full name...",
+            "position": "Position",
+            "position_placeholder": "e.g. Founder & Consultant",
+            "specialization": "Specialization",
+            "specialization_placeholder": "e.g. Corporate Law & Taxation",
+            "social_links": "Social Links",
+            "select_platform": "Select platform",
+            "add_social_link": "Add Social Link",
+            "remove": "Remove",
+            "image": "Photo",
+            "image_preview": "Image preview",
+            "image_help": "JPG, PNG or WebP. Max 2MB.",
+            "clear_image": "Clear",
+            "remove_image": "Remove current photo",
+            "active": "Active",
+            "sort_order": "Sort Order"
         }
     },
     "testimonials": {

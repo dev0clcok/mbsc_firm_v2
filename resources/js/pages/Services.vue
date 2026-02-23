@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const activeService = ref<string | null>(null);
+
+onMounted(() => {
+    const hash = window.location.hash?.slice(1);
+    if (hash) {
+        activeService.value = hash;
+    }
+});
 
 interface Service {
     id: string;

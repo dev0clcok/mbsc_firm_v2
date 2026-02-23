@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\TeamMember;
 use App\Models\Testimonial;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,8 +28,42 @@ class HomeController extends Controller
             ])
             ->values();
 
+        $teamMembers = TeamMember::query()
+            ->active()
+            ->with('socialLinks')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->limit(3)
+            ->get()
+            ->map(fn (TeamMember $m) => [
+                'name' => $m->name,
+                'position' => $m->position,
+                'specialization' => $m->specialization,
+                'image' => $m->image_url,
+                'social_links' => $m->socialLinks->map(fn ($s) => [
+                    'platform' => $s->platform,
+                    'url' => $s->url,
+                ])->values()->all(),
+            ])
+            ->values();
+
+        $services = Service::query()
+            ->active()
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['slug', 'title', 'short_description', 'icon_svg'])
+            ->map(fn (Service $s) => [
+                'slug' => $s->slug,
+                'title' => $s->title,
+                'description' => $s->short_description,
+                'icon' => $s->icon_svg,
+            ])
+            ->values();
+
         return Inertia::render('Welcome', [
             'testimonials' => $testimonials,
+            'teamMembers' => $teamMembers,
+            'services' => $services,
         ]);
     }
 
@@ -65,7 +100,27 @@ class HomeController extends Controller
 
     public function about(): Response
     {
-        return Inertia::render('About');
+        $teamMembers = TeamMember::query()
+            ->active()
+            ->with('socialLinks')
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (TeamMember $m) => [
+                'name' => $m->name,
+                'position' => $m->position,
+                'specialization' => $m->specialization,
+                'image' => $m->image_url,
+                'social_links' => $m->socialLinks->map(fn ($s) => [
+                    'platform' => $s->platform,
+                    'url' => $s->url,
+                ])->values()->all(),
+            ])
+            ->values();
+
+        return Inertia::render('About', [
+            'teamMembers' => $teamMembers,
+        ]);
     }
 
         public function contact(): Response

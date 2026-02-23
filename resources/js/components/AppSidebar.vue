@@ -16,7 +16,7 @@ import { index as faqsIndex } from '@/routes/admin/faqs';
 import { index as servicesIndex } from '@/routes/admin/services';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid, HelpCircle, Users, Shield, ScrollText, Briefcase, MessageSquareQuote } from 'lucide-vue-next';
+import { LayoutGrid, HelpCircle, Users, Shield, ScrollText, Briefcase, MessageSquareQuote, UsersRound } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
@@ -35,6 +35,10 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (canAny(['services.list', 'services.view', 'services.create', 'services.update', 'services.delete'])) {
         items.push({ title: t('nav.services'), href: servicesIndex().url, icon: Briefcase });
+    }
+
+    if (canAny(['team_members.list', 'team_members.view', 'team_members.create', 'team_members.update', 'team_members.delete'])) {
+        items.push({ title: t('nav.team_members'), href: '/admin/team-members', icon: UsersRound });
     }
 
     if (canAny(['testimonials.list', 'testimonials.view', 'testimonials.create', 'testimonials.update', 'testimonials.delete'])) {
