@@ -18,6 +18,7 @@
         "main": "Main",
         "dashboard": "Dashboard",
         "services": "Services",
+        "testimonials": "Testimonials",
         "faqs": "FAQs",
         "audit_logs": "Audit Logs",
         "users_roles": "Users & Roles",
@@ -90,6 +91,65 @@
             "model": "Model",
             "status": "Status",
             "ip": "IP"
+        }
+    },
+    "testimonials": {
+        "title": "What Our Clients Say",
+        "add_new": "Add Testimonial",
+        "back_to_list": "Back to Testimonials",
+        "delete": {
+            "title": "Delete testimonial?",
+            "description": "This will permanently delete the testimonial. This action cannot be undone.",
+            "confirm": "Delete"
+        },
+        "filters": {
+            "status": "Status",
+            "all_status": "All Status",
+            "search_placeholder": "Search name, company or text..."
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "columns": {
+            "name": "Client",
+            "rating": "Rating",
+            "status": "Status",
+            "sort": "Sort"
+        },
+        "empty": {
+            "no_testimonials": "No testimonials found.",
+            "create_first": "Create your first testimonial"
+        },
+        "create": {
+            "title": "Create Testimonial",
+            "heading": "Add New Testimonial",
+            "save": "Create Testimonial"
+        },
+        "edit": {
+            "title": "Edit Testimonial",
+            "heading": "Edit Testimonial",
+            "save": "Update Testimonial"
+        },
+        "form": {
+            "details": "Client Details",
+            "name": "Name",
+            "name_placeholder": "Client name...",
+            "position": "Position",
+            "position_placeholder": "e.g. CEO, Director",
+            "company": "Company",
+            "company_placeholder": "Company name...",
+            "text": "Testimonial",
+            "text_placeholder": "What did the client say?...",
+            "rating": "Rating",
+            "stars": "stars",
+            "avatar": "Photo",
+            "avatar_preview": "Avatar preview",
+            "avatar_help": "JPG, PNG or WebP. Max 2MB. Shown as circular avatar.",
+            "clear_avatar": "Clear",
+            "remove_avatar": "Remove current photo",
+            "active": "Active",
+            "sort_order": "Sort Order"
         }
     },
     "faqs": {

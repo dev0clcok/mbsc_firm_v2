@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const activeAccordion = ref<number | null>(null);
 
@@ -49,29 +49,20 @@ const stats = [
     { value: '50+', label: 'Expert Team' },
 ];
 
-const testimonials = [
-    {
-        name: 'Mohammad Rahman',
-        position: 'CEO',
-        company: 'TechStart BD',
-        text: 'Outstanding service! They handled our VAT compliance with utmost professionalism. Highly recommended for any business.',
-        rating: 5,
-    },
-    {
-        name: 'Fatima Ahmed',
-        position: 'Director',
-        company: 'Green Exports Ltd',
-        text: 'The team\'s expertise in IRC/ERC processing saved us weeks of work. Their knowledge of regulations is exceptional.',
-        rating: 5,
-    },
-    {
-        name: 'Karim Hassan',
-        position: 'Managing Director',
-        company: 'Dhaka Industries',
-        text: 'Professional, responsive, and knowledgeable. They made our BIDA registration process smooth and hassle-free.',
-        rating: 5,
-    },
-];
+interface Props {
+    testimonials: Array<{
+        name: string;
+        position: string | null;
+        company: string | null;
+        text: string;
+        rating: number;
+        avatar_url: string | null;
+    }>;
+}
+
+const props = defineProps<Props>();
+
+const testimonials = computed(() => props.testimonials || []);
 
 const faqs = [
     {
@@ -707,8 +698,11 @@ const blogPosts = [
                         </div>
                         <p class="mb-4 text-sm text-slate-600">"{{ testimonial.text }}"</p>
                         <div class="flex items-center gap-3 border-t border-slate-100 pt-4">
-                            <img :src="`https://images.unsplash.com/photo-${index === 0 ? '1472099645785-5658abf4ff4e' : index === 1 ? '1494790108377-be9c29b29330' : '1500648767791-00dcc994a43e'}?w=80&h=80&fit=crop&crop=face`"
-                                :alt="testimonial.name" class="h-10 w-10 rounded-full object-cover" />
+                            <img
+                                :src="testimonial.avatar_url || `https://images.unsplash.com/photo-${index === 0 ? '1472099645785-5658abf4ff4e' : index === 1 ? '1494790108377-be9c29b29330' : '1500648767791-00dcc994a43e'}?w=80&h=80&fit=crop&crop=face`"
+                                :alt="testimonial.name"
+                                class="h-10 w-10 rounded-full object-cover"
+                            />
                             <div>
                                 <div class="text-sm font-semibold text-slate-900">{{ testimonial.name }}</div>
                                 <div class="text-xs text-slate-500">{{ testimonial.position }}, {{ testimonial.company

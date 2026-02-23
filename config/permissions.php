@@ -36,6 +36,17 @@ return [
             'label' => 'CMS',
             'modules' => [
                 [
+                    'key' => 'testimonials',
+                    'label' => 'Testimonials',
+                    'permissions' => [
+                        ['slug' => 'testimonials.list', 'label' => 'List'],
+                        ['slug' => 'testimonials.view', 'label' => 'View'],
+                        ['slug' => 'testimonials.create', 'label' => 'Create'],
+                        ['slug' => 'testimonials.update', 'label' => 'Update'],
+                        ['slug' => 'testimonials.delete', 'label' => 'Delete'],
+                    ],
+                ],
+                [
                     'key' => 'services',
                     'label' => 'Services',
                     'permissions' => [
