@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreServiceRequest;
+use App\Http\Requests\Admin\UpdateServiceRequest;
+use App\Http\Services\ServiceService;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,29 +26,9 @@ class ServiceController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(Request $request): Response
+    public function index(Request $request, ServiceService $serviceService): Response
     {
-        $query = Service::query();
-
-        if ($request->filled('search')) {
-            $search = $request->string('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('slug', 'like', "%{$search}%")
-                    ->orWhere('short_description', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('status')) {
-            $query->where('is_active', $request->integer('status'));
-        }
-
-        $services = $query
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->paginate(config('app.settings.pagination.per_page'))
-            ->withQueryString();
+        $services = $serviceService->index($request);
 
         return Inertia::render('admin/Services/Index', [
             'services' => $services,
@@ -61,35 +44,9 @@ class ServiceController extends Controller implements HasMiddleware
         return Inertia::render('admin/Services/Create');
     }
 
-    public function store(Request $request)
+    public function store(StoreServiceRequest $request, ServiceService $serviceService): RedirectResponse
     {
-        $validated = $request->validate([
-            'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:services,slug'],
-            'title' => ['required', 'string', 'max:255'],
-            'short_description' => ['nullable', 'string', 'max:2000'],
-            'description' => ['nullable', 'string'],
-            'icon_svg' => ['nullable', 'string'],
-            'features' => ['nullable', 'array'],
-            'features.*' => ['string', 'max:255'],
-            'image' => ['nullable', 'file', 'image', 'max:2048'],
-            'sort_order' => ['nullable', 'integer'],
-            'is_active' => ['boolean'],
-        ]);
-
-        $validated['features'] = array_values(array_filter(
-            $validated['features'] ?? [],
-            fn ($v) => is_string($v) && trim($v) !== ''
-        ));
-
-        unset($validated['image']);
-        if ($request->hasFile('image')) {
-            $validated['image_url'] = $request->file('image')->store('services', 'public');
-            $validated['image_url'] = '/storage/'.$validated['image_url'];
-        } else {
-            $validated['image_url'] = null;
-        }
-
-        Service::create($validated);
+        $serviceService->store($request->validated(), $request);
 
         return redirect()->route('admin.services.index')
             ->with('success', 'Service created successfully.');
@@ -102,60 +59,19 @@ class ServiceController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function update(Request $request, Service $service)
+    public function update(UpdateServiceRequest $request, Service $service, ServiceService $serviceService): RedirectResponse
     {
-        $validated = $request->validate([
-            'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:services,slug,'.$service->id],
-            'title' => ['required', 'string', 'max:255'],
-            'short_description' => ['nullable', 'string', 'max:2000'],
-            'description' => ['nullable', 'string'],
-            'icon_svg' => ['nullable', 'string'],
-            'features' => ['nullable', 'array'],
-            'features.*' => ['string', 'max:255'],
-            'image' => ['nullable', 'file', 'image', 'max:2048'],
-            'remove_image' => ['nullable', 'boolean'],
-            'sort_order' => ['nullable', 'integer'],
-            'is_active' => ['boolean'],
-        ]);
-
-        $validated['features'] = array_values(array_filter(
-            $validated['features'] ?? [],
-            fn ($v) => is_string($v) && trim($v) !== ''
-        ));
-
-        unset($validated['image'], $validated['remove_image']);
-
-        if ($request->boolean('remove_image')) {
-            $this->deleteStoredImage($service->image_url);
-            $validated['image_url'] = null;
-        } elseif ($request->hasFile('image')) {
-            $this->deleteStoredImage($service->image_url);
-            $validated['image_url'] = $request->file('image')->store('services', 'public');
-            $validated['image_url'] = '/storage/'.$validated['image_url'];
-        }
-
-        $service->update($validated);
+        $serviceService->update($service, $request->validated(), $request);
 
         return redirect()->route('admin.services.index')
             ->with('success', 'Service updated successfully.');
     }
 
-    private function deleteStoredImage(?string $imageUrl): void
+    public function destroy(Service $service, ServiceService $serviceService): RedirectResponse
     {
-        if (! $imageUrl || ! str_starts_with($imageUrl, '/storage/')) {
-            return;
-        }
-        $path = str_replace('/storage/', '', $imageUrl);
-        Storage::disk('public')->delete($path);
-    }
-
-    public function destroy(Service $service)
-    {
-        $this->deleteStoredImage($service->image_url);
-        $service->delete();
+        $serviceService->destroy($service);
 
         return redirect()->route('admin.services.index')
             ->with('success', 'Service deleted successfully.');
     }
 }
-
