@@ -6,11 +6,15 @@ use App\Models\TeamMember;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class TeamMemberService
 {
-    public function index(Request $request): LengthAwarePaginator
+    /**
+     * @return LengthAwarePaginator|Collection<int, TeamMember>
+     */
+    public function index(Request $request, bool $pagination = true, ?int $limit = null): LengthAwarePaginator|Collection
     {
         $query = TeamMember::query();
 
@@ -27,11 +31,17 @@ class TeamMemberService
             $query->where('is_active', $request->integer('status'));
         }
 
-        return $query
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->paginate(config('app.settings.pagination.per_page'))
-            ->withQueryString();
+        $query = $query->orderBy('sort_order')->orderBy('id');
+
+        if ($pagination) {
+            return $query->paginate(config('app.settings.pagination.per_page'))->withQueryString();
+        }
+
+        if ($limit !== null) {
+            $query->limit($limit);
+        }
+
+        return $query->with('socialLinks')->get();
     }
 
     /**

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 
 const activeService = ref<string | null>(null);
@@ -198,7 +198,7 @@ const setActiveService = (id: string) => {
                             <p class="text-base leading-relaxed text-slate-600">{{ currentService.description }}</p>
                             
                             <p class="mt-6 text-base leading-relaxed text-slate-600">
-                                Each engagement is handled with clear documentation, compliance-first execution, and proactive updates—so you stay audit-ready and confident with regulators.
+                                {{ currentService.shortDescription || '' }}
                             </p>
                         </div>
 
@@ -227,10 +227,10 @@ const setActiveService = (id: string) => {
                                     <h3 class="text-xl font-semibold text-white">Ready to Get Started?</h3>
                                     <p class="mt-1 text-slate-300">Contact us today for a free consultation on {{ currentService.title }}.</p>
                                 </div>
-                                <a href="/contact" class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl">
+                                <Link href="/contact" class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl">
                                     Contact Us Now
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

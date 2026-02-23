@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\ServiceService;
+use App\Http\Services\TeamMemberService;
+use App\Http\Services\TestimonialService;
 use App\Models\Service;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
@@ -11,14 +14,15 @@ use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index(): Response
-    {
-        $testimonials = Testimonial::query()
-            ->active()
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->get(['name', 'position', 'company', 'text', 'rating', 'avatar_url'])
-            ->map(fn (Testimonial $t) => [
+    public function index(
+        TestimonialService $testimonialService,
+        TeamMemberService $teamMemberService,
+        ServiceService $serviceService
+    ): Response {
+        $request = request()->merge(['status' => 1]);
+
+        $testimonials = $testimonialService->index($request, false)
+            ->map(fn(Testimonial $t) => [
                 'name' => $t->name,
                 'position' => $t->position,
                 'company' => $t->company,
@@ -28,31 +32,21 @@ class HomeController extends Controller
             ])
             ->values();
 
-        $teamMembers = TeamMember::query()
-            ->active()
-            ->with('socialLinks')
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->limit(3)
-            ->get()
-            ->map(fn (TeamMember $m) => [
+        $teamMembers = $teamMemberService->index($request, false, 3)
+            ->map(fn(TeamMember $m) => [
                 'name' => $m->name,
                 'position' => $m->position,
                 'specialization' => $m->specialization,
                 'image' => $m->image_url,
-                'social_links' => $m->socialLinks->map(fn ($s) => [
+                'social_links' => $m->socialLinks->map(fn($s) => [
                     'platform' => $s->platform,
                     'url' => $s->url,
                 ])->values()->all(),
             ])
             ->values();
 
-        $services = Service::query()
-            ->active()
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->get(['slug', 'title', 'short_description', 'icon_svg'])
-            ->map(fn (Service $s) => [
+        $services = $serviceService->index($request, false)
+            ->map(fn(Service $s) => [
                 'slug' => $s->slug,
                 'title' => $s->title,
                 'description' => $s->short_description,
@@ -67,22 +61,11 @@ class HomeController extends Controller
         ]);
     }
 
-    public function services(): Response
+    public function services(ServiceService $serviceService): Response
     {
-        $services = Service::query()
-            ->active()
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->get([
-                'slug',
-                'title',
-                'short_description',
-                'description',
-                'icon_svg',
-                'features',
-                'image_url',
-            ])
-            ->map(fn (Service $s) => [
+        $request = request()->merge(['status' => 1]);
+        $services = $serviceService->index($request, false)
+            ->map(fn(Service $s) => [
                 'id' => $s->slug,
                 'title' => $s->title,
                 'shortDescription' => $s->short_description,
@@ -98,14 +81,10 @@ class HomeController extends Controller
         ]);
     }
 
-    public function about(): Response
+    public function about(TeamMemberService $teamMemberService): Response
     {
-        $teamMembers = TeamMember::query()
-            ->active()
-            ->with('socialLinks')
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->get()
+        $request = request()->merge(['status' => 1]);
+        $teamMembers = $teamMemberService->index($request, false)
             ->map(fn (TeamMember $m) => [
                 'name' => $m->name,
                 'position' => $m->position,
@@ -123,7 +102,7 @@ class HomeController extends Controller
         ]);
     }
 
-        public function contact(): Response
+    public function contact(): Response
     {
         return Inertia::render('Contact');
     }

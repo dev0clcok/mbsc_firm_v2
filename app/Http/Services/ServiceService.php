@@ -6,11 +6,15 @@ use App\Models\Service;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class ServiceService
 {
-    public function index(Request $request): LengthAwarePaginator
+    /**
+     * @return LengthAwarePaginator|Collection<int, Service>
+     */
+    public function index(Request $request, $pagination = true): LengthAwarePaginator|Collection
     {
         $query = Service::query();
 
@@ -28,11 +32,13 @@ class ServiceService
             $query->where('is_active', $request->integer('status'));
         }
 
-        return $query
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->paginate(config('app.settings.pagination.per_page'))
-            ->withQueryString();
+        $query = $query->orderBy('sort_order')->orderBy('id');
+
+        if ($pagination) {
+            return $query->paginate(config('app.settings.pagination.per_page'))->withQueryString();
+        }
+
+        return $query->get();
     }
 
     /**

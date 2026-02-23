@@ -6,11 +6,15 @@ use App\Models\Testimonial;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
 class TestimonialService
 {
-    public function index(Request $request): LengthAwarePaginator
+    /**
+     * @return LengthAwarePaginator|Collection<int, Testimonial>
+     */
+    public function index(Request $request, bool $pagination = true): LengthAwarePaginator|Collection
     {
         $query = Testimonial::query();
 
@@ -27,11 +31,13 @@ class TestimonialService
             $query->where('is_active', $request->integer('status'));
         }
 
-        return $query
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->paginate(config('app.settings.pagination.per_page'))
-            ->withQueryString();
+        $query = $query->orderBy('sort_order')->orderBy('id');
+
+        if ($pagination) {
+            return $query->paginate(config('app.settings.pagination.per_page'))->withQueryString();
+        }
+
+        return $query->get();
     }
 
     /**
