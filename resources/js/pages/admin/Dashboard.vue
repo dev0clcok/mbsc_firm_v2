@@ -17,6 +17,7 @@ const props = defineProps<{
         testimonials: number;
     };
     recentEnquiries: Array<{ id: number; name: string; service: string | null; message: string; status: Status; created_at: string }>;
+    weeklyEnquiries: Array<{ from: string; to: string; count: number }>;
     checklist: Array<{ key: string; done: boolean; href: string }>;
 }>();
 
@@ -28,6 +29,11 @@ const cards = computed(() => [
     { key: 'faqs', value: props.stats.faqs, href: '/admin/faqs', icon: HelpCircle },
     { key: 'testimonials', value: props.stats.testimonials, href: '/admin/testimonials', icon: MessageSquareQuote },
 ]);
+
+// Bar chart: heights are a share of the busiest week, with room left for the count above each bar.
+const weekMax = computed(() => Math.max(1, ...props.weeklyEnquiries.map((w) => w.count)));
+const weekTotal = computed(() => props.weeklyEnquiries.reduce((sum, w) => sum + w.count, 0));
+const shortDate = (value: string) => new Date(`${value}T00:00:00`).toLocaleDateString(locale.value === 'bn' ? 'bn-BD' : 'en-GB', { day: 'numeric', month: 'short' });
 
 const remaining = computed(() => props.checklist.filter((item) => !item.done).length);
 
@@ -95,6 +101,27 @@ const formatDate = (value: string) =>
             </Link>
         </div>
 
+        <section class="rounded-lg border border-border bg-card p-5" aria-labelledby="dashboard-weekly">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 id="dashboard-weekly" class="text-base font-semibold">{{ t('dashboard.weekly.title') }}</h2>
+                <p class="text-sm text-muted-foreground">{{ t('dashboard.weekly.total', { count: weekTotal }) }}</p>
+            </div>
+            <ol class="mt-5 grid h-40 grid-cols-8 items-end gap-2 sm:gap-4" :aria-label="t('dashboard.weekly.title')">
+                <li v-for="week in weeklyEnquiries" :key="week.from" class="flex h-full flex-col justify-end text-center">
+                    <span class="text-sm font-semibold tabular-nums">{{ week.count }}</span>
+                    <span
+                        :class="['mt-1 block w-full rounded-t', week.count ? 'bg-primary' : 'bg-muted']"
+                        :style="{ height: `${Math.max(3, (week.count / weekMax) * 78)}%` }"
+                        aria-hidden="true"
+                    ></span>
+                    <span class="mt-2 block truncate text-xs text-muted-foreground">
+                        <span class="sr-only">{{ t('dashboard.weekly.week_from') }}</span>{{ shortDate(week.from) }}
+                    </span>
+                </li>
+            </ol>
+            <p class="mt-3 text-xs text-muted-foreground">{{ t('dashboard.weekly.help') }}</p>
+        </section>
+
         <div class="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
             <section class="rounded-lg border border-border bg-card" aria-labelledby="dashboard-recent">
                 <div class="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
@@ -106,7 +133,7 @@ const formatDate = (value: string) =>
                 <ul v-if="recentEnquiries.length" class="divide-y divide-border">
                     <li v-for="enquiry in recentEnquiries" :key="enquiry.id" class="px-5 py-4">
                         <div class="flex flex-wrap items-center justify-between gap-2">
-                            <p class="font-medium">{{ enquiry.name }}</p>
+                            <Link :href="`/admin/enquiries/${enquiry.id}`" class="font-medium underline-offset-4 hover:underline">{{ enquiry.name }}</Link>
                             <span :class="['rounded-md border px-2 py-0.5 text-xs font-medium', statusClass(enquiry.status)]">
                                 {{ t(`enquiries.status.${enquiry.status}`) }}
                             </span>

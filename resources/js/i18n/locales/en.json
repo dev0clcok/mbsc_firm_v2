@@ -603,6 +603,12 @@
                     "help": "Add at least one real testimonial to show the section on the home page."
                 }
             }
+        },
+        "weekly": {
+            "title": "Enquiries per week",
+            "total": "{count} in the last 8 weeks",
+            "week_from": "Week starting",
+            "help": "Each bar is seven days; the last one ends today."
         }
     },
     "steps": {

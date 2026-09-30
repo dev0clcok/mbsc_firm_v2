@@ -36,8 +36,35 @@ class DashboardController extends Controller implements HasMiddleware
             ],
             'recentEnquiries' => Enquiry::query()->latest()->limit(5)
                 ->get(['id', 'name', 'service', 'message', 'status', 'created_at']),
+            'weeklyEnquiries' => $this->weeklyEnquiries(),
             'checklist' => $this->checklist(),
         ]);
+    }
+
+    /**
+     * Enquiries received in each of the last eight weeks, oldest first.
+     * A week here is seven days ending today, so the last bar is always
+     * a full week rather than a part of the calendar week.
+     *
+     * @return array<int, array{from: string, to: string, count: int}>
+     */
+    private function weeklyEnquiries(): array
+    {
+        $today = now('Asia/Dhaka')->endOfDay();
+        $start = $today->copy()->subDays(8 * 7)->addSecond();
+
+        $dates = Enquiry::query()->where('created_at', '>=', $start->copy()->utc())->pluck('created_at');
+
+        return collect(range(0, 7))->map(function (int $week) use ($start, $dates) {
+            $from = $start->copy()->addDays($week * 7);
+            $to = $from->copy()->addDays(7)->subSecond();
+
+            return [
+                'from' => $from->toDateString(),
+                'to' => $to->toDateString(),
+                'count' => $dates->filter(fn ($date) => $date->between($from, $to))->count(),
+            ];
+        })->all();
     }
 
     /**
