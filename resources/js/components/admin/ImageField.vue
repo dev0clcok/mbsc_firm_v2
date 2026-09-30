@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ImageUp, Trash2 } from 'lucide-vue-next';
-import { computed, onBeforeUnmount, ref, useId, watch } from 'vue';
+import { Crop, ImageUp, Trash2 } from 'lucide-vue-next';
+import type CropperType from 'cropperjs';
+import 'cropperjs/dist/cropper.css';
+import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 /**
@@ -53,7 +55,74 @@ watch(
     },
 );
 
-onBeforeUnmount(() => objectUrl.value && URL.revokeObjectURL(objectUrl.value));
+onBeforeUnmount(() => {
+    if (objectUrl.value) URL.revokeObjectURL(objectUrl.value);
+    cropper?.destroy();
+});
+
+// Cropping: keeps the part of the picture that fits the shape it is shown in.
+const dialog = ref<HTMLDialogElement | null>(null);
+const cropImage = ref<HTMLImageElement | null>(null);
+const cropSource = ref<string | null>(null);
+let cropper: CropperType | null = null;
+
+const openCrop = async () => {
+    if (!props.modelValue) return;
+
+    cropSource.value = URL.createObjectURL(props.modelValue);
+    dialog.value?.showModal();
+    await nextTick();
+
+    // Loaded on demand: only needed once someone crops a picture.
+    const { default: Cropper } = await import('cropperjs');
+    cropper?.destroy();
+    cropper = new Cropper(cropImage.value!, {
+        aspectRatio: props.ratio,
+        viewMode: 1,
+        autoCropArea: 1,
+        background: false,
+        movable: false,
+        zoomable: false,
+        rotatable: false,
+        scalable: false,
+    });
+};
+
+const closeCrop = () => {
+    cropper?.destroy();
+    cropper = null;
+    if (cropSource.value) URL.revokeObjectURL(cropSource.value);
+    cropSource.value = null;
+    dialog.value?.close();
+};
+
+const applyCrop = () => {
+    const source = props.modelValue;
+    const canvas = cropper?.getCroppedCanvas({ maxWidth: 2560, maxHeight: 2560, imageSmoothingQuality: 'high' });
+    if (!source || !canvas) return closeCrop();
+
+    canvas.toBlob(
+        (blob) => {
+            if (blob) {
+                emit('update:modelValue', new File([blob], source.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' }));
+            }
+            closeCrop();
+        },
+        'image/jpeg',
+        0.92,
+    );
+};
+
+// A picture whose shape is far from the slot's is offered for cropping straight away.
+const offerCrop = (file: File) => {
+    const probe = new Image();
+    const url = URL.createObjectURL(file);
+    probe.onload = () => {
+        URL.revokeObjectURL(url);
+        if (Math.abs(probe.naturalWidth / probe.naturalHeight - props.ratio) > 0.08) openCrop();
+    };
+    probe.src = url;
+};
 
 const previewUrl = computed(() => objectUrl.value ?? (props.remove ? null : props.existingUrl));
 
@@ -72,6 +141,7 @@ const choose = (file: File | undefined) => {
 
     emit('update:remove', false);
     emit('update:modelValue', file);
+    nextTick(() => offerCrop(file));
 };
 
 const onDrop = (event: DragEvent) => {
@@ -134,7 +204,15 @@ defineExpose({ choose });
                         <ImageUp class="size-4" />
                         {{ previewUrl ? t('image_field.replace') : t('image_field.choose') }}
                     </label>
-                    <slot name="actions" :has-file="Boolean(modelValue)" />
+                    <button
+                        v-if="modelValue && !disabled"
+                        type="button"
+                        class="inline-flex min-h-10 items-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-muted"
+                        @click="openCrop"
+                    >
+                        <Crop class="size-4" />
+                        {{ t('image_field.crop') }}
+                    </button>
                     <button
                         v-if="previewUrl && !disabled"
                         type="button"
@@ -171,5 +249,28 @@ defineExpose({ choose });
                 </div>
             </div>
         </div>
+
+        <dialog
+            ref="dialog"
+            class="m-auto w-[min(92vw,44rem)] rounded-lg border border-border bg-card p-0 text-card-foreground shadow-xl backdrop:bg-black/50"
+            :aria-labelledby="`${id}-crop-title`"
+            @cancel.prevent="closeCrop"
+        >
+            <div class="border-b border-border px-5 py-4">
+                <h3 :id="`${id}-crop-title`" class="text-lg font-semibold">{{ t('image_field.crop_title') }}</h3>
+                <p class="mt-0.5 text-sm text-muted-foreground">{{ t('image_field.crop_help') }}</p>
+            </div>
+            <div class="max-h-[60vh] bg-muted/40 p-4">
+                <img v-if="cropSource" ref="cropImage" :src="cropSource" alt="" class="block max-h-[52vh] max-w-full" />
+            </div>
+            <div class="flex justify-end gap-3 border-t border-border px-5 py-4">
+                <button type="button" class="inline-flex min-h-10 items-center rounded-md border border-input px-4 py-2 text-sm font-medium hover:bg-muted" @click="closeCrop">
+                    {{ t('image_field.crop_cancel') }}
+                </button>
+                <button type="button" class="inline-flex min-h-10 items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90" @click="applyCrop">
+                    {{ t('image_field.crop_apply') }}
+                </button>
+            </div>
+        </dialog>
     </div>
 </template>
