@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CtaBand from '@/components/site/CtaBand.vue';
+import SiteBreadcrumb from '@/components/site/SiteBreadcrumb.vue';
 import SiteIcon from '@/components/site/SiteIcon.vue';
 import SiteImage from '@/components/site/SiteImage.vue';
 import TeamList, { type TeamMember } from '@/components/site/TeamList.vue';
@@ -31,8 +32,9 @@ const values = [
     <Head title="About the firm" />
 
     <PublicLayout current-page="about">
-        <section class="py-section">
-            <div :class="['site-container grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
+        <section class="pt-8 pb-section">
+            <div class="site-container"><SiteBreadcrumb :items="[{ label: 'About' }]" /></div>
+            <div :class="['site-container mt-6 grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
                 <div>
                     <h1 class="site-display">A compliance-first practice</h1>
                     <p class="site-lead mt-6">

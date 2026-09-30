@@ -2,6 +2,7 @@
 import ContactDetails from '@/components/site/ContactDetails.vue';
 import EnquiryForm from '@/components/site/EnquiryForm.vue';
 import OfficeMap from '@/components/site/OfficeMap.vue';
+import SiteBreadcrumb from '@/components/site/SiteBreadcrumb.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { useSite } from '@/composables/useSite';
 import { Head } from '@inertiajs/vue3';
@@ -13,9 +14,10 @@ const site = useSite();
     <Head title="Contact" />
 
     <PublicLayout current-page="contact">
-        <section class="py-section">
+        <section class="pt-8 pb-section">
             <div class="site-container">
-                <h1 class="site-display">Contact</h1>
+                <SiteBreadcrumb :items="[{ label: 'Contact' }]" />
+                <h1 class="site-display mt-6">Contact</h1>
                 <p class="site-lead mt-6">
                     Send an enquiry, call, or message us on WhatsApp. The first consultation is free.
                     <template v-if="site.response_time">We reply {{ site.response_time }}.</template>

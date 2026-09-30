@@ -137,7 +137,7 @@
 
     /* Buttons: one set, three weights. */
     .site-btn {
-        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-site border px-5 text-base font-semibold transition-colors;
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-site border px-5 text-base font-semibold transition-colors active:translate-y-px;
     }
 
     .site-btn-primary {
@@ -190,6 +190,18 @@
 .reveal.is-visible {
     opacity: 1;
     transform: none;
+}
+
+/* In-page links glide to their target and stop clear of the sticky header. */
+html:has(.site) {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html:has(.site) {
+        scroll-behavior: auto;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

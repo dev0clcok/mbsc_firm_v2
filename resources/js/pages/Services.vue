@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CtaBand from '@/components/site/CtaBand.vue';
 import ServiceGrid, { type ServiceSummary } from '@/components/site/ServiceGrid.vue';
+import SiteBreadcrumb from '@/components/site/SiteBreadcrumb.vue';
 import SiteImage from '@/components/site/SiteImage.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import type { SiteImageData } from '@/types';
@@ -26,8 +27,9 @@ onMounted(() => {
     <Head title="Services" />
 
     <PublicLayout current-page="services">
-        <section class="pt-section pb-12">
-            <div :class="['site-container grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
+        <section class="pt-8 pb-12">
+            <div class="site-container"><SiteBreadcrumb :items="[{ label: 'Services' }]" /></div>
+            <div :class="['site-container mt-6 grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
                 <div>
                     <h1 class="site-display">Services</h1>
                     <p class="site-lead mt-6">

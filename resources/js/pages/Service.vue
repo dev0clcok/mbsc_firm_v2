@@ -2,6 +2,7 @@
 import ContactDetails from '@/components/site/ContactDetails.vue';
 import EnquiryForm from '@/components/site/EnquiryForm.vue';
 import FaqList, { type Faq } from '@/components/site/FaqList.vue';
+import SiteBreadcrumb from '@/components/site/SiteBreadcrumb.vue';
 import SiteIcon from '@/components/site/SiteIcon.vue';
 import SiteImage from '@/components/site/SiteImage.vue';
 import { useSite } from '@/composables/useSite';
@@ -40,14 +41,8 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
         <article>
             <header class="pt-8 pb-section">
                 <div class="site-container">
-                    <nav aria-label="Breadcrumb">
-                        <ol class="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
-                            <li><Link href="/services" class="site-link inline-flex min-h-11 items-center">Services</Link></li>
-                            <li aria-hidden="true">/</li>
-                            <li aria-current="page">{{ service.title }}</li>
-                        </ol>
-                    </nav>
-                    <div :class="['mt-8 grid items-center gap-x-14 gap-y-10', service.image && 'lg:grid-cols-2']">
+                    <SiteBreadcrumb :items="[{ label: 'Services', href: '/services' }, { label: service.title }]" />
+                    <div :class="['mt-6 grid items-center gap-x-14 gap-y-10', service.image && 'lg:grid-cols-2']">
                         <div>
                             <!-- eslint-disable-next-line vue/no-v-html -->
                             <span v-if="service.icon" class="site-icon-tile mb-5" v-html="service.icon"></span>

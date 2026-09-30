@@ -4,7 +4,7 @@ import SiteIcon from '@/components/site/SiteIcon.vue';
 import SiteLogo from '@/components/site/SiteLogo.vue';
 import { useSite } from '@/composables/useSite';
 import { Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 defineProps<{
     currentPage?: 'home' | 'services' | 'faqs' | 'about' | 'contact';
@@ -12,6 +12,19 @@ defineProps<{
 
 const site = useSite();
 const menuOpen = ref(false);
+
+// The header gains a shadow once the page has moved under it.
+const scrolled = ref(false);
+const onScroll = () => {
+    scrolled.value = window.scrollY > 8;
+};
+
+onMounted(() => {
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+});
+
+onBeforeUnmount(() => window.removeEventListener('scroll', onScroll));
 
 const navLinks = [
     { name: 'Home', href: '/', page: 'home' },
@@ -33,7 +46,7 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
             Skip to main content
         </a>
 
-        <header class="sticky top-0 z-50 border-b border-rule bg-paper">
+        <header :class="['sticky top-0 z-50 border-b border-rule bg-paper transition-shadow duration-200', scrolled && 'shadow-raised']">
             <div class="site-container flex h-[4.5rem] items-center justify-between gap-6">
                 <Link href="/" class="shrink-0">
                     <SiteLogo />
