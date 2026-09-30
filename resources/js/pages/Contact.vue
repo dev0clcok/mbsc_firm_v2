@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ContactDetails from '@/components/site/ContactDetails.vue';
 import EnquiryForm from '@/components/site/EnquiryForm.vue';
+import OfficeMap from '@/components/site/OfficeMap.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { useSite } from '@/composables/useSite';
 import { Head } from '@inertiajs/vue3';
@@ -31,6 +32,7 @@ const site = useSite();
                     <section aria-labelledby="contact-office">
                         <h2 id="contact-office" class="site-title mb-6">Office</h2>
                         <ContactDetails />
+                        <OfficeMap class="mt-8" />
                     </section>
                 </div>
             </div>

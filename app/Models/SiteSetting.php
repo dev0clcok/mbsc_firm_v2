@@ -24,6 +24,8 @@ class SiteSetting extends Model
         'enquiry_email',
         'address',
         'maps_url',
+        'map_latitude',
+        'map_longitude',
         'office_hours',
         'response_time',
         'facebook_url',
@@ -140,6 +142,7 @@ class SiteSetting extends Model
             'email' => $s['email'],
             'address' => $s['address'],
             'maps_url' => $s['maps_url'],
+            'map_embed_url' => self::mapEmbedUrl($s),
             // Keep "7:00 PM" together so the AM/PM never wraps onto its own line.
             'office_hours' => $s['office_hours']
                 ? preg_replace('/(\d)\s+(AM|PM)\b/i', "$1\u{00A0}$2", $s['office_hours'])
@@ -147,6 +150,23 @@ class SiteSetting extends Model
             'response_time' => $s['response_time'],
             'socials' => $socials,
         ];
+    }
+
+    /**
+     * Address of the embeddable Google map: the exact coordinates when they
+     * are set, otherwise a search for the office address.
+     *
+     * @param  array<string, string|null>  $s
+     */
+    private static function mapEmbedUrl(array $s): ?string
+    {
+        $query = filled($s['map_latitude']) && filled($s['map_longitude'])
+            ? $s['map_latitude'].','.$s['map_longitude']
+            : $s['address'];
+
+        return filled($query)
+            ? 'https://www.google.com/maps?q='.rawurlencode($query).'&z=16&output=embed'
+            : null;
     }
 
     /**
@@ -178,6 +198,11 @@ class SiteSetting extends Model
             ] : null,
             'areaServed' => ['@type' => 'Country', 'name' => 'Bangladesh'],
             'hasMap' => $s['maps_url'],
+            'geo' => filled($s['map_latitude']) && filled($s['map_longitude']) ? [
+                '@type' => 'GeoCoordinates',
+                'latitude' => (float) $s['map_latitude'],
+                'longitude' => (float) $s['map_longitude'],
+            ] : null,
             'sameAs' => array_values(array_filter(array_map(fn ($key) => $s[$key], self::SOCIAL_KEYS))) ?: null,
         ]);
     }

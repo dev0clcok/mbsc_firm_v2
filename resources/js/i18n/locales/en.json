@@ -443,6 +443,14 @@
             "whatsapp_message": {
                 "label": "WhatsApp template message",
                 "help": "Already typed for the visitor when they tap a WhatsApp button. Leave empty to open a blank chat."
+            },
+            "map_latitude": {
+                "label": "Map latitude",
+                "help": "Optional. With longitude, pins the map on the contact page exactly. In Google Maps, right-click the office and copy the two numbers."
+            },
+            "map_longitude": {
+                "label": "Map longitude",
+                "help": "Optional. If both are empty the map searches for the office address instead."
             }
         },
         "images": {

@@ -53,3 +53,21 @@ test('office hours keep the time and AM/PM together', function () {
 
     expect(SiteSetting::forPublic()['office_hours'])->toBe("Saturday to Thursday, 10:00\u{00A0}AM to 7:00\u{00A0}PM");
 });
+
+test('the contact map uses coordinates when set and the address otherwise', function () {
+    SiteSetting::put(['address' => 'Kotowali, Chattogram', 'map_latitude' => '', 'map_longitude' => '']);
+    expect(SiteSetting::forPublic()['map_embed_url'])->toBe('https://www.google.com/maps?q=Kotowali%2C%20Chattogram&z=16&output=embed');
+
+    SiteSetting::put(['map_latitude' => '22.3384', 'map_longitude' => '91.8317']);
+    expect(SiteSetting::forPublic()['map_embed_url'])->toBe('https://www.google.com/maps?q=22.3384%2C91.8317&z=16&output=embed');
+
+    SiteSetting::put(['address' => '', 'map_latitude' => '', 'map_longitude' => '']);
+    expect(SiteSetting::forPublic()['map_embed_url'])->toBeNull();
+});
+
+test('map coordinates must be valid and come as a pair', function () {
+    $this->actingAs(User::factory()->create(['email' => config('admin.super_admin_email')]));
+
+    $this->put('/admin/site-settings', ['map_latitude' => '122', 'map_longitude' => ''])
+        ->assertSessionHasErrors(['map_latitude', 'map_longitude']);
+});

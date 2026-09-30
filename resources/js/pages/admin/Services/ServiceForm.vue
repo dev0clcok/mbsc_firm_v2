@@ -46,6 +46,8 @@ const errors = () => props.form.errors as Record<string, string | undefined>;
 </script>
 
 <template>
+    <!-- The Inertia form object is shared with the page on purpose; fields bind straight to it. -->
+    <!-- eslint-disable vue/no-mutating-props -->
     <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>

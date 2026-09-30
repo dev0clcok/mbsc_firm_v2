@@ -48,6 +48,7 @@ export interface SiteSettings {
     email: string | null;
     address: string | null;
     maps_url: string | null;
+    map_embed_url: string | null;
     office_hours: string | null;
     response_time: string | null;
     socials: Array<{ platform: string; url: string }>;

@@ -99,6 +99,8 @@ type SettingKey =
     | 'enquiry_email'
     | 'address'
     | 'maps_url'
+    | 'map_latitude'
+    | 'map_longitude'
     | 'office_hours'
     | 'response_time'
     | 'facebook_url'
@@ -143,6 +145,8 @@ const groups: Array<{ key: string; fields: Field[] }> = [
         fields: [
             { key: 'address', type: 'textarea', wide: true },
             { key: 'maps_url', type: 'url', placeholder: 'https://maps.app.goo.gl/...', wide: true },
+            { key: 'map_latitude', type: 'text', placeholder: '22.3384' },
+            { key: 'map_longitude', type: 'text', placeholder: '91.8317' },
             { key: 'office_hours', type: 'text' },
             { key: 'response_time', type: 'text' },
         ],

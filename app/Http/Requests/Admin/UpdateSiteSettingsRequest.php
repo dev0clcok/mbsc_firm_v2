@@ -37,6 +37,8 @@ class UpdateSiteSettingsRequest extends FormRequest
             'enquiry_email' => ['nullable', 'email', 'max:255'],
             'address' => ['nullable', 'string', 'max:500'],
             'maps_url' => $url,
+            'map_latitude' => ['nullable', 'numeric', 'between:-90,90', 'required_with:map_longitude'],
+            'map_longitude' => ['nullable', 'numeric', 'between:-180,180', 'required_with:map_latitude'],
             'office_hours' => ['nullable', 'string', 'max:255'],
             'response_time' => ['nullable', 'string', 'max:255'],
             'facebook_url' => $url,
