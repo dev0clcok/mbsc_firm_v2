@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { enquiryText, mailtoUrl, whatsappUrl } from '@/lib/contact';
 import { ref, computed } from 'vue';
 
 const activeAccordion = ref<number | null>(null);
@@ -9,6 +10,39 @@ const toggleAccordion = (index: number) => {
     activeAccordion.value = activeAccordion.value === index ? null : index;
 };
 
+
+const callbackForm = ref({ name: '', phone: '' });
+
+const requestCallback = () => {
+    window.open(
+        whatsappUrl(`Please call me back.\n${enquiryText({ Name: callbackForm.value.name, Phone: callbackForm.value.phone })}`),
+        '_blank',
+        'noopener',
+    );
+};
+
+const messageForm = ref({ name: '', phone: '', email: '', service: '', message: '' });
+const messageFormEl = ref<HTMLFormElement | null>(null);
+
+const messageText = () =>
+    enquiryText({
+        Name: messageForm.value.name,
+        Phone: messageForm.value.phone,
+        Email: messageForm.value.email,
+        Service: messageForm.value.service,
+        Message: messageForm.value.message,
+    });
+
+const sendMessageViaWhatsApp = () => {
+    window.open(whatsappUrl(messageText()), '_blank', 'noopener');
+};
+
+const sendMessageViaEmail = () => {
+    if (!messageFormEl.value?.reportValidity()) {
+        return;
+    }
+    window.location.href = mailtoUrl('Enquiry from mbscfirm.com', messageText());
+};
 
 const stats = [
     { value: '500+', label: 'Clients Served' },
@@ -116,7 +150,7 @@ const blogPosts = [
                             execution, clear documentation, and confident regulatory communication.
                         </p>
                         <div class="mt-8 flex flex-wrap items-center gap-4">
-                            <a href="/#"
+                            <a href="/contact"
                                 class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-7 py-4 text-base font-semibold text-white shadow-lg shadow-gray-900/30 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-rose-500/40">
                                 Free Consultation
                                 <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none"
@@ -191,14 +225,14 @@ const blogPosts = [
                                     <p class="text-xs text-slate-500">Response within 2 hours</p>
                                 </div>
                             </div>
-                            <form class="space-y-3">
-                                <input type="text" placeholder="Your name"
+                            <form class="space-y-3" @submit.prevent="requestCallback">
+                                <input v-model="callbackForm.name" type="text" required aria-label="Your name" placeholder="Your name"
                                     class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none" />
-                                <input type="tel" placeholder="Phone number"
+                                <input v-model="callbackForm.phone" type="tel" required aria-label="Phone number" placeholder="Phone number"
                                     class="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-rose-500 focus:outline-none" />
-                                <button type="submit" disabled
+                                <button type="submit"
                                     class="w-full rounded-lg bg-gradient-to-r from-zinc-900 to-slate-800 py-2.5 text-sm font-medium text-white transition-shadow hover:shadow-lg">
-                                    Request Callback
+                                    Request Callback on WhatsApp
                                 </button>
                             </form>
                         </div>
@@ -485,7 +519,7 @@ const blogPosts = [
                             </div>
                         </div>
                         <div class="mt-8 flex items-center gap-4">
-                            <a href="#"
+                            <a href="/contact"
                                 class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl">
                                 Get Started
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -853,7 +887,7 @@ const blogPosts = [
                                 </svg>
                                 WhatsApp Us
                             </a>
-                            <a href="#"
+                            <a href="/contact"
                                 class="inline-flex items-center gap-2 rounded-xl border-2 border-rose-400/40 bg-rose-500/10 px-6 py-3.5 text-base font-semibold text-rose-300 backdrop-blur-sm transition-all hover:border-rose-400/60 hover:bg-rose-500/20">
                                 Contact Us
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1050,7 +1084,7 @@ const blogPosts = [
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-white">Phone Number</h4>
-                                    <p class="mt-1 text-slate-300">+88 01868-196716</p>
+                                    <a href="tel:+8801868196716" class="mt-1 block text-slate-300 transition-colors hover:text-rose-300">+88 01868-196716</a>
                                 </div>
                             </div>
                             <div
@@ -1065,7 +1099,7 @@ const blogPosts = [
                                 </div>
                                 <div>
                                     <h4 class="font-semibold text-white">Email Address</h4>
-                                    <p class="mt-1 text-slate-300">mbscfirm@gmail.com</p>
+                                    <a href="mailto:mbscfirm@gmail.com" class="mt-1 block text-slate-300 transition-colors hover:text-rose-300">mbscfirm@gmail.com</a>
                                 </div>
                             </div>
                             <div
@@ -1093,30 +1127,30 @@ const blogPosts = [
 
                     <div class="rounded-2xl border border-white/10 bg-white p-8 shadow-2xl">
                         <h3 class="mb-6 text-xl font-semibold text-slate-900">Send us a Message</h3>
-                        <form class="space-y-5">
+                        <form ref="messageFormEl" class="space-y-5" @submit.prevent="sendMessageViaWhatsApp">
                             <div class="grid gap-5 sm:grid-cols-2">
                                 <div>
                                     <label class="mb-2 block text-sm font-medium text-slate-700">Full Name</label>
-                                    <input type="text" placeholder="John Doe"
+                                    <input v-model="messageForm.name" type="text" required placeholder="John Doe"
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm transition-colors focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20" />
                                 </div>
                                 <div>
                                     <label class="mb-2 block text-sm font-medium text-slate-700">Phone Number</label>
-                                    <input type="tel" placeholder="+880 1XXX-XXXXXX"
+                                    <input v-model="messageForm.phone" type="tel" placeholder="+880 1XXX-XXXXXX"
                                         class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm transition-colors focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20" />
                                 </div>
                             </div>
                             <div>
                                 <label class="mb-2 block text-sm font-medium text-slate-700">Email Address</label>
-                                <input type="email" placeholder="example@company.com"
+                                <input v-model="messageForm.email" type="email" placeholder="example@company.com"
                                     class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm transition-colors focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20" />
                             </div>
                             <div>
                                 <label class="mb-2 block text-sm font-medium text-slate-700">Service Interested
                                     In</label>
-                                <select
+                                <select v-model="messageForm.service"
                                     class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm transition-colors focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20">
-                                    <option>Select a service</option>
+                                    <option value="">Select a service</option>
                                     <option>VAT Compliance</option>
                                     <option>Company Formation</option>
                                     <option>Tax Consultancy</option>
@@ -1127,13 +1161,20 @@ const blogPosts = [
                             </div>
                             <div>
                                 <label class="mb-2 block text-sm font-medium text-slate-700">Your Message</label>
-                                <textarea rows="4" placeholder="Tell us about your requirements..."
+                                <textarea v-model="messageForm.message" rows="4" required placeholder="Tell us about your requirements..."
                                     class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm transition-colors focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20"></textarea>
                             </div>
-                            <button type="submit" disabled
-                                class="w-full rounded-xl bg-gradient-to-r from-zinc-900 to-slate-800 py-3.5 text-sm font-semibold text-white shadow-lg shadow-zinc-900/25 transition-all hover:-translate-y-0.5 hover:shadow-xl">
-                                Send Message
-                            </button>
+                            <div class="grid gap-3 sm:grid-cols-2">
+                                <button type="submit"
+                                    class="w-full rounded-xl bg-gradient-to-r from-zinc-900 to-slate-800 py-3.5 text-sm font-semibold text-white shadow-lg shadow-zinc-900/25 transition-all hover:-translate-y-0.5 hover:shadow-xl">
+                                    Send via WhatsApp
+                                </button>
+                                <button type="button" @click="sendMessageViaEmail"
+                                    class="w-full rounded-xl border border-slate-200 bg-white py-3.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50">
+                                    Send by email
+                                </button>
+                            </div>
+                            <p class="text-sm text-slate-500">Opens WhatsApp or your email app with your message filled in. Press send there to reach us.</p>
                         </form>
                     </div>
                 </div>

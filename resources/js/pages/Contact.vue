@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { enquiryText, mailtoUrl, whatsappUrl } from '@/lib/contact';
 import { ref } from 'vue';
 
 const contactForm = ref({
@@ -12,25 +13,27 @@ const contactForm = ref({
     message: '',
 });
 
-const formSubmitting = ref(false);
-const formSubmitted = ref(false);
+const formEl = ref<HTMLFormElement | null>(null);
 
-const submitForm = () => {
-    formSubmitting.value = true;
-    // Simulate form submission
-    setTimeout(() => {
-        formSubmitting.value = false;
-        formSubmitted.value = true;
-        // Reset form
-        contactForm.value = {
-            name: '',
-            email: '',
-            phone: '',
-            subject: '',
-            service: '',
-            message: '',
-        };
-    }, 1500);
+const enquiry = () =>
+    enquiryText({
+        Name: contactForm.value.name,
+        Email: contactForm.value.email,
+        Phone: contactForm.value.phone,
+        Service: contactForm.value.service,
+        Subject: contactForm.value.subject,
+        Message: contactForm.value.message,
+    });
+
+const sendViaWhatsApp = () => {
+    window.open(whatsappUrl(enquiry()), '_blank', 'noopener');
+};
+
+const sendViaEmail = () => {
+    if (!formEl.value?.reportValidity()) {
+        return;
+    }
+    window.location.href = mailtoUrl(contactForm.value.subject, enquiry());
 };
 
 
@@ -87,7 +90,7 @@ const services = [
                                     <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                                 </div>
                                 <div class="text-lg font-bold text-white">Call Us</div>
-                                <div class="mt-1 text-sm text-white/80">+88 01868-196716</div>
+                                <a href="tel:+8801868196716" class="mt-1 block text-sm text-white/80 underline-offset-4 hover:underline">+88 01868-196716</a>
                             </div>
                             <div class="absolute -bottom-4 -right-4 h-20 w-20 rounded-full bg-white/20 blur-2xl"></div>
                         </div>
@@ -97,7 +100,7 @@ const services = [
                                     <svg class="h-6 w-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                 </div>
                                 <div class="text-lg font-bold text-white">Email Us</div>
-                                <div class="mt-1 text-sm text-slate-400">mbscfirm@gmail.com</div>
+                                <a href="mailto:mbscfirm@gmail.com" class="mt-1 block text-sm text-slate-400 underline-offset-4 hover:text-rose-300 hover:underline">mbscfirm@gmail.com</a>
                             </div>
                         </div>
                         <div class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white/10">
@@ -144,21 +147,8 @@ const services = [
                         </div>
 
                         <!-- Success Message -->
-                        <Transition name="fade">
-                            <div v-if="formSubmitted" class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
-                                <div class="flex items-start gap-4">
-                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                                        <svg class="h-5 w-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="font-semibold text-emerald-900">Message Sent Successfully!</h3>
-                                        <p class="mt-1 text-sm text-emerald-700">Thank you for reaching out. We'll get back to you within 24 hours.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </Transition>
 
-                        <form @submit.prevent="submitForm" class="space-y-6">
+                        <form ref="formEl" @submit.prevent="sendViaWhatsApp" class="space-y-6">
                             <div class="grid gap-6 sm:grid-cols-2">
                                 <div>
                                     <label class="mb-2 block text-sm font-medium text-slate-700">Full Name *</label>
@@ -226,19 +216,22 @@ const services = [
                                 ></textarea>
                             </div>
 
-                            <button
-                                type="submit"
-                                :disabled="formSubmitting"
-                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-rose-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
-                            >
-                                <svg v-if="formSubmitting" class="h-5 w-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                <span v-if="formSubmitting">Sending...</span>
-                                <span v-else>Send Message</span>
-                                <svg v-if="!formSubmitting" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </button>
+                            <div class="grid gap-3 sm:grid-cols-2">
+                                <button
+                                    type="submit"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-rose-500/30 transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                                >
+                                    Send via WhatsApp
+                                </button>
+                                <button
+                                    type="button"
+                                    @click="sendViaEmail"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-8 py-4 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+                                >
+                                    Send by email
+                                </button>
+                            </div>
+                            <p class="text-sm text-slate-500">Opens WhatsApp or your email app with your message filled in. Press send there to reach us.</p>
                         </form>
                     </div>
 
