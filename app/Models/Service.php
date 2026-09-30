@@ -18,15 +18,22 @@ class Service extends Model
         'description',
         'icon_svg',
         'features',
+        'process_steps',
+        'documents',
+        'timeline',
+        'fees',
         'image_url',
         'image_width',
         'image_height',
+        'image_alt',
         'sort_order',
         'is_active',
     ];
 
     protected $casts = [
         'features' => 'array',
+        'process_steps' => 'array',
+        'documents' => 'array',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
         'image_width' => 'integer',
@@ -36,12 +43,12 @@ class Service extends Model
     /**
      * The service picture in the shape the public site expects, or null.
      *
-     * @return array{url: string, width: int|null, height: int|null}|null
+     * @return array{url: string, width: int|null, height: int|null, alt: string|null}|null
      */
     public function image(): ?array
     {
         return $this->image_url
-            ? ['url' => $this->image_url, 'width' => $this->image_width, 'height' => $this->image_height]
+            ? ['url' => $this->image_url, 'width' => $this->image_width, 'height' => $this->image_height, 'alt' => $this->image_alt]
             : null;
     }
 

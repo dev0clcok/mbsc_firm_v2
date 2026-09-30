@@ -12,7 +12,11 @@
         "create": "Create",
         "edit": "Edit",
         "delete": "Delete",
-        "created": "Created"
+        "created": "Created",
+        "view_on_site": "View on site",
+        "unsaved_changes": "Unsaved changes",
+        "leave_unsaved": "You have unsaved changes. Leave this page without saving?",
+        "required_note": "Fields marked * are required."
     },
     "nav": {
         "main": "Main",
@@ -285,7 +289,7 @@
             "title_placeholder": "Enter service title...",
             "slug": "Slug",
             "slug_placeholder": "e.g. income-tax",
-            "slug_help": "Used in the URL/selection. Only letters, numbers, dashes and underscores.",
+            "slug_help": "The end of the page address, for example income-tax. Letters, numbers and dashes only.",
             "short_description": "Short Description",
             "short_description_placeholder": "Shown in related services cards...",
             "description": "Description",
@@ -305,7 +309,24 @@
             "icon_svg_help": "Paste a trusted SVG string. This is rendered on the public page.",
             "settings": "Settings",
             "active": "Active",
-            "sort_order": "Sort Order"
+            "sort_order": "Sort Order",
+            "details_help": "Name, address and the text shown on the website.",
+            "short_description_help": "One or two lines. Shown on service cards and under the page title.",
+            "description_help": "The main paragraph on the service page.",
+            "features_help": "What the service covers. The first three also appear on the service card.",
+            "steps": "How it works",
+            "steps_help": "The steps a client goes through. Shown as a numbered list on the service page. Leave empty to hide.",
+            "documents": "Documents you'll need",
+            "documents_help": "What the client should bring or send. Leave empty to hide.",
+            "document_placeholder": "Document name",
+            "add_document": "Add document",
+            "timeline": "Typical timeline",
+            "timeline_help": "How long this usually takes. Leave empty to hide.",
+            "fees": "Fees",
+            "fees_help": "How fees are set for this service. Only state amounts you are happy to publish. Leave empty to hide.",
+            "media_help": "The picture and icon shown for this service.",
+            "settings_help": "Whether the service is shown, and where it sits in the list.",
+            "active_help": "Hidden services do not appear anywhere on the website."
         }
     },
     "datatable": {
@@ -480,5 +501,28 @@
                 }
             }
         }
+    },
+    "steps": {
+        "title_placeholder": "Step title",
+        "description_placeholder": "What happens in this step",
+        "add": "Add step",
+        "remove": "Remove step"
+    },
+    "image_field": {
+        "drop_here": "Drag a picture here, or choose a file.",
+        "choose": "Choose picture",
+        "replace": "Replace picture",
+        "remove": "Remove",
+        "crop": "Crop",
+        "guidance": "JPG, PNG or WebP, up to 8 MB. Use a picture at least 1280 pixels wide; it is resized and converted automatically.",
+        "wrong_type": "That file is not a JPG, PNG or WebP picture.",
+        "too_large": "That picture is larger than 8 MB. Choose a smaller one.",
+        "alt": "Description of the picture",
+        "alt_help": "Read aloud to visitors who cannot see the picture. Say what it shows in a few words.",
+        "alt_required": "Describe the picture for visitors who cannot see it.",
+        "crop_title": "Crop picture",
+        "crop_help": "Drag to choose the part of the picture to keep.",
+        "crop_apply": "Use this crop",
+        "crop_cancel": "Cancel"
     }
 }

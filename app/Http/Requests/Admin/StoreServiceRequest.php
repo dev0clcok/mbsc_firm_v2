@@ -30,10 +30,28 @@ class StoreServiceRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'icon_svg' => ['nullable', 'string'],
             'features' => ['nullable', 'array'],
-            'features.*' => ['string', 'max:255'],
+            'features.*' => ['nullable', 'string', 'max:255'],
+            'process_steps' => ['nullable', 'array', 'max:12'],
+            'process_steps.*.title' => ['nullable', 'string', 'max:120'],
+            'process_steps.*.description' => ['nullable', 'string', 'max:500'],
+            'documents' => ['nullable', 'array', 'max:40'],
+            'documents.*' => ['nullable', 'string', 'max:255'],
+            'timeline' => ['nullable', 'string', 'max:2000'],
+            'fees' => ['nullable', 'string', 'max:2000'],
             'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:8192'],
+            'image_alt' => ['nullable', 'string', 'max:200', 'required_with:image'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'image_alt.required_with' => 'Describe the picture for visitors who cannot see it.',
         ];
     }
 }

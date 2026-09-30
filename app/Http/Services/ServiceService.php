@@ -48,7 +48,7 @@ class ServiceService
     public function store(array $data, Request $request): Service
     {
         unset($data['image']);
-        $data['features'] = $this->cleanFeatures($data['features'] ?? []);
+        $data = $this->cleanLists($data);
 
         if ($request->hasFile('image')) {
             $data = [...$data, ...$this->storeImage($request)];
@@ -63,14 +63,14 @@ class ServiceService
     public function update(Service $service, array $data, Request $request): Service
     {
         unset($data['image'], $data['remove_image']);
-        $data['features'] = $this->cleanFeatures($data['features'] ?? []);
+        $data = $this->cleanLists($data);
 
         if ($request->hasFile('image')) {
             $this->images->delete($service->image_url);
             $data = [...$data, ...$this->storeImage($request)];
         } elseif ($request->boolean('remove_image')) {
             $this->images->delete($service->image_url);
-            $data = [...$data, 'image_url' => null, 'image_width' => null, 'image_height' => null];
+            $data = [...$data, 'image_url' => null, 'image_width' => null, 'image_height' => null, 'image_alt' => null];
         }
 
         $service->update($data);
@@ -99,11 +99,29 @@ class ServiceService
     }
 
     /**
-     * @param  array<int, mixed>  $features
-     * @return array<int, string>
+     * Drop blank rows that the form's repeatable lists may send.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
      */
-    private function cleanFeatures(array $features): array
+    private function cleanLists(array $data): array
     {
-        return array_values(array_filter($features, fn ($v) => is_string($v) && trim($v) !== ''));
+        $lines = fn ($list) => array_values(array_filter(
+            array_map(fn ($v) => is_string($v) ? trim($v) : '', (array) $list),
+            fn ($v) => $v !== '',
+        ));
+
+        $data['features'] = $lines($data['features'] ?? []);
+        $data['documents'] = $lines($data['documents'] ?? []);
+
+        $data['process_steps'] = array_values(array_filter(
+            array_map(fn ($step) => [
+                'title' => trim((string) ($step['title'] ?? '')),
+                'description' => trim((string) ($step['description'] ?? '')),
+            ], (array) ($data['process_steps'] ?? [])),
+            fn ($step) => $step['title'] !== '',
+        ));
+
+        return $data;
     }
 }

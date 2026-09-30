@@ -16,6 +16,10 @@ const props = defineProps<{
         summary: string | null;
         description: string | null;
         features: string[];
+        process_steps: Array<{ title: string; description: string }>;
+        documents: string[];
+        timeline: string | null;
+        fees: string | null;
         /** Trusted SVG markup entered in the admin panel. */
         icon: string | null;
         image: SiteImageData | null;
@@ -74,6 +78,40 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
                                 </li>
                             </ul>
                         </template>
+
+                        <template v-if="service.process_steps.length">
+                            <h2 class="site-title mt-14">How it works</h2>
+                            <ol class="mt-6 space-y-6">
+                                <li v-for="(step, index) in service.process_steps" :key="step.title" class="flex gap-5">
+                                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-lg font-medium text-white" aria-hidden="true">{{ index + 1 }}</span>
+                                    <div>
+                                        <h3 class="site-heading">{{ step.title }}</h3>
+                                        <p v-if="step.description" class="mt-1 text-ink-soft">{{ step.description }}</p>
+                                    </div>
+                                </li>
+                            </ol>
+                        </template>
+
+                        <template v-if="service.documents.length">
+                            <h2 class="site-title mt-14">Documents you'll need</h2>
+                            <ul class="mt-6 grid gap-x-8 sm:grid-cols-2">
+                                <li v-for="document in service.documents" :key="document" class="flex gap-3 border-b border-rule py-3.5">
+                                    <span class="mt-0.5 text-rose"><SiteIcon name="check" /></span>
+                                    {{ document }}
+                                </li>
+                            </ul>
+                        </template>
+
+                        <div v-if="service.timeline || service.fees" class="mt-14 grid gap-6 sm:grid-cols-2">
+                            <section v-if="service.timeline" class="site-card p-6" aria-labelledby="service-timeline">
+                                <h2 id="service-timeline" class="site-heading">Typical timeline</h2>
+                                <p class="mt-2 whitespace-pre-line text-ink-soft">{{ service.timeline }}</p>
+                            </section>
+                            <section v-if="service.fees" class="site-card p-6" aria-labelledby="service-fees">
+                                <h2 id="service-fees" class="site-heading">Fees</h2>
+                                <p class="mt-2 whitespace-pre-line text-ink-soft">{{ service.fees }}</p>
+                            </section>
+                        </div>
                     </div>
 
                     <aside v-if="otherServices.length" aria-labelledby="other-services" class="site-card self-start p-6">

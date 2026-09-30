@@ -60,7 +60,37 @@ test('a service image upload is resized and its size recorded', function () {
         'title' => 'VAT',
         'is_active' => '1',
         'image' => UploadedFile::fake()->image('vat.png', 2000, 1000),
+        'image_alt' => 'A calculator on a desk',
     ])->assertSessionHasNoErrors();
 
-    expect($service->fresh()->image())->toMatchArray(['width' => 1280, 'height' => 640]);
+    expect($service->fresh()->image())->toMatchArray(['width' => 1280, 'height' => 640, 'alt' => 'A calculator on a desk']);
+});
+
+test('saving a service keeps filled-in detail rows and drops blank ones', function () {
+    $service = Service::create(['slug' => 'vat', 'title' => 'VAT', 'is_active' => true, 'sort_order' => 1]);
+
+    $this->put("/admin/services/{$service->id}", [
+        'slug' => 'vat',
+        'title' => 'VAT',
+        'is_active' => true,
+        'features' => ['BIN registration', '  '],
+        'documents' => ['', 'Trade licence'],
+        'process_steps' => [['title' => 'Consultation', 'description' => 'We talk.'], ['title' => '', 'description' => 'orphan']],
+        'timeline' => 'About a week.',
+    ])->assertSessionHasNoErrors();
+
+    $service->refresh();
+    expect($service->features)->toBe(['BIN registration'])
+        ->and($service->documents)->toBe(['Trade licence'])
+        ->and($service->process_steps)->toBe([['title' => 'Consultation', 'description' => 'We talk.']])
+        ->and($service->timeline)->toBe('About a week.');
+});
+
+test('a new service image needs a description', function () {
+    $service = Service::create(['slug' => 'vat', 'title' => 'VAT', 'is_active' => true, 'sort_order' => 1]);
+
+    $this->post("/admin/services/{$service->id}", [
+        '_method' => 'put', 'slug' => 'vat', 'title' => 'VAT', 'is_active' => '1',
+        'image' => UploadedFile::fake()->image('vat.png', 900, 600),
+    ])->assertSessionHasErrors('image_alt');
 });

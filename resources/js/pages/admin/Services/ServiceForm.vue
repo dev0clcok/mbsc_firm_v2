@@ -1,337 +1,149 @@
+<script setup lang="ts">
+import FormActions from '@/components/admin/FormActions.vue';
+import FormField from '@/components/admin/FormField.vue';
+import FormSection from '@/components/admin/FormSection.vue';
+import ImageField from '@/components/admin/ImageField.vue';
+import StepList, { type Step } from '@/components/admin/StepList.vue';
+import StringList from '@/components/admin/StringList.vue';
+import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
+import type { InertiaForm } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+export interface ServiceFormData {
+    slug: string;
+    title: string;
+    short_description: string;
+    description: string;
+    icon_svg: string;
+    image: File | null;
+    remove_image: boolean;
+    image_alt: string;
+    features: string[];
+    process_steps: Step[];
+    documents: string[];
+    timeline: string;
+    fees: string;
+    sort_order: number;
+    is_active: boolean;
+}
+
+const props = defineProps<{
+    mode: 'create' | 'edit';
+    form: InertiaForm<ServiceFormData>;
+    existingImageUrl?: string | null;
+    /** Public address of the service, for the "View on site" link. */
+    viewHref?: string;
+}>();
+
+const emit = defineEmits<{ (e: 'submit'): void }>();
+
+const { t } = useI18n();
+
+useUnsavedWarning(() => props.form.isDirty, t('common.leave_unsaved'));
+
+const errors = () => props.form.errors as Record<string, string | undefined>;
+</script>
+
 <template>
-    <div class="space-y-6 p-4">
+    <div class="space-y-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
-            <h1 class="text-2xl font-semibold tracking-tight">
-                {{ mode === 'edit' ? t('services.edit.heading') : t('services.create.heading') }}
-            </h1>
-            <Link href="/admin/services" class="text-muted-foreground hover:text-foreground">
+            <div>
+                <h1 class="text-2xl font-semibold tracking-tight">
+                    {{ mode === 'edit' ? t('services.edit.heading') : t('services.create.heading') }}
+                </h1>
+                <p class="mt-1 text-sm text-muted-foreground">{{ t('common.required_note') }}</p>
+            </div>
+            <Link href="/admin/services" class="inline-flex min-h-10 items-center text-sm font-medium text-muted-foreground hover:text-foreground">
                 {{ t('services.back_to_list') }}
             </Link>
         </div>
 
-        <form @submit.prevent="emit('submit')" class="space-y-6">
-            <div class="grid gap-6">
-                <div class="space-y-6">
-                    <div class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="mb-4 text-xl font-semibold">{{ t('services.form.details') }}</h2>
-
-                        <div class="grid gap-4 md:grid-cols-2">
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">
-                                    {{ t('services.form.title') }} <span class="text-destructive">*</span>
-                                </label>
-                                <input
-                                    v-model="title"
-                                    type="text"
-                                    required
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                    :placeholder="t('services.form.title_placeholder')"
-                                />
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">
-                                    {{ t('services.form.slug') }} <span class="text-destructive">*</span>
-                                </label>
-                                <input
-                                    v-model="slug"
-                                    type="text"
-                                    required
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono"
-                                    :placeholder="t('services.form.slug_placeholder')"
-                                />
-                                <p class="mt-1 text-xs text-muted-foreground">
-                                    {{ t('services.form.slug_help') }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <label class="mb-2 block text-sm font-medium">{{ t('services.form.short_description') }}</label>
-                            <textarea
-                                v-model="shortDescription"
-                                rows="3"
-                                class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                :placeholder="t('services.form.short_description_placeholder')"
-                            />
-                        </div>
-
-                        <div class="mt-4">
-                            <label class="mb-2 block text-sm font-medium">{{ t('services.form.description') }}</label>
-                            <textarea
-                                v-model="description"
-                                rows="6"
-                                class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                :placeholder="t('services.form.description_placeholder')"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="mb-4 text-xl font-semibold">{{ t('services.form.features') }}</h2>
-
-                        <div class="space-y-3">
-                            <div v-for="(f, idx) in features" :key="idx" class="flex items-center gap-3">
-                                <input
-                                    :value="f"
-                                    @input="updateFeature(idx, ($event.target as HTMLInputElement).value)"
-                                    type="text"
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                    :placeholder="t('services.form.feature_placeholder')"
-                                />
-                                <Button type="button" variant="secondary" class="shrink-0" @click="removeFeature(idx)">
-                                    {{ t('services.form.remove') }}
-                                </Button>
-                            </div>
-
-                            <Button type="button" variant="secondary" @click="addFeature">
-                                {{ t('services.form.add_feature') }}
-                            </Button>
-                        </div>
-                    </div>
+        <form class="space-y-6" novalidate @submit.prevent="emit('submit')">
+            <FormSection :title="t('services.form.details')" :description="t('services.form.details_help')">
+                <div class="grid gap-5 md:grid-cols-2">
+                    <FormField v-slot="f" :label="t('services.form.title')" required :error="errors().title">
+                        <input :id="f.id" v-model="form.title" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="form.clearErrors('title')" />
+                    </FormField>
+                    <FormField v-slot="f" :label="t('services.form.slug')" required :help="t('services.form.slug_help')" :error="errors().slug">
+                        <input :id="f.id" v-model="form.slug" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-sm" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="form.clearErrors('slug')" />
+                    </FormField>
                 </div>
+                <FormField v-slot="f" :label="t('services.form.short_description')" :help="t('services.form.short_description_help')" :error="errors().short_description">
+                    <textarea :id="f.id" v-model="form.short_description" rows="2" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                </FormField>
+                <FormField v-slot="f" :label="t('services.form.description')" :help="t('services.form.description_help')" :error="errors().description">
+                    <textarea :id="f.id" v-model="form.description" rows="5" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                </FormField>
+            </FormSection>
 
-                <div class="space-y-6">
-                    <div class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="mb-4 text-xl font-semibold">{{ t('services.form.media') }}</h2>
+            <FormSection :title="t('services.form.features')" :description="t('services.form.features_help')">
+                <StringList v-model="form.features" :add-label="t('services.form.add_feature')" :remove-label="t('services.form.remove')" :placeholder="t('services.form.feature_placeholder')" />
+            </FormSection>
 
-                        <div class="space-y-4">
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">{{ t('services.form.image') }}</label>
+            <FormSection :title="t('services.form.steps')" :description="t('services.form.steps_help')">
+                <StepList v-model="form.process_steps" />
+            </FormSection>
 
-                                <!-- Preview: existing image or selected file -->
-                                <div
-                                    v-if="previewUrl"
-                                    class="mb-3 overflow-hidden rounded-lg border border-border bg-muted/30"
-                                >
-                                    <img
-                                        :src="previewUrl"
-                                        :alt="t('services.form.image_preview')"
-                                        class="h-48 w-full object-cover"
-                                    />
-                                </div>
+            <FormSection :title="t('services.form.documents')" :description="t('services.form.documents_help')">
+                <StringList v-model="form.documents" :add-label="t('services.form.add_document')" :remove-label="t('services.form.remove')" :placeholder="t('services.form.document_placeholder')" />
+            </FormSection>
 
-                                <div class="flex flex-wrap items-center gap-3">
-                                    <input
-                                        ref="fileInputRef"
-                                        type="file"
-                                        accept="image/*"
-                                        class="block w-full max-w-xs text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90"
-                                        @change="onImageChange"
-                                    />
-                                    <Button
-                                        v-if="previewUrl"
-                                        type="button"
-                                        variant="secondary"
-                                        size="sm"
-                                        @click="clearImage"
-                                    >
-                                        {{ t('services.form.clear_image') }}
-                                    </Button>
-                                </div>
-
-                                <p class="mt-1.5 text-xs text-muted-foreground">
-                                    {{ t('services.form.image_help') }}
-                                </p>
-
-                                <!-- Remove current image (edit mode only) -->
-                                <div v-if="mode === 'edit' && existingImageUrl" class="mt-3 flex items-center gap-2">
-                                    <input
-                                        v-model="removeImage"
-                                        type="checkbox"
-                                        id="remove_image"
-                                        class="rounded border-input"
-                                    />
-                                    <label for="remove_image" class="text-sm font-medium">
-                                        {{ t('services.form.remove_image') }}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">{{ t('services.form.icon_svg') }}</label>
-                                <textarea
-                                    v-model="iconSvg"
-                                    rows="6"
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-xs"
-                                    :placeholder="t('services.form.icon_svg_placeholder')"
-                                />
-                                <p class="mt-1 text-xs text-muted-foreground">
-                                    {{ t('services.form.icon_svg_help') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="mb-4 text-xl font-semibold">{{ t('services.form.settings') }}</h2>
-
-                        <div class="grid gap-6 md:grid-cols-3">
-                            <div class="flex items-center gap-2">
-                                <input v-model="isActive" type="checkbox" id="is_active" class="rounded border-input" />
-                                <label for="is_active" class="text-sm font-medium">{{ t('services.form.active') }}</label>
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">{{ t('services.form.sort_order') }}</label>
-                                <input
-                                    v-model.number="sortOrder"
-                                    type="number"
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid gap-6 lg:grid-cols-2">
+                <FormSection :title="t('services.form.timeline')" :description="t('services.form.timeline_help')">
+                    <FormField v-slot="f" :label="t('services.form.timeline')" :error="errors().timeline">
+                        <textarea :id="f.id" v-model="form.timeline" rows="4" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                    </FormField>
+                </FormSection>
+                <FormSection :title="t('services.form.fees')" :description="t('services.form.fees_help')">
+                    <FormField v-slot="f" :label="t('services.form.fees')" :error="errors().fees">
+                        <textarea :id="f.id" v-model="form.fees" rows="4" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                    </FormField>
+                </FormSection>
             </div>
 
-            <div class="flex items-center justify-end gap-4">
-                <Button as-child variant="secondary">
-                    <Link href="/admin/services">{{ t('common.cancel') }}</Link>
-                </Button>
-                <Button type="submit" :loading="processing">
-                    <span v-if="mode === 'edit'">{{ t('services.edit.save') }}</span>
-                    <span v-else>{{ t('services.create.save') }}</span>
-                </Button>
-            </div>
+            <FormSection :title="t('services.form.media')" :description="t('services.form.media_help')">
+                <ImageField
+                    v-model="form.image"
+                    v-model:remove="form.remove_image"
+                    v-model:alt="form.image_alt"
+                    :label="t('services.form.image')"
+                    :existing-url="existingImageUrl"
+                    :ratio="3 / 2"
+                    :error="errors().image"
+                    :alt-error="errors().image_alt"
+                />
+                <FormField v-slot="f" :label="t('services.form.icon_svg')" :help="t('services.form.icon_svg_help')" :error="errors().icon_svg">
+                    <div class="flex items-start gap-3">
+                        <!-- eslint-disable-next-line vue/no-v-html -->
+                        <span v-if="form.icon_svg" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border bg-muted [&>svg]:h-6 [&>svg]:w-6" aria-hidden="true" v-html="form.icon_svg"></span>
+                        <textarea :id="f.id" v-model="form.icon_svg" rows="4" class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-xs" :placeholder="t('services.form.icon_svg_placeholder')" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                    </div>
+                </FormField>
+            </FormSection>
+
+            <FormSection :title="t('services.form.settings')" :description="t('services.form.settings_help')">
+                <div class="grid gap-5 md:grid-cols-2">
+                    <div>
+                        <label class="flex min-h-10 items-center gap-3 text-sm font-medium">
+                            <input v-model="form.is_active" type="checkbox" class="size-4 rounded border-input" />
+                            {{ t('services.form.active') }}
+                        </label>
+                        <p class="mt-1 text-xs text-muted-foreground">{{ t('services.form.active_help') }}</p>
+                    </div>
+                    <FormField v-slot="f" :label="t('services.form.sort_order')" :error="errors().sort_order">
+                        <input :id="f.id" v-model.number="form.sort_order" type="number" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                    </FormField>
+                </div>
+            </FormSection>
+
+            <FormActions
+                :save-label="mode === 'edit' ? t('services.edit.save') : t('services.create.save')"
+                cancel-href="/admin/services"
+                :processing="form.processing"
+                :dirty="form.isDirty"
+                :view-href="viewHref"
+            />
         </form>
     </div>
 </template>
-
-<script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { Button } from '@/components/ui/button';
-
-const { t } = useI18n();
-
-const props = defineProps<{
-    mode: 'create' | 'edit';
-    slug: string;
-    title: string;
-    shortDescription: string;
-    description: string;
-    iconSvg: string;
-    image: File | null;
-    removeImage: boolean;
-    existingImageUrl: string | null;
-    features: string[];
-    sortOrder: number;
-    isActive: boolean;
-    processing: boolean;
-}>();
-
-const emit = defineEmits<{
-    (e: 'submit'): void;
-    (e: 'update:slug', value: string): void;
-    (e: 'update:title', value: string): void;
-    (e: 'update:shortDescription', value: string): void;
-    (e: 'update:description', value: string): void;
-    (e: 'update:iconSvg', value: string): void;
-    (e: 'update:image', value: File | null): void;
-    (e: 'update:removeImage', value: boolean): void;
-    (e: 'update:features', value: string[]): void;
-    (e: 'update:sortOrder', value: number): void;
-    (e: 'update:isActive', value: boolean): void;
-}>();
-
-const fileInputRef = ref<HTMLInputElement | null>(null);
-
-const slug = computed({
-    get: () => props.slug,
-    set: (v: string) => emit('update:slug', v),
-});
-const title = computed({
-    get: () => props.title,
-    set: (v: string) => emit('update:title', v),
-});
-const shortDescription = computed({
-    get: () => props.shortDescription,
-    set: (v: string) => emit('update:shortDescription', v),
-});
-const description = computed({
-    get: () => props.description,
-    set: (v: string) => emit('update:description', v),
-});
-const iconSvg = computed({
-    get: () => props.iconSvg,
-    set: (v: string) => emit('update:iconSvg', v),
-});
-const image = computed({
-    get: () => props.image,
-    set: (v: File | null) => emit('update:image', v),
-});
-const removeImage = computed({
-    get: () => props.removeImage,
-    set: (v: boolean) => emit('update:removeImage', v),
-});
-
-const objectUrlRef = ref<string | null>(null);
-
-watch(
-    () => image.value,
-    (file) => {
-        if (objectUrlRef.value) {
-            URL.revokeObjectURL(objectUrlRef.value);
-            objectUrlRef.value = null;
-        }
-        if (file) {
-            objectUrlRef.value = URL.createObjectURL(file);
-        }
-    }
-);
-
-const previewUrl = computed(() => {
-    if (objectUrlRef.value) return objectUrlRef.value;
-    if (removeImage.value) return null;
-    return props.existingImageUrl;
-});
-
-onBeforeUnmount(() => {
-    if (objectUrlRef.value) {
-        URL.revokeObjectURL(objectUrlRef.value);
-    }
-});
-
-const onImageChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    const file = target.files?.[0];
-    image.value = file || null;
-};
-
-const clearImage = () => {
-    image.value = null;
-    if (fileInputRef.value) {
-        fileInputRef.value.value = '';
-    }
-};
-
-const features = computed({
-    get: () => props.features,
-    set: (v: string[]) => emit('update:features', v),
-});
-const sortOrder = computed({
-    get: () => props.sortOrder,
-    set: (v: number) => emit('update:sortOrder', v),
-});
-const isActive = computed({
-    get: () => props.isActive,
-    set: (v: boolean) => emit('update:isActive', v),
-});
-
-const addFeature = () => {
-    features.value = [...features.value, ''];
-};
-
-const updateFeature = (idx: number, value: string) => {
-    const next = [...features.value];
-    next[idx] = value;
-    features.value = next;
-};
-
-const removeFeature = (idx: number) => {
-    features.value = features.value.filter((_, i) => i !== idx);
-};
-</script>
-

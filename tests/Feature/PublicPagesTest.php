@@ -73,3 +73,18 @@ test('unknown addresses show the site error page with a 404 status', function ()
 test('missing admin pages keep the default response', function () {
     $this->get('/admin/no-such-page')->assertNotFound()->assertDontSee('data-page');
 });
+
+test('a service page carries its steps, documents, timeline and fees', function () {
+    Service::where('slug', 'vat')->update([
+        'process_steps' => [['title' => 'Consultation', 'description' => 'We talk.']],
+        'documents' => ['Trade licence'],
+        'timeline' => 'About a week.',
+        'fees' => null,
+    ]);
+
+    $this->get('/services/vat')->assertInertia(fn (Assert $page) => $page
+        ->where('service.process_steps.0.title', 'Consultation')
+        ->where('service.documents', ['Trade licence'])
+        ->where('service.timeline', 'About a week.')
+        ->where('service.fees', null));
+});

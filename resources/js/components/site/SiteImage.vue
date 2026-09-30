@@ -9,7 +9,7 @@ import { computed } from 'vue';
 const props = withDefaults(
     defineProps<{
         image: SiteImageData;
-        /** Empty for pictures that only illustrate the text beside them. */
+        /** Overrides the description stored with the picture. */
         alt?: string;
         /**
          * How wide the picture is shown, as a `sizes` attribute. On phones use
@@ -20,7 +20,7 @@ const props = withDefaults(
         /** Load immediately and with high priority: use for the image at the top of a page. */
         eager?: boolean;
     }>(),
-    { alt: '', sizes: '100vw', eager: false },
+    { alt: undefined, sizes: '100vw', eager: false },
 );
 
 // Pictures saved by the image store come in three widths: name-1280.webp, name-800.webp and name-480.webp.
@@ -42,7 +42,7 @@ const srcset = computed(() => {
         :sizes="srcset ? sizes : undefined"
         :width="image.width ?? undefined"
         :height="image.height ?? undefined"
-        :alt="alt"
+        :alt="alt ?? image.alt ?? ''"
         :loading="eager ? 'eager' : 'lazy'"
         :fetchpriority="eager ? 'high' : undefined"
         decoding="async"

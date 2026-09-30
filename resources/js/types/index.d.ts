@@ -36,6 +36,7 @@ export interface SiteImageData {
     url: string;
     width: number | null;
     height: number | null;
+    alt?: string | null;
 }
 
 export interface SiteSettings {

@@ -29,6 +29,7 @@ class ServiceSeeder extends Seeder
                     'Refunds and exemption/zero-rate consultancy',
                 ],
                 'image_url' => '/images/seed/vat-1280.webp',
+                'image_alt' => 'Phone calculator held over paperwork',
                 'image_width' => 1280,
                 'image_height' => 854,
                 'sort_order' => 1,
@@ -51,6 +52,7 @@ class ServiceSeeder extends Seeder
                     'Winding up & liquidation (including voluntary winding up)',
                 ],
                 'image_url' => '/images/seed/rjsc-limited-company-1280.webp',
+                'image_alt' => 'Glass office building seen from below',
                 'image_width' => 1280,
                 'image_height' => 851,
                 'sort_order' => 2,
@@ -73,6 +75,7 @@ class ServiceSeeder extends Seeder
                     'Specialized support: transfer pricing, gift tax, capital gains, exemptions',
                 ],
                 'image_url' => '/images/seed/income-tax-1280.webp',
+                'image_alt' => 'Tax forms, a pen and a phone calculator on a table',
                 'image_width' => 1280,
                 'image_height' => 734,
                 'sort_order' => 3,
@@ -91,6 +94,7 @@ class ServiceSeeder extends Seeder
                     'Annual return filing & regulatory reporting',
                 ],
                 'image_url' => '/images/seed/foundation-trust-society-1280.webp',
+                'image_alt' => 'Two people shaking hands',
                 'image_width' => 1280,
                 'image_height' => 854,
                 'sort_order' => 4,
@@ -109,6 +113,7 @@ class ServiceSeeder extends Seeder
                     'Dissolution management and formal cancellation at RJSC',
                 ],
                 'image_url' => '/images/seed/rjsc-partnership-firm-1280.webp',
+                'image_alt' => 'Hands writing on paper beside laptops',
                 'image_width' => 1280,
                 'image_height' => 854,
                 'sort_order' => 5,
@@ -131,6 +136,7 @@ class ServiceSeeder extends Seeder
                     'Accounts & financial statement preparation (IAS/IFRS) and consolidation',
                 ],
                 'image_url' => '/images/seed/audit-support-1280.webp',
+                'image_alt' => 'Laptop showing a reporting dashboard',
                 'image_width' => 1280,
                 'image_height' => 912,
                 'sort_order' => 6,
@@ -149,6 +155,7 @@ class ServiceSeeder extends Seeder
                     'Winding up proceedings management',
                 ],
                 'image_url' => '/images/seed/club-limited-company-1280.webp',
+                'image_alt' => 'Empty meeting room with a long table',
                 'image_width' => 1280,
                 'image_height' => 854,
                 'sort_order' => 7,
@@ -166,6 +173,7 @@ class ServiceSeeder extends Seeder
                     'Amendments and organization management modifications',
                 ],
                 'image_url' => '/images/seed/trade-organization-1280.webp',
+                'image_alt' => 'Empty office corridor',
                 'image_width' => 1280,
                 'image_height' => 854,
                 'sort_order' => 8,
@@ -173,11 +181,25 @@ class ServiceSeeder extends Seeder
             ],
         ];
 
+        // The firm's standard way of working, shown as "How it works" on each
+        // service page. Documents, timeline and fees are left for the firm
+        // to fill in; those sections stay hidden until they are.
+        $steps = [
+            ['title' => 'Consultation', 'description' => 'A free first consultation to understand what you need.'],
+            ['title' => 'Documentation', 'description' => 'We collect and prepare all required documents.'],
+            ['title' => 'Processing', 'description' => 'We file and follow up your application with the authority.'],
+            ['title' => 'Delivery', 'description' => 'You receive the result on time, with ongoing support.'],
+        ];
+
         foreach ($services as $service) {
-            Service::updateOrCreate(
+            $model = Service::updateOrCreate(
                 ['slug' => $service['slug']],
                 $service
             );
+
+            if (empty($model->process_steps)) {
+                $model->update(['process_steps' => $steps]);
+            }
         }
     }
 }
