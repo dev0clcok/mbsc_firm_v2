@@ -3,100 +3,107 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use App\Http\Services\FAQService;
-use App\Http\Services\ServiceService;
-use App\Http\Services\TeamMemberService;
-use App\Http\Services\TestimonialService;
 use App\Models\FAQ;
 use App\Models\Service;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index(
-        TestimonialService $testimonialService,
-        TeamMemberService $teamMemberService,
-        ServiceService $serviceService,
-        FAQService $faqService
-    ): Response {
-        $request = request()->merge(['status' => 1]);
+    public function index(): Response
+    {
+        return Inertia::render('Welcome', [
+            'services' => $this->serviceSummaries(),
+            'teamMembers' => $this->teamMembers(),
+            'testimonials' => Testimonial::query()->active()->orderBy('sort_order')->orderBy('id')->get()
+                ->map(fn (Testimonial $t) => [
+                    'name' => $t->name,
+                    'position' => $t->position,
+                    'company' => $t->company,
+                    'text' => $t->text,
+                ])
+                ->values(),
+            'faqs' => FAQ::query()->active()->orderBy('sort_order')->orderBy('id')->get()
+                ->map(fn (FAQ $f) => [
+                    'question' => $f->question,
+                    'answer' => $f->answer,
+                ])
+                ->values(),
+        ])->withViewData('seo', [
+            'title' => 'Company registration, tax and VAT services in Chattogram',
+            'description' => 'MBSC Firm handles RJSC company registration, income tax, VAT and audit support for businesses and individuals from its office in Kotowali, Chattogram.',
+        ]);
+    }
 
-        $testimonials = $testimonialService->index($request, false)
-            ->map(fn(Testimonial $t) => [
-                'name' => $t->name,
-                'position' => $t->position,
-                'company' => $t->company,
-                'text' => $t->text,
-                'rating' => $t->rating,
-                'avatar_url' => $t->avatar_url,
-            ])
-            ->values();
+    public function services(): Response
+    {
+        return Inertia::render('Services', [
+            'services' => $this->serviceSummaries(),
+        ])->withViewData('seo', [
+            'title' => 'Services',
+            'description' => 'RJSC company, partnership and society registration, income tax returns and appeals, VAT registration and returns, and audit support in Chattogram.',
+        ]);
+    }
 
-        $teamMembers = $teamMemberService->index($request, false, 3)
-            ->map(fn(TeamMember $m) => [
-                'name' => $m->name,
-                'position' => $m->position,
-                'specialization' => $m->specialization,
-                'image' => $m->image_url,
-                'social_links' => $m->socialLinks->map(fn($s) => [
-                    'platform' => $s->platform,
-                    'url' => $s->url,
-                ])->values()->all(),
-            ])
-            ->values();
+    public function service(string $slug): Response
+    {
+        $service = Service::query()->active()->where('slug', $slug)->firstOrFail();
 
-        $services = $serviceService->index($request, false)
-            ->take(6)
-            ->map(fn(Service $s) => [
+        return Inertia::render('Service', [
+            'service' => [
+                'slug' => $service->slug,
+                'title' => $service->title,
+                'summary' => $service->short_description,
+                'description' => $service->description,
+                'features' => $service->features ?? [],
+            ],
+        ])->withViewData('seo', [
+            'title' => $service->title,
+            'description' => $service->short_description ?: str($service->description)->limit(155)->toString(),
+        ]);
+    }
+
+    public function about(): Response
+    {
+        return Inertia::render('About', [
+            'teamMembers' => $this->teamMembers(),
+        ])->withViewData('seo', [
+            'title' => 'About the firm',
+            'description' => 'MBSC Firm is a Chattogram practice for RJSC, income tax, VAT and audit support work, built on careful documentation and clear communication with regulators.',
+        ]);
+    }
+
+    public function contact(): Response
+    {
+        return Inertia::render('Contact')->withViewData('seo', [
+            'title' => 'Contact',
+            'description' => 'Send an enquiry, call or message MBSC Firm on WhatsApp, or visit the office in Kotowali, Chattogram. The first consultation is free.',
+        ]);
+    }
+
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function serviceSummaries(): Collection
+    {
+        return Service::query()->active()->orderBy('sort_order')->orderBy('id')->get()
+            ->map(fn (Service $s) => [
                 'slug' => $s->slug,
                 'title' => $s->title,
-                'description' => $s->short_description,
-                'icon' => $s->icon_svg,
+                'summary' => $s->short_description,
             ])
             ->values();
-
-        $faqs = $faqService->index($request, false)
-            ->map(fn (FAQ $f) => [
-                'question' => $f->question,
-                'answer' => $f->answer,
-            ])
-            ->values();
-
-        return Inertia::render('Welcome', [
-            'testimonials' => $testimonials,
-            'teamMembers' => $teamMembers,
-            'services' => $services,
-            'faqs' => $faqs,
-        ]);
     }
 
-    public function services(ServiceService $serviceService): Response
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    private function teamMembers(): Collection
     {
-        $request = request()->merge(['status' => 1]);
-        $services = $serviceService->index($request, false)
-            ->map(fn(Service $s) => [
-                'id' => $s->slug,
-                'title' => $s->title,
-                'shortDescription' => $s->short_description,
-                'description' => $s->description,
-                'icon' => $s->icon_svg,
-                'features' => $s->features ?? [],
-                'image' => $s->image_url,
-            ])
-            ->values();
-
-        return Inertia::render('Services', [
-            'services' => $services,
-        ]);
-    }
-
-    public function about(TeamMemberService $teamMemberService): Response
-    {
-        $request = request()->merge(['status' => 1]);
-        $teamMembers = $teamMemberService->index($request, false)
+        return TeamMember::query()->active()->with('socialLinks')->orderBy('sort_order')->orderBy('id')->get()
             ->map(fn (TeamMember $m) => [
                 'name' => $m->name,
                 'position' => $m->position,
@@ -108,14 +115,5 @@ class HomeController extends Controller
                 ])->values()->all(),
             ])
             ->values();
-
-        return Inertia::render('About', [
-            'teamMembers' => $teamMembers,
-        ]);
-    }
-
-    public function contact(): Response
-    {
-        return Inertia::render('Contact');
     }
 }

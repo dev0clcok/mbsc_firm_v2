@@ -26,8 +26,23 @@ export type AppPageProps<
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    site: SiteSettings;
     sidebarOpen: boolean;
 };
+
+export interface SiteSettings {
+    name: string;
+    phone: string | null;
+    phone_href: string | null;
+    whatsapp_url: string | null;
+    email: string | null;
+    address: string | null;
+    maps_url: string | null;
+    office_hours: string | null;
+    response_time: string | null;
+    socials: Array<{ platform: string; url: string }>;
+    services: Array<{ slug: string; title: string }>;
+}
 
 export interface User {
     id: number;

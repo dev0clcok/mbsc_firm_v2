@@ -51,7 +51,9 @@ test('enquiries are rate limited per visitor', function () use ($valid) {
         $this->post('/enquiries', $valid)->assertSessionHas('success');
     }
 
-    $this->post('/enquiries', $valid)->assertStatus(429);
+    $this->post('/enquiries', $valid)->assertSessionHasErrors('form');
+
+    expect(Enquiry::count())->toBe(5);
 });
 
 test('an admin can list enquiries and change their status', function () use ($valid) {

@@ -22,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for('enquiries', fn (Request $request) => Limit::perMinutes(10, 5)->by($request->ip()));
+        // Answer with a form error instead of a bare 429 page so the enquiry
+        // form can show the message in place.
+        RateLimiter::for('enquiries', fn (Request $request) => Limit::perMinutes(10, 5)
+            ->by($request->ip())
+            ->response(fn () => back()->withErrors([
+                'form' => 'Too many enquiries were sent from this connection. Try again in a few minutes, or call us.',
+            ])));
     }
 }

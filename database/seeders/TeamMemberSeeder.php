@@ -9,12 +9,13 @@ class TeamMemberSeeder extends Seeder
 {
     public function run(): void
     {
+        // Only real people belong here. Add other members in the admin panel.
         $members = [
             [
                 'name' => 'Mr. S. M. Sirajul Monir (Rifat)',
                 'position' => 'Founder & Consultant',
                 'specialization' => 'Corporate Law & Taxation',
-                'image_url' => '/asset/rifat.jpeg',
+                'image_url' => '/images/founder.webp',
                 'sort_order' => 1,
                 'is_active' => true,
                 'social_links' => [
@@ -31,51 +32,6 @@ class TeamMemberSeeder extends Seeder
                         'url' => 'https://twitter.com/rifat_s_m_sirajul_monir',
                     ],
                 ],
-            ],
-            [
-                'name' => 'Ms. Fatima',
-                'position' => 'Senior Consultant',
-                'specialization' => 'VAT & Customs',
-                'image_url' => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400',
-                'sort_order' => 2,
-                'is_active' => true,
-                'social_links' => [
-                    [
-                        'platform' => 'linkedin',
-                        'url' => 'https://www.linkedin.com/in/rifat-s-m-sirajul-monir-b1925b192/',
-                    ],
-                    [
-                        'platform' => 'facebook',
-                        'url' => 'https://www.facebook.com/rifat.s.m.sirajul.monir',
-                    ],
-                    [
-                        'platform' => 'twitter',
-                        'url' => 'https://twitter.com/rifat_s_m_sirajul_monir',
-                    ],
-                ],
-            ],
-            [
-                'name' => 'Mr. Hossain',
-                'position' => 'Legal Advisor',
-                'specialization' => 'Business Registration',
-                'image_url' => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400',
-                'sort_order' => 3,
-                'is_active' => true,
-                'social_links' => [
-                    [
-
-                        'platform' => 'linkedin',
-                        'url' => 'https://www.linkedin.com/in/rifat-s-m-sirajul-monir-b1925b192/',
-                    ],
-                    [
-                        'platform' => 'facebook',
-                        'url' => 'https://www.facebook.com/rifat.s.m.sirajul.monir',
-                    ],
-                    [
-                        'platform' => 'twitter',
-                        'url' => 'https://twitter.com/rifat_s_m_sirajul_monir',
-                    ],
-                ]
             ],
         ];
 

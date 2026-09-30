@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Service;
 use App\Models\SiteSetting;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -43,7 +44,14 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'site' => fn () => SiteSetting::forPublic(),
+            'site' => fn () => [
+                ...SiteSetting::forPublic(),
+                'name' => config('app.name'),
+                'services' => Service::query()->active()->orderBy('sort_order')->orderBy('id')
+                    ->get(['slug', 'title'])
+                    ->map(fn (Service $s) => ['slug' => $s->slug, 'title' => $s->title])
+                    ->all(),
+            ],
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $user,

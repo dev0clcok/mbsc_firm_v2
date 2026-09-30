@@ -23,5 +23,5 @@
 Open enquiries
 </x-mail::button>
 
-Received {{ $enquiry->created_at->timezone(config('app.timezone'))->format('j M Y, g:i A') }}.
+Received {{ $enquiry->created_at->timezone('Asia/Dhaka')->format('j M Y, g:i A') }}.
 </x-mail::message>
