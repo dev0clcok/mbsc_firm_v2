@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import PublicLayout from '@/layouts/PublicLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { enquiryText, mailtoUrl, whatsappUrl } from '@/lib/contact';
 import { ref } from 'vue';
 
