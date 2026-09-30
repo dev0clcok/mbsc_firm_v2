@@ -1,242 +1,150 @@
-<template>
-    <div class="space-y-6 p-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-            <h1 class="text-2xl font-semibold tracking-tight">
-                {{ mode === 'edit' ? t('team_members.edit.heading') : t('team_members.create.heading') }}
-            </h1>
-            <Link href="/admin/team-members" class="text-muted-foreground hover:text-foreground">
-                {{ t('team_members.back_to_list') }}
-            </Link>
-        </div>
-
-        <form @submit.prevent="emit('submit')" class="space-y-6">
-            <div class="rounded-lg border border-border bg-card p-6">
-                <h2 class="mb-4 text-xl font-semibold">{{ t('team_members.form.details') }}</h2>
-
-                <div class="grid gap-4 md:grid-cols-2">
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">
-                            {{ t('team_members.form.name') }} <span class="text-destructive">*</span>
-                        </label>
-                        <input
-                            v-model="name"
-                            type="text"
-                            required
-                            class="w-full rounded-md border border-input bg-background px-3 py-2"
-                            :placeholder="t('team_members.form.name_placeholder')"
-                        />
-                    </div>
-
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">{{ t('team_members.form.position') }}</label>
-                        <input
-                            v-model="position"
-                            type="text"
-                            class="w-full rounded-md border border-input bg-background px-3 py-2"
-                            :placeholder="t('team_members.form.position_placeholder')"
-                        />
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="mb-2 block text-sm font-medium">{{ t('team_members.form.specialization') }}</label>
-                        <input
-                            v-model="specialization"
-                            type="text"
-                            class="w-full rounded-md border border-input bg-background px-3 py-2"
-                            :placeholder="t('team_members.form.specialization_placeholder')"
-                        />
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <h3 class="mb-3 text-sm font-semibold">{{ t('team_members.form.social_links') }}</h3>
-                        <div class="space-y-3">
-                            <div
-                                v-for="(link, idx) in socialLinks"
-                                :key="idx"
-                                class="flex flex-wrap items-center gap-3 rounded-md border border-border bg-muted/30 p-3"
-                            >
-                                <select
-                                    :value="link.platform"
-                                    @change="updateSocialLink(idx, 'platform', ($event.target as HTMLSelectElement).value)"
-                                    class="w-36 rounded-md border border-input bg-background px-3 py-2 text-sm"
-                                >
-                                    <option value="">{{ t('team_members.form.select_platform') }}</option>
-                                    <option
-                                        v-for="(label, key) in platformOptions"
-                                        :key="key"
-                                        :value="key"
-                                    >
-                                        {{ label }}
-                                    </option>
-                                </select>
-                                <input
-                                    :value="link.url"
-                                    @input="updateSocialLink(idx, 'url', ($event.target as HTMLInputElement).value)"
-                                    :type="link.platform === 'email' ? 'email' : 'url'"
-                                    class="min-w-0 flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"
-                                    :placeholder="link.platform === 'email' ? 'member@example.com' : 'https://...'"
-                                />
-                                <Button type="button" variant="secondary" size="sm" class="shrink-0" @click="removeSocialLink(idx)">
-                                    {{ t('team_members.form.remove') }}
-                                </Button>
-                            </div>
-                            <Button type="button" variant="secondary" @click="addSocialLink">
-                                {{ t('team_members.form.add_social_link') }}
-                            </Button>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label class="mb-2 block text-sm font-medium">{{ t('team_members.form.image') }}</label>
-                        <div v-if="previewUrl" class="mb-3">
-                            <img :src="previewUrl" :alt="t('team_members.form.image_preview')" class="h-32 w-32 rounded-lg object-cover" />
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3">
-                            <input
-                                ref="fileInputRef"
-                                type="file"
-                                accept="image/*"
-                                class="block w-full max-w-xs text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90"
-                                @change="onImageChange"
-                            />
-                            <Button v-if="previewUrl" type="button" variant="secondary" size="sm" @click="clearImage">
-                                {{ t('team_members.form.clear_image') }}
-                            </Button>
-                        </div>
-                        <p class="mt-1.5 text-xs text-muted-foreground">{{ t('team_members.form.image_help') }}</p>
-                        <div v-if="mode === 'edit' && existingImageUrl" class="mt-3 flex items-center gap-2">
-                            <input v-model="removeImage" type="checkbox" id="remove_image" class="rounded border-input" />
-                            <label for="remove_image" class="text-sm font-medium">{{ t('team_members.form.remove_image') }}</label>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <input v-model="isActive" type="checkbox" id="is_active" class="rounded border-input" />
-                        <label for="is_active" class="text-sm font-medium">{{ t('team_members.form.active') }}</label>
-                    </div>
-                    <div>
-                        <label class="mb-2 block text-sm font-medium">{{ t('team_members.form.sort_order') }}</label>
-                        <input v-model.number="sortOrder" type="number" class="w-full rounded-md border border-input bg-background px-3 py-2" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end gap-4">
-                <Button as-child variant="secondary">
-                    <Link href="/admin/team-members">{{ t('common.cancel') }}</Link>
-                </Button>
-                <Button type="submit" :loading="processing">
-                    <span v-if="mode === 'edit'">{{ t('team_members.edit.save') }}</span>
-                    <span v-else>{{ t('team_members.create.save') }}</span>
-                </Button>
-            </div>
-        </form>
-    </div>
-</template>
-
 <script setup lang="ts">
+import FormActions from '@/components/admin/FormActions.vue';
+import FormField from '@/components/admin/FormField.vue';
+import FormSection from '@/components/admin/FormSection.vue';
+import ImageField from '@/components/admin/ImageField.vue';
+import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
+import type { InertiaForm } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
-import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { Plus, Trash2 } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
-import { Button } from '@/components/ui/button';
+
+export interface TeamMemberFormData {
+    name: string;
+    position: string;
+    specialization: string;
+    social_links: Array<{ platform: string; url: string }>;
+    image: File | null;
+    remove_image: boolean;
+    sort_order: number;
+    is_active: boolean;
+}
+
+const props = defineProps<{
+    mode: 'create' | 'edit';
+    form: InertiaForm<TeamMemberFormData>;
+    existingImageUrl?: string | null;
+    viewHref?: string;
+}>();
+
+const emit = defineEmits<{ (e: 'submit'): void }>();
 
 const { t } = useI18n();
 
-export interface SocialLink {
-    platform: string;
-    url: string;
-}
+useUnsavedWarning(() => props.form.isDirty, t('common.leave_unsaved'));
 
-const platformOptions: Record<string, string> = {
-    facebook: 'Facebook',
+const errors = () => props.form.errors as Record<string, string | undefined>;
+
+const platforms: Record<string, string> = {
     linkedin: 'LinkedIn',
+    facebook: 'Facebook',
     twitter: 'X (Twitter)',
     instagram: 'Instagram',
     youtube: 'YouTube',
     email: 'Email',
 };
-
-const props = defineProps<{
-    mode: 'create' | 'edit';
-    name: string;
-    position: string;
-    specialization: string;
-    socialLinks: SocialLink[];
-    image: File | null;
-    removeImage: boolean;
-    existingImageUrl: string | null;
-    sortOrder: number;
-    isActive: boolean;
-    processing: boolean;
-}>();
-
-const emit = defineEmits<{
-    (e: 'submit'): void;
-    (e: 'update:name', value: string): void;
-    (e: 'update:position', value: string): void;
-    (e: 'update:specialization', value: string): void;
-    (e: 'update:socialLinks', value: SocialLink[]): void;
-    (e: 'update:image', value: File | null): void;
-    (e: 'update:removeImage', value: boolean): void;
-    (e: 'update:sortOrder', value: number): void;
-    (e: 'update:isActive', value: boolean): void;
-}>();
-
-const fileInputRef = ref<HTMLInputElement | null>(null);
-const objectUrlRef = ref<string | null>(null);
-
-const name = computed({ get: () => props.name, set: (v) => emit('update:name', v) });
-const position = computed({ get: () => props.position, set: (v) => emit('update:position', v) });
-const specialization = computed({ get: () => props.specialization, set: (v) => emit('update:specialization', v) });
-const socialLinks = computed({ get: () => props.socialLinks, set: (v) => emit('update:socialLinks', v) });
-const image = computed({ get: () => props.image, set: (v) => emit('update:image', v) });
-const removeImage = computed({ get: () => props.removeImage, set: (v) => emit('update:removeImage', v) });
-const sortOrder = computed({ get: () => props.sortOrder, set: (v) => emit('update:sortOrder', v) });
-const isActive = computed({ get: () => props.isActive, set: (v) => emit('update:isActive', v) });
-
-const addSocialLink = () => {
-    socialLinks.value = [...socialLinks.value, { platform: '', url: '' }];
-};
-
-const updateSocialLink = (idx: number, field: 'platform' | 'url', value: string) => {
-    const next = [...socialLinks.value];
-    if (!next[idx]) next[idx] = { platform: '', url: '' };
-    next[idx] = { ...next[idx], [field]: value };
-    socialLinks.value = next;
-};
-
-const removeSocialLink = (idx: number) => {
-    socialLinks.value = socialLinks.value.filter((_, i) => i !== idx);
-};
-
-watch(
-    () => image.value,
-    (file) => {
-        if (objectUrlRef.value) {
-            URL.revokeObjectURL(objectUrlRef.value);
-            objectUrlRef.value = null;
-        }
-        if (file) objectUrlRef.value = URL.createObjectURL(file);
-    }
-);
-
-const previewUrl = computed(() => {
-    if (objectUrlRef.value) return objectUrlRef.value;
-    if (removeImage.value) return null;
-    return props.existingImageUrl;
-});
-
-onBeforeUnmount(() => {
-    if (objectUrlRef.value) URL.revokeObjectURL(objectUrlRef.value);
-});
-
-const onImageChange = (e: Event) => {
-    const target = e.target as HTMLInputElement;
-    image.value = target.files?.[0] || null;
-};
-
-const clearImage = () => {
-    image.value = null;
-    if (fileInputRef.value) fileInputRef.value.value = '';
-};
 </script>
+
+<template>
+    <!-- The Inertia form object is shared with the page on purpose; fields bind straight to it. -->
+    <!-- eslint-disable vue/no-mutating-props -->
+    <div class="space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h1 class="text-2xl font-semibold tracking-tight">{{ mode === 'edit' ? t('team_members.edit.heading') : t('team_members.create.heading') }}</h1>
+                <p class="mt-1 text-sm text-muted-foreground">{{ t('common.required_note') }}</p>
+            </div>
+            <Link href="/admin/team-members" class="inline-flex min-h-10 items-center text-sm font-medium text-muted-foreground hover:text-foreground">
+                {{ t('team_members.back_to_list') }}
+            </Link>
+        </div>
+
+        <form class="space-y-6" novalidate @submit.prevent="emit('submit')">
+            <FormSection :title="t('team_members.form.details')" :description="t('team_members.form.details_help')">
+                <FormField v-slot="f" :label="t('team_members.form.name')" required :error="errors().name">
+                    <input :id="f.id" v-model="form.name" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="form.clearErrors('name')" />
+                </FormField>
+                <div class="grid gap-5 md:grid-cols-2">
+                    <FormField v-slot="f" :label="t('team_members.form.position')" :error="errors().position">
+                        <input :id="f.id" v-model="form.position" type="text" class="w-full rounded-md border border-input bg-background px-3 py-2" :placeholder="t('team_members.form.position_placeholder')" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                    </FormField>
+                    <FormField v-slot="f" :label="t('team_members.form.specialization')" :error="errors().specialization">
+                        <input :id="f.id" v-model="form.specialization" type="text" class="w-full rounded-md border border-input bg-background px-3 py-2" :placeholder="t('team_members.form.specialization_placeholder')" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
+                    </FormField>
+                </div>
+            </FormSection>
+
+            <FormSection :title="t('team_members.form.image')" :description="t('team_members.form.image_section_help')">
+                <ImageField
+                    v-model="form.image"
+                    v-model:remove="form.remove_image"
+                    :label="t('team_members.form.image')"
+                    :existing-url="existingImageUrl"
+                    :ratio="1"
+                    :error="errors().image"
+                    without-alt
+                />
+            </FormSection>
+
+            <FormSection :title="t('team_members.form.social_links')" :description="t('team_members.form.social_links_help')">
+                <div class="space-y-3">
+                    <div v-for="(link, index) in form.social_links" :key="index">
+                        <div class="flex flex-wrap items-center gap-2 sm:flex-nowrap">
+                            <select v-model="link.platform" class="w-full rounded-md border border-input bg-background px-3 py-2 sm:w-44" :aria-label="`${t('team_members.form.select_platform')} ${index + 1}`">
+                                <option value="">{{ t('team_members.form.select_platform') }}</option>
+                                <option v-for="(label, key) in platforms" :key="key" :value="key">{{ label }}</option>
+                            </select>
+                            <input
+                                v-model="link.url"
+                                :type="link.platform === 'email' ? 'email' : 'url'"
+                                class="w-full flex-1 rounded-md border border-input bg-background px-3 py-2"
+                                :placeholder="link.platform === 'email' ? 'name@example.com' : 'https://'"
+                                :aria-label="`${t('team_members.form.link_address')} ${index + 1}`"
+                                :aria-invalid="errors()[`social_links.${index}.url`] ? true : undefined"
+                            />
+                            <button
+                                type="button"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-destructive hover:bg-destructive/10"
+                                :aria-label="`${t('team_members.form.remove')} ${index + 1}`"
+                                @click="form.social_links.splice(index, 1)"
+                            >
+                                <Trash2 class="size-4" />
+                            </button>
+                        </div>
+                        <p v-if="errors()[`social_links.${index}.url`] || errors()[`social_links.${index}.platform`]" class="mt-1.5 text-sm font-medium text-red-600 dark:text-red-500">
+                            {{ errors()[`social_links.${index}.url`] || errors()[`social_links.${index}.platform`] }}
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        class="inline-flex min-h-10 items-center gap-2 rounded-md border border-dashed border-input px-3 py-2 text-sm font-medium hover:bg-muted"
+                        @click="form.social_links.push({ platform: '', url: '' })"
+                    >
+                        <Plus class="size-4" />
+                        {{ t('team_members.form.add_social_link') }}
+                    </button>
+                </div>
+            </FormSection>
+
+            <FormSection :title="t('team_members.form.settings')">
+                <div class="grid gap-5 md:grid-cols-2">
+                    <label class="flex min-h-10 items-center gap-3 text-sm font-medium">
+                        <input v-model="form.is_active" type="checkbox" class="size-4 rounded border-input" />
+                        {{ t('team_members.form.active') }}
+                    </label>
+                    <FormField v-slot="f" :label="t('team_members.form.sort_order')" :error="errors().sort_order">
+                        <input :id="f.id" v-model.number="form.sort_order" type="number" class="w-full rounded-md border border-input bg-background px-3 py-2" />
+                    </FormField>
+                </div>
+            </FormSection>
+
+            <FormActions
+                :save-label="mode === 'edit' ? t('team_members.edit.save') : t('team_members.create.save')"
+                cancel-href="/admin/team-members"
+                :processing="form.processing"
+                :dirty="form.isDirty"
+                :view-href="viewHref"
+            />
+        </form>
+    </div>
+</template>

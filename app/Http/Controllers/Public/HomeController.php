@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\ImageStore;
 use App\Models\FAQ;
 use App\Models\Service;
 use App\Models\SiteSetting;
@@ -169,7 +170,8 @@ class HomeController extends Controller
                 'name' => $m->name,
                 'position' => $m->position,
                 'specialization' => $m->specialization,
-                'image' => $m->image_url,
+                // Portraits are shown small, so the 480px file is enough.
+                'image' => $m->image_url ? ImageStore::variant($m->image_url, 480) : null,
                 'social_links' => $m->socialLinks->map(fn ($s) => [
                     'platform' => $s->platform,
                     'url' => $s->url,

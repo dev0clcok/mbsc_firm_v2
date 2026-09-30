@@ -159,8 +159,13 @@
             "image_help": "JPG, PNG or WebP. Max 2MB.",
             "clear_image": "Clear",
             "remove_image": "Remove current photo",
-            "active": "Active",
-            "sort_order": "Sort Order"
+            "active": "Shown on the website",
+            "sort_order": "Sort order",
+            "details_help": "Shown on the About page, and the first member on the home page.",
+            "image_section_help": "A square head-and-shoulders photo works best. The description for screen readers is written automatically from the name.",
+            "social_links_help": "Only real, working profiles. Leave empty to show none.",
+            "link_address": "Link address",
+            "settings": "Settings"
         }
     },
     "testimonials": {
@@ -218,8 +223,10 @@
             "avatar_help": "JPG, PNG or WebP. Max 2MB. Shown as circular avatar.",
             "clear_avatar": "Clear",
             "remove_avatar": "Remove current photo",
-            "active": "Active",
-            "sort_order": "Sort Order"
+            "active": "Shown on the website",
+            "sort_order": "Sort order",
+            "details_help": "Only publish words a real client has agreed to have quoted.",
+            "settings": "Settings"
         }
     },
     "faqs": {

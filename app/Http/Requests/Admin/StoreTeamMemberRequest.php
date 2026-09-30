@@ -39,7 +39,7 @@ class StoreTeamMemberRequest extends FormRequest
                     }
                 },
             ],
-            'image' => ['nullable', 'file', 'image', 'max:2048'],
+            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:8192'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
         ];

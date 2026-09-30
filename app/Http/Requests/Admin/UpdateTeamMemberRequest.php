@@ -39,7 +39,7 @@ class UpdateTeamMemberRequest extends FormRequest
                     }
                 },
             ],
-            'image' => ['nullable', 'file', 'image', 'max:2048'],
+            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:8192'],
             'remove_image' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],

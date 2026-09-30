@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 
 class TeamMemberService
 {
+    public function __construct(private ImageStore $images) {}
+
     /**
      * @return LengthAwarePaginator|Collection<int, TeamMember>
      */
@@ -52,11 +54,9 @@ class TeamMemberService
         $socialLinks = $data['social_links'] ?? [];
         unset($data['image'], $data['social_links']);
 
-        $data['image_url'] = null;
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('team-members', 'public');
-            $data['image_url'] = '/storage/'.$path;
-        }
+        $data['image_url'] = $request->hasFile('image')
+            ? $this->images->store($request->file('image'), 'team-members')['url']
+            : null;
 
         $teamMember = TeamMember::query()->create($data);
         $this->syncSocialLinks($teamMember, $socialLinks);
@@ -72,13 +72,12 @@ class TeamMemberService
         $socialLinks = $data['social_links'] ?? [];
         unset($data['image'], $data['remove_image'], $data['social_links']);
 
-        if ($request->boolean('remove_image')) {
+        if ($request->hasFile('image')) {
+            $this->deleteStoredImage($teamMember->image_url);
+            $data['image_url'] = $this->images->store($request->file('image'), 'team-members')['url'];
+        } elseif ($request->boolean('remove_image')) {
             $this->deleteStoredImage($teamMember->image_url);
             $data['image_url'] = null;
-        } elseif ($request->hasFile('image')) {
-            $this->deleteStoredImage($teamMember->image_url);
-            $path = $request->file('image')->store('team-members', 'public');
-            $data['image_url'] = '/storage/'.$path;
         }
 
         $teamMember->update($data);
@@ -118,10 +117,6 @@ class TeamMemberService
 
     private function deleteStoredImage(?string $imageUrl): void
     {
-        if (! $imageUrl || ! str_starts_with($imageUrl, '/storage/')) {
-            return;
-        }
-        $path = str_replace('/storage/', '', $imageUrl);
-        Storage::disk('public')->delete($path);
+        $this->images->delete($imageUrl);
     }
 }
