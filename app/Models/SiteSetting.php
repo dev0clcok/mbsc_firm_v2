@@ -101,7 +101,10 @@ class SiteSetting extends Model
             'email' => $s['email'],
             'address' => $s['address'],
             'maps_url' => $s['maps_url'],
-            'office_hours' => $s['office_hours'],
+            // Keep "7:00 PM" together so the AM/PM never wraps onto its own line.
+            'office_hours' => $s['office_hours']
+                ? preg_replace('/(\d)\s+(AM|PM)\b/i', "$1\u{00A0}$2", $s['office_hours'])
+                : null,
             'response_time' => $s['response_time'],
             'socials' => $socials,
         ];

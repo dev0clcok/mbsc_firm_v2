@@ -45,3 +45,9 @@ test('public pages receive derived contact links and only filled-in socials', fu
         ->where('site.socials', [['platform' => 'facebook', 'url' => 'https://facebook.com/example']])
     );
 });
+
+test('office hours keep the time and AM/PM together', function () {
+    SiteSetting::put(['office_hours' => 'Saturday to Thursday, 10:00 AM to 7:00 PM']);
+
+    expect(SiteSetting::forPublic()['office_hours'])->toBe("Saturday to Thursday, 10:00\u{00A0}AM to 7:00\u{00A0}PM");
+});

@@ -10,7 +10,7 @@ class SiteSettingSeeder extends Seeder
     public function run(): void
     {
         $defaults = [
-            'phone' => '+88 01868-196716',
+            'phone' => '+880 1868-196716',
             'whatsapp' => '+880 1868-196716',
             'email' => 'mbscfirm@gmail.com',
             'enquiry_email' => 'mbscfirm@gmail.com',

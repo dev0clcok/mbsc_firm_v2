@@ -38,7 +38,7 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
                 <Link href="/" class="shrink-0" :aria-label="`${site.name} home`">
                     <picture>
                         <source srcset="/images/logo-1x.webp 1x, /images/logo.webp 2x" type="image/webp" />
-                        <img src="/images/logo.png" :alt="site.name" width="219" height="56" class="h-12 w-auto sm:h-14" />
+                        <img src="/images/logo.png" :alt="site.name" width="239" height="56" class="h-11 w-auto sm:h-12" />
                     </picture>
                 </Link>
 
@@ -124,18 +124,18 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
 
                 <nav aria-label="Footer">
                     <h2 class="text-sm font-semibold text-white/60">Pages</h2>
-                    <ul class="mt-3">
+                    <ul class="mt-1">
                         <li v-for="link in navLinks" :key="link.page">
-                            <Link :href="link.href" class="inline-flex min-h-11 items-center text-white/85 underline-offset-4 hover:text-white hover:underline">{{ link.name }}</Link>
+                            <Link :href="link.href" class="block py-2.5 leading-6 text-white/85 underline-offset-4 hover:text-white hover:underline">{{ link.name }}</Link>
                         </li>
                     </ul>
                 </nav>
 
                 <nav v-if="site.services.length" aria-label="Services">
                     <h2 class="text-sm font-semibold text-white/60">Services</h2>
-                    <ul class="mt-3">
+                    <ul class="mt-1">
                         <li v-for="service in site.services" :key="service.slug">
-                            <Link :href="`/services/${service.slug}`" class="inline-flex min-h-11 items-center text-white/85 underline-offset-4 hover:text-white hover:underline">{{ service.title }}</Link>
+                            <Link :href="`/services/${service.slug}`" class="block py-2.5 leading-6 text-white/85 underline-offset-4 hover:text-white hover:underline">{{ service.title }}</Link>
                         </li>
                     </ul>
                 </nav>
