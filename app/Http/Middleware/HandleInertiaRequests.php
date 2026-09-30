@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Enquiry;
 use App\Models\Service;
 use App\Models\SiteSetting;
 use Illuminate\Foundation\Inspiring;
@@ -76,6 +77,10 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'site' => fn () => self::siteProps(),
+            // Badge in the admin sidebar.
+            'newEnquiries' => fn () => $request->is('admin*')
+                ? Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count()
+                : null,
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $user,

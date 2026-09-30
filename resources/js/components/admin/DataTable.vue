@@ -1,9 +1,10 @@
 <template>
     <div class="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-border bg-gradient-to-r from-muted/80 to-muted/60">
+        <!-- Below md each row becomes a stacked block, so nothing needs sideways scrolling on a phone. -->
+        <div class="md:overflow-x-auto">
+            <table class="w-full max-md:block">
+                <thead class="max-md:hidden">
+                    <tr class="border-b border-border bg-muted/60">
                         <th
                             v-for="column in columns"
                             :key="column.key"
@@ -26,21 +27,25 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border bg-background">
+                <tbody class="divide-y divide-border bg-background max-md:block">
                     <tr
                         v-for="(row, index) in data"
                         :key="getRowKey(row, index)"
-                        class="transition-all duration-150 hover:bg-muted/40 hover:shadow-sm"
+                        class="transition-colors duration-150 hover:bg-muted/40 max-md:block max-md:px-4 max-md:py-3"
                     >
                         <td
-                            v-for="column in columns"
+                            v-for="(column, columnIndex) in columns"
                             :key="column.key"
                             :class="[
-                                'px-6 py-4 text-sm',
-                                column.align === 'center' && 'text-center',
-                                column.align === 'right' && 'text-right',
+                                'px-6 py-4 text-sm max-md:flex max-md:items-center max-md:justify-between max-md:gap-4 max-md:px-0 max-md:py-1.5 max-md:text-left',
+                                column.align === 'center' && 'md:text-center',
+                                column.align === 'right' && 'md:text-right',
+                                columnIndex === 0 && 'max-md:block',
                             ]"
                         >
+                            <span v-if="columnIndex > 0" class="text-xs font-semibold tracking-wide text-muted-foreground uppercase md:hidden">
+                                {{ column.label }}
+                            </span>
                             <slot
                                 :name="`cell-${column.key}`"
                                 :row="row"
@@ -61,17 +66,17 @@
                         </td>
                         <td
                             v-if="actions && actions.length > 0"
-                            class="px-6 py-4"
+                            class="px-6 py-4 max-md:block max-md:px-0 max-md:pt-2 max-md:pb-0"
                         >
-                            <div class="flex items-center justify-end gap-2">
+                            <div class="flex items-center justify-end gap-2 max-md:-ml-2 max-md:justify-start">
                                 <template v-for="(action, actionIndex) in actions" :key="actionIndex">
                                     <Link
                                         v-if="action.type === 'link'"
-                                        :href="typeof action.href === 'function' ? action.href(row).url : action.href(row)"
+                                        :href="action.href?.(row)?.url ?? action.href?.(row) ?? '#'"
                                         :title="action.label"
                                         :aria-label="action.label"
                                         :class="[
-                                            'inline-flex h-9 w-9 items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                                            'inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
                                             action.variant === 'destructive'
                                                 ? 'text-destructive hover:bg-destructive/10 hover:text-destructive/90'
                                                 : 'text-muted-foreground hover:bg-muted hover:text-foreground',
@@ -82,12 +87,12 @@
                                     </Link>
                                     <button
                                         v-else-if="action.type === 'button'"
-                                        @click="action.onClick(row)"
+                                        @click="action.onClick?.(row)"
                                         type="button"
                                         :title="action.label"
                                         :aria-label="action.label"
                                         :class="[
-                                            'inline-flex h-9 w-9 items-center justify-center rounded-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                                            'inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
                                             action.variant === 'destructive'
                                                 ? 'text-destructive hover:bg-destructive/10 hover:text-destructive/90'
                                                 : 'text-muted-foreground hover:bg-muted hover:text-foreground',
@@ -100,10 +105,10 @@
                             </div>
                         </td>
                     </tr>
-                    <tr v-if="data.length === 0">
+                    <tr v-if="data.length === 0" class="max-md:block">
                         <td
                             :colspan="columns.length + (actions && actions.length > 0 ? 1 : 0)"
-                            class="px-6 py-16 text-center"
+                            class="px-6 py-16 text-center max-md:block"
                         >
                             <slot name="empty">
                                 <div class="flex flex-col items-center justify-center text-muted-foreground">

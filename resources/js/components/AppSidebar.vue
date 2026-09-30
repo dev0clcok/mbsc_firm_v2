@@ -34,7 +34,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     ];
 
     if (canAny(['enquiries.list', 'enquiries.update', 'enquiries.delete'])) {
-        items.push({ title: t('nav.enquiries'), href: '/admin/enquiries', icon: Inbox });
+        items.push({ title: t('nav.enquiries'), href: '/admin/enquiries', icon: Inbox, badge: Number(page.props.newEnquiries ?? 0) });
     }
 
     if (canAny(['services.list', 'services.view', 'services.create', 'services.update', 'services.delete'])) {

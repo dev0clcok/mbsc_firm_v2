@@ -2,9 +2,9 @@
     <AppLayout>
         <Head :title="t('audit.title')" />
 
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-3xl font-bold">{{ t('audit.title') }}</h1>
+                <h1 class="text-2xl font-semibold tracking-tight">{{ t('audit.title') }}</h1>
                 <p class="mt-1 text-sm text-muted-foreground">
                     {{ t('audit.subtitle') }}
                 </p>
@@ -173,11 +173,11 @@ const columns = computed(() => [
     { key: 'created_at', label: t('audit.columns.time') },
     { key: 'user', label: t('audit.columns.user') },
     { key: 'event', label: t('audit.columns.event') },
-    { key: 'method', label: t('audit.columns.method'), align: 'center' },
+    { key: 'method', label: t('audit.columns.method'), align: 'center' as const },
     { key: 'route', label: t('audit.columns.route_url') },
     { key: 'model', label: t('audit.columns.model') },
-    { key: 'status_code', label: t('audit.columns.status'), align: 'center' },
-    { key: 'ip', label: t('audit.columns.ip'), align: 'right' },
+    { key: 'status_code', label: t('audit.columns.status'), align: 'center' as const },
+    { key: 'ip', label: t('audit.columns.ip'), align: 'right' as const },
 ]);
 
 let searchTimer: number | undefined;

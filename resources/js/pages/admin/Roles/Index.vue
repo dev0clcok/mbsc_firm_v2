@@ -2,12 +2,12 @@
     <AppLayout>
         <Head :title="t('roles.title')" />
 
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">{{ t('roles.title') }}</h1>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="text-2xl font-semibold tracking-tight">{{ t('roles.title') }}</h1>
             <Link
                 v-if="canCreate"
                 href="/admin/roles/create"
-                class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
+                class="inline-flex min-h-10 items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
                 {{ t('roles.create_role') }}
             </Link>

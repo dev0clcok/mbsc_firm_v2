@@ -4,7 +4,7 @@
 
         <div class="space-y-6 p-4">
             <div>
-                <h1 class="text-3xl font-bold">{{ t('site_settings.title') }}</h1>
+                <h1 class="text-2xl font-semibold tracking-tight">{{ t('site_settings.title') }}</h1>
                 <p class="mt-1 text-sm text-muted-foreground">{{ t('site_settings.subtitle') }}</p>
             </div>
 

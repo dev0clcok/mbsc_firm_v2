@@ -1,6 +1,6 @@
 {
     "app": {
-        "name": "RoleGuard"
+        "name": "MBSC Firm"
     },
     "common": {
         "search": "Search",
@@ -26,7 +26,8 @@
         "users": "Users",
         "roles": "Roles",
         "site_settings": "Site Settings",
-        "enquiries": "Enquiries"
+        "enquiries": "Enquiries",
+        "view_site": "View website"
     },
     "language": {
         "label": "Language",
@@ -97,7 +98,7 @@
         }
     },
     "team_members": {
-        "title": "Meet Our Team",
+        "title": "Team",
         "add_new": "Add Team Member",
         "back_to_list": "Back to Team",
         "delete": {
@@ -155,7 +156,7 @@
         }
     },
     "testimonials": {
-        "title": "What Our Clients Say",
+        "title": "Testimonials",
         "add_new": "Add Testimonial",
         "back_to_list": "Back to Testimonials",
         "delete": {
@@ -214,7 +215,7 @@
         }
     },
     "faqs": {
-        "title": "FAQs Management",
+        "title": "FAQs",
         "add_new": "Add New FAQ",
         "delete": {
             "title": "Delete FAQ?",
@@ -242,7 +243,7 @@
         }
     },
     "services": {
-        "title": "Services Management",
+        "title": "Services",
         "add_new": "Add New Service",
         "back_to_list": "Back to Services",
         "delete": {
@@ -428,6 +429,56 @@
             "title": "Delete enquiry?",
             "description": "This will permanently delete the enquiry. This action cannot be undone.",
             "confirm": "Delete"
+        }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "subtitle": "What needs attention on the website.",
+        "view_site": "View website",
+        "stats": {
+            "new_enquiries": "New enquiries",
+            "enquiries_total": "{count} received in total",
+            "services": "Services",
+            "team_members": "Team members",
+            "faqs": "FAQs",
+            "testimonials": "Testimonials",
+            "shown_on_site": "shown on the website"
+        },
+        "recent": {
+            "title": "Recent enquiries",
+            "view_all": "View all",
+            "empty": "No enquiries yet. They appear here when someone uses the website form."
+        },
+        "checklist": {
+            "title": "Website checklist",
+            "remaining": "{count} still to do",
+            "all_done": "Everything is set up.",
+            "items": {
+                "enquiry_email": {
+                    "label": "Enquiry notification email",
+                    "help": "Set the address that receives new enquiries."
+                },
+                "mail": {
+                    "label": "Email sending",
+                    "help": "Mail is not configured on the server, so enquiry emails are not sent. Ask your developer to add SMTP details."
+                },
+                "maps_url": {
+                    "label": "Google Maps link",
+                    "help": "Add it so visitors can open directions to the office."
+                },
+                "response_time": {
+                    "label": "Response time",
+                    "help": "Tell visitors how soon you reply, for example within one working day."
+                },
+                "hero_images": {
+                    "label": "Page images",
+                    "help": "Upload pictures for the home, services and about pages."
+                },
+                "testimonials": {
+                    "label": "Client testimonials",
+                    "help": "Add at least one real testimonial to show the section on the home page."
+                }
+            }
         }
     }
 }

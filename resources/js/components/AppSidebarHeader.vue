@@ -4,6 +4,7 @@ import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItemType } from '@/types';
 import { setAppLocale, type AppLocale } from '@/i18n';
 import { useI18n } from 'vue-i18n';
+import { ExternalLink } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 withDefaults(
@@ -39,6 +40,15 @@ const current = computed({
             </div>
 
             <div class="flex items-center gap-2">
+                <a
+                    href="/"
+                    target="_blank"
+                    rel="noopener"
+                    class="hidden h-9 items-center gap-2 rounded-md border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-muted sm:inline-flex"
+                >
+                    <ExternalLink class="size-4" />
+                    {{ t('nav.view_site') }}
+                </a>
                 <label class="sr-only" for="rg-locale">
                     {{ t('language.label') }}
                 </label>

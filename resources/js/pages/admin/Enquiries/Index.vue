@@ -2,9 +2,9 @@
     <AppLayout>
         <Head :title="t('enquiries.title')" />
 
-        <div class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-                <h1 class="text-3xl font-bold">{{ t('enquiries.title') }}</h1>
+                <h1 class="text-2xl font-semibold tracking-tight">{{ t('enquiries.title') }}</h1>
                 <p class="mt-1 text-sm text-muted-foreground">{{ t('enquiries.new_count', { count: newCount }) }}</p>
             </div>
         </div>

@@ -18,6 +18,8 @@ export interface NavItem {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon;
     isActive?: boolean;
+    /** Small count shown after the label, hidden when zero. */
+    badge?: number;
 }
 
 export type AppPageProps<

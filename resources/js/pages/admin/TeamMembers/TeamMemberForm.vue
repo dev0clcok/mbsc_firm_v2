@@ -1,7 +1,7 @@
 <template>
     <div class="space-y-6 p-4">
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="text-2xl font-semibold tracking-tight">
                 {{ mode === 'edit' ? t('team_members.edit.heading') : t('team_members.create.heading') }}
             </h1>
             <Link href="/admin/team-members" class="text-muted-foreground hover:text-foreground">

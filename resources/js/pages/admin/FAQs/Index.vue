@@ -2,12 +2,12 @@
     <AppLayout>
 
         <Head :title="t('faqs.title')" />
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">{{ t('faqs.title') }}</h1>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="text-2xl font-semibold tracking-tight">{{ t('faqs.title') }}</h1>
             <Link
                 v-if="canCreate"
                 :href="faqsCreate().url"
-                class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90">
+                class="inline-flex min-h-10 items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
                 {{ t('faqs.add_new') }}
             </Link>
         </div>
@@ -66,7 +66,7 @@
                 ]">
                     <span :class="[
                         'h-2 w-2 rounded-full',
-                        value ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400',
+                        value ? 'bg-emerald-500' : 'bg-gray-400',
                     ]" />
                     {{ value ? t('faqs.status.active') : t('faqs.status.inactive') }}
                 </span>

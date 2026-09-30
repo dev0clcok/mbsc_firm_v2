@@ -2,12 +2,12 @@
     <AppLayout>
         <Head :title="t('services.title')" />
 
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">{{ t('services.title') }}</h1>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="text-2xl font-semibold tracking-tight">{{ t('services.title') }}</h1>
             <Link
                 v-if="canCreate"
                 href="/admin/services/create"
-                class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
+                class="inline-flex min-h-10 items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
             >
                 {{ t('services.add_new') }}
             </Link>
@@ -61,7 +61,7 @@
                             : 'bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/20 dark:bg-gray-800/50 dark:text-gray-400 dark:ring-gray-400/20',
                     ]"
                 >
-                    <span :class="['h-2 w-2 rounded-full', value ? 'bg-emerald-500 animate-pulse' : 'bg-gray-400']" />
+                    <span :class="['h-2 w-2 rounded-full', value ? 'bg-emerald-500' : 'bg-gray-400']" />
                     {{ value ? t('services.status.active') : t('services.status.inactive') }}
                 </span>
             </template>

@@ -2,8 +2,8 @@
     <AppLayout>
         <Head :title="t('users.title')" />
 
-        <div class="flex items-center justify-between">
-            <h1 class="text-3xl font-bold">{{ t('users.title') }}</h1>
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="text-2xl font-semibold tracking-tight">{{ t('users.title') }}</h1>
 
             <Link
                 v-if="canCreate"

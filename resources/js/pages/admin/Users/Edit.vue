@@ -3,8 +3,8 @@
         <Head title="Edit User" />
 
         <div class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h1 class="text-3xl font-bold">Edit User</h1>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <h1 class="text-2xl font-semibold tracking-tight">Edit User</h1>
                 <Link href="/admin/users" class="text-muted-foreground hover:text-foreground">
                     Back to Users
                 </Link>
