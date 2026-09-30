@@ -72,13 +72,6 @@
                 <StatusToggle :active="value" :url="`/admin/faqs/${row.id}/toggle`" :label="row.question" :disabled="!canEdit" />
             </template>
 
-            <template #cell-sort_order="{ value }">
-                <span
-                    class="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-sm font-mono font-semibold text-muted-foreground">
-                    {{ value }}
-                </span>
-            </template>
-
             <template #empty>
                 <div class="text-muted-foreground">
                     <p class="text-sm">{{ t('faqs.empty.no_faqs') }}</p>
@@ -159,7 +152,6 @@ const columns = computed(() => [
     { key: 'question', label: t('faqs.columns.question') },
     { key: 'service', label: t('faqs.columns.service') },
     { key: 'is_active', label: t('faqs.columns.status'), align: 'center' as const },
-    { key: 'sort_order', label: t('faqs.columns.sort'), align: 'center' as const },
 ]);
 
 const actions = computed(() => {

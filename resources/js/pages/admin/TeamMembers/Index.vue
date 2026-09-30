@@ -64,12 +64,6 @@
                 <StatusToggle :active="value" :url="`/admin/team-members/${row.id}/toggle`" :label="row.name" :disabled="!canEdit" />
             </template>
 
-            <template #cell-sort_order="{ value }">
-                <span class="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-sm font-mono font-semibold text-muted-foreground">
-                    {{ value }}
-                </span>
-            </template>
-
             <template #empty>
                 <div class="text-muted-foreground">
                     <p class="text-sm">{{ t('team_members.empty.no_team_members') }}</p>
@@ -130,7 +124,6 @@ const canDelete = computed(() => can('team_members.delete'));
 const columns = computed(() => [
     { key: 'name', label: t('team_members.columns.name') },
     { key: 'is_active', label: t('team_members.columns.status'), align: 'center' as const },
-    { key: 'sort_order', label: t('team_members.columns.sort'), align: 'center' as const },
 ]);
 
 const actions = computed(() => {

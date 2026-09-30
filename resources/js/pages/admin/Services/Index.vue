@@ -59,12 +59,6 @@
                 <StatusToggle :active="value" :url="`/admin/services/${row.id}/toggle`" :label="row.title" :disabled="!canEdit" />
             </template>
 
-            <template #cell-sort_order="{ value }">
-                <span class="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-sm font-mono font-semibold text-muted-foreground">
-                    {{ value }}
-                </span>
-            </template>
-
             <template #empty>
                 <div class="text-muted-foreground">
                     <p class="text-sm">{{ t('services.empty.no_services') }}</p>
@@ -128,7 +122,6 @@ const canDelete = computed(() => can('services.delete'));
 const columns = computed(() => [
     { key: 'title', label: t('services.columns.title') },
     { key: 'is_active', label: t('services.columns.status'), align: 'center' as const },
-    { key: 'sort_order', label: t('services.columns.sort'), align: 'center' as const },
 ]);
 
 const actions = computed(() => {

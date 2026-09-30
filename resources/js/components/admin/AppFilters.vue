@@ -1,46 +1,20 @@
-<template>
-    <div class="rounded-lg border border-border bg-card p-4">
-        <div :class="gridClass">
-            <!-- Custom filters -->
-            <slot name="filters" />
-
-            <!-- Search -->
-            <div v-if="showSearch">
-                <label class="mb-2 block text-sm font-medium">{{ searchLabel }}</label>
-                <input
-                    :value="search"
-                    type="text"
-                    :placeholder="searchPlaceholder"
-                    class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    @input="onInput"
-                />
-            </div>
-
-            <!-- Reset -->
-            <div class="flex items-end">
-                <button
-                    type="button"
-                    class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                    @click="emit('reset')"
-                >
-                    {{ resetText }}
-                </button>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import { computed } from 'vue';
+import { Search, X } from 'lucide-vue-next';
+import { useId } from 'vue';
 
-const props = withDefaults(
+/**
+ * Toolbar above a list: a search box, any extra filters passed in the
+ * `filters` slot, and a reset button.
+ */
+withDefaults(
     defineProps<{
         search?: string;
         searchLabel?: string;
         searchPlaceholder?: string;
         resetText?: string;
         showSearch?: boolean;
-        cols?: number; // md:grid-cols-{cols}
+        /** Kept for older callers; the toolbar now lays itself out. */
+        cols?: number;
     }>(),
     {
         search: '',
@@ -58,28 +32,47 @@ const emit = defineEmits<{
     (e: 'reset'): void;
 }>();
 
-const gridClass = computed(() => {
-    const cols = Math.min(Math.max(props.cols, 1), 6);
-    // Tailwind v4 still supports arbitrary values, but keep it simple with known variants.
-    const mdCols =
-        cols === 1
-            ? 'md:grid-cols-1'
-            : cols === 2
-              ? 'md:grid-cols-2'
-              : cols === 3
-                ? 'md:grid-cols-3'
-                : cols === 5
-                  ? 'md:grid-cols-5'
-                  : cols === 6
-                    ? 'md:grid-cols-6'
-                    : 'md:grid-cols-4';
-    return `grid gap-4 ${mdCols}`;
-});
+const id = useId();
 
 const onInput = (e: Event) => {
-    const value = (e.target as HTMLInputElement).value;
-    emit('update:search', value);
+    emit('update:search', (e.target as HTMLInputElement).value);
     emit('search');
 };
 </script>
 
+<template>
+    <div class="admin-toolbar flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-3 shadow-xs sm:p-4">
+        <div v-if="showSearch" class="min-w-0 flex-[2_1_16rem]">
+            <label :for="id" class="sr-only">{{ searchLabel }}</label>
+            <div class="relative">
+                <Search class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                <input :id="id" :value="search" type="search" :placeholder="searchPlaceholder" class="h-10 w-full border border-input py-2 pr-3 pl-9" @input="onInput" />
+            </div>
+        </div>
+
+        <slot name="filters" />
+
+        <button
+            type="button"
+            class="inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            @click="emit('reset')"
+        >
+            <X class="size-4" />
+            {{ resetText }}
+        </button>
+    </div>
+</template>
+
+<style scoped>
+/* Filters passed into the slot sit on the same row as the search box. */
+.admin-toolbar :deep(> div:not(:first-child)) {
+    flex: 1 1 11rem;
+    min-width: 0;
+}
+
+.admin-toolbar :deep(label:not(.sr-only)) {
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+}
+</style>

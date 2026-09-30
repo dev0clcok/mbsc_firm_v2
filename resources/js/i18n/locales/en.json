@@ -358,12 +358,14 @@
             "document_placeholder": "Document name",
             "add_document": "Add document",
             "timeline": "Typical timeline",
-            "timeline_help": "How long this usually takes. Leave empty to hide.",
+            "timeline_help": "How long this usually takes.",
             "fees": "Fees",
-            "fees_help": "How fees are set for this service. Only state amounts you are happy to publish. Leave empty to hide.",
+            "fees_help": "How fees are set. Only state amounts you are happy to publish.",
             "media_help": "The picture and icon shown for this service.",
             "settings_help": "Whether the service is shown, and where it sits in the list.",
-            "active_help": "Hidden services do not appear anywhere on the website."
+            "active_help": "Hidden services do not appear anywhere on the website.",
+            "timeline_fees": "Timeline and fees",
+            "timeline_fees_help": "Shown as two panels on the service page. Each is hidden while empty."
         }
     },
     "datatable": {

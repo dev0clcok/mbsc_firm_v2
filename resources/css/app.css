@@ -172,6 +172,18 @@
         @apply bg-background text-foreground;
     }
 
+    /*
+     * Admin form controls share one look: same height, border and a brand
+     * focus ring, whether they are written as plain elements or components.
+     */
+    :where(input:not([type='checkbox'], [type='radio'], [type='file'], [type='range']), select, textarea):where(.border-input) {
+        @apply min-h-10 rounded-lg border-input bg-background text-sm shadow-xs transition-[border-color,box-shadow] outline-none placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/20 disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-70 aria-invalid:border-destructive aria-invalid:ring-destructive/20;
+    }
+
+    :where(input[type='checkbox'].border-input) {
+        accent-color: var(--primary);
+    }
+
     select:not(:disabled) {
         cursor: pointer;
     }

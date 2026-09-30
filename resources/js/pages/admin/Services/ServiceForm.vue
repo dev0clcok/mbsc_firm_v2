@@ -91,18 +91,16 @@ const errors = () => props.form.errors as Record<string, string | undefined>;
                 <StringList v-model="form.documents" :add-label="t('services.form.add_document')" :remove-label="t('services.form.remove')" :placeholder="t('services.form.document_placeholder')" />
             </FormSection>
 
-            <div class="grid gap-6 lg:grid-cols-2">
-                <FormSection :title="t('services.form.timeline')" :description="t('services.form.timeline_help')">
-                    <FormField v-slot="f" :label="t('services.form.timeline')" :error="errors().timeline">
+            <FormSection :title="t('services.form.timeline_fees')" :description="t('services.form.timeline_fees_help')">
+                <div class="grid gap-5 md:grid-cols-2">
+                    <FormField v-slot="f" :label="t('services.form.timeline')" :help="t('services.form.timeline_help')" :error="errors().timeline">
                         <textarea :id="f.id" v-model="form.timeline" rows="4" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
                     </FormField>
-                </FormSection>
-                <FormSection :title="t('services.form.fees')" :description="t('services.form.fees_help')">
-                    <FormField v-slot="f" :label="t('services.form.fees')" :error="errors().fees">
+                    <FormField v-slot="f" :label="t('services.form.fees')" :help="t('services.form.fees_help')" :error="errors().fees">
                         <textarea :id="f.id" v-model="form.fees" rows="4" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
                     </FormField>
-                </FormSection>
-            </div>
+                </div>
+            </FormSection>
 
             <FormSection :title="t('services.form.media')" :description="t('services.form.media_help')">
                 <ImageField

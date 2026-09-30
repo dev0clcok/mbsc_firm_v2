@@ -1,18 +1,18 @@
 <template>
-    <div class="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+    <div class="overflow-hidden rounded-xl border border-border bg-card shadow-xs">
         <!-- Below md each row becomes a stacked block, so nothing needs sideways scrolling on a phone. -->
         <div class="md:overflow-x-auto">
             <table class="w-full max-md:block">
                 <thead class="max-md:hidden">
-                    <tr class="border-b border-border bg-muted/60">
-                        <th v-if="reorderUrl" class="w-px py-4 pr-0 pl-4 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                    <tr class="border-b border-border bg-muted/40">
+                        <th v-if="reorderUrl" class="w-px py-3 pr-0 pl-3 text-left text-xs font-medium text-muted-foreground">
                             <span class="sr-only">{{ t('datatable.order') }}</span>
                         </th>
                         <th
                             v-for="column in columns"
                             :key="column.key"
                             :class="[
-                                'px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground',
+                                'px-5 py-3 text-left text-xs font-medium text-muted-foreground',
                                 column.align === 'center' && 'text-center',
                                 column.align === 'right' && 'text-right',
                                 !column.align && 'text-left',
@@ -24,7 +24,7 @@
                         </th>
                         <th
                             v-if="actions && actions.length > 0"
-                            class="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+                            class="px-5 py-3 text-right text-xs font-medium text-muted-foreground"
                         >
                             {{ t('datatable.actions') }}
                         </th>
@@ -34,9 +34,9 @@
                     <tr
                         v-for="(row, index) in rows"
                         :key="getRowKey(row, index)"
-                        class="transition-colors duration-150 hover:bg-muted/40 max-md:block max-md:px-4 max-md:py-3"
+                        class="group/row transition-colors duration-150 hover:bg-muted/30 max-md:block max-md:px-4 max-md:py-3"
                     >
-                        <td v-if="reorderUrl" class="w-px py-4 pr-0 pl-4 align-middle max-md:block max-md:px-0 max-md:py-0 max-md:pb-1">
+                        <td v-if="reorderUrl" class="w-px py-3 pr-0 pl-3 align-middle max-md:block max-md:px-0 max-md:py-0 max-md:pb-1">
                             <div class="flex items-center gap-0.5">
                                 <span
                                     class="drag-handle flex h-9 w-7 cursor-grab items-center justify-center rounded text-muted-foreground hover:bg-muted active:cursor-grabbing max-md:hidden"
@@ -69,14 +69,14 @@
                             v-for="(column, columnIndex) in columns"
                             :key="column.key"
                             :class="[
-                                'px-6 py-4 text-sm max-md:px-0 max-md:py-1.5 max-md:text-left',
+                                'px-5 py-3.5 align-middle text-sm max-md:px-0 max-md:py-1.5 max-md:text-left',
                                 column.align === 'center' && 'md:text-center',
                                 column.align === 'right' && 'md:text-right',
                                 // On phones the first column is the row's heading; the rest are label and value pairs.
                                 columnIndex === 0 ? 'max-md:block' : 'max-md:flex max-md:items-center max-md:justify-between max-md:gap-4',
                             ]"
                         >
-                            <span v-if="columnIndex > 0" class="text-xs font-semibold tracking-wide text-muted-foreground uppercase md:hidden">
+                            <span v-if="columnIndex > 0" class="text-xs font-medium text-muted-foreground md:hidden">
                                 {{ column.label }}
                             </span>
                             <slot
@@ -99,40 +99,32 @@
                         </td>
                         <td
                             v-if="actions && actions.length > 0"
-                            class="px-6 py-4 max-md:block max-md:px-0 max-md:pt-2 max-md:pb-0"
+                            class="px-5 py-3.5 align-middle max-md:block max-md:px-0 max-md:pt-2 max-md:pb-0"
                         >
                             <div class="flex items-center justify-end gap-2 max-md:-ml-2 max-md:justify-start">
                                 <template v-for="(action, actionIndex) in actions" :key="actionIndex">
                                     <Link
                                         v-if="action.type === 'link'"
                                         :href="action.href?.(row)?.url ?? action.href?.(row) ?? '#'"
-                                        :title="action.label"
-                                        :aria-label="action.label"
-                                        :class="[
-                                            'inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                                            action.variant === 'destructive'
-                                                ? 'text-destructive hover:bg-destructive/10 hover:text-destructive/90'
-                                                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                                        ]"
+                                        class="inline-flex h-9 items-center gap-1.5 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground shadow-xs transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none"
                                     >
-                                        <Icon :name="action.icon" class="h-4 w-4" />
-                                        <span class="sr-only">{{ action.label }}</span>
+                                        <Icon :name="action.icon" class="h-4 w-4 text-muted-foreground" />
+                                        {{ action.label }}
                                     </Link>
                                     <button
                                         v-else-if="action.type === 'button'"
-                                        @click="action.onClick?.(row)"
                                         type="button"
-                                        :title="action.label"
-                                        :aria-label="action.label"
-                                        :class="[
-                                            'inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+                                        :title="action.variant === 'destructive' ? action.label : undefined"
+                                        :aria-label="action.variant === 'destructive' ? action.label : undefined"
+                                        :class="
                                             action.variant === 'destructive'
-                                                ? 'text-destructive hover:bg-destructive/10 hover:text-destructive/90'
-                                                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                                        ]"
+                                                ? 'inline-flex h-9 w-9 items-center justify-center rounded-lg text-destructive transition-colors duration-150 hover:bg-destructive/10 focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none'
+                                                : 'inline-flex h-9 items-center gap-1.5 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground shadow-xs transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none'
+                                        "
+                                        @click="action.onClick?.(row)"
                                     >
-                                        <Icon :name="action.icon" class="h-4 w-4" />
-                                        <span class="sr-only">{{ action.label }}</span>
+                                        <Icon :name="action.icon" :class="action.variant === 'destructive' ? 'h-4 w-4' : 'h-4 w-4 text-muted-foreground'" />
+                                        <template v-if="action.variant !== 'destructive'">{{ action.label }}</template>
                                     </button>
                                 </template>
                             </div>
@@ -173,7 +165,7 @@
         <!-- Pagination -->
         <div
             v-if="pagination && pagination.links && pagination.links.length > 3"
-            class="border-t border-border bg-muted/20 px-6 py-4"
+            class="border-t border-border px-5 py-3"
         >
             <div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <div class="text-sm text-muted-foreground">
@@ -197,9 +189,9 @@
                         :key="link.label"
                         :href="link.url || '#'"
                         :class="[
-                            'relative inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-150',
+                            'relative inline-flex min-h-9 items-center rounded-lg px-3 text-sm font-medium transition-colors duration-150',
                             link.active
-                                ? 'z-10 bg-primary text-primary-foreground shadow-md'
+                                ? 'z-10 bg-primary text-primary-foreground'
                                 : 'bg-background text-foreground hover:bg-muted hover:text-foreground',
                             !link.url && 'pointer-events-none opacity-40 cursor-not-allowed',
                             link.url && !link.active && 'hover:shadow-sm',
