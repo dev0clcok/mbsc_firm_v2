@@ -31,7 +31,7 @@ onMounted(() => {
                     listing what is covered.
                 </p>
 
-                <ServiceRegister v-if="services.length" :services="services" class="mt-12" />
+                <ServiceRegister v-if="services.length" :services="services" heading-level="h2" class="mt-12" />
                 <p v-else class="site-prose mt-12">Our service list is being updated. Contact us to ask about a specific matter.</p>
             </div>
         </section>
