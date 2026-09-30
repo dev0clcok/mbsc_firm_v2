@@ -2,8 +2,8 @@
  * Public site design tokens and components.
  *
  * Everything the public pages use for colour, type, spacing, radius and
- * shadow is defined here. The admin panel keeps its own shadcn theme in
- * app.css; the two do not share variables.
+ * shadow is defined here. It is loaded through public.css; the admin panel
+ * keeps its own shadcn theme in app.css and the two share nothing.
  */
 
 @theme {

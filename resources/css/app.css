@@ -2,11 +2,6 @@
 
 @import 'tw-animate-css';
 
-@import '@fontsource-variable/public-sans/wght.css';
-@import '@fontsource-variable/literata/wght.css';
-
-@import './site.css';
-
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../js/**/*.{vue,ts,js}';

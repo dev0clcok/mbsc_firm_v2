@@ -1,0 +1,19 @@
+/*
+ * Stylesheet for the public site only. Tailwind scans just the public
+ * pages and components, so visitors do not download admin styles.
+ * The admin panel uses app.css.
+ */
+@import 'tailwindcss' source(none);
+
+@source '../js/pages/Welcome.vue';
+@source '../js/pages/Services.vue';
+@source '../js/pages/Service.vue';
+@source '../js/pages/About.vue';
+@source '../js/pages/Contact.vue';
+@source '../js/layouts/PublicLayout.vue';
+@source '../js/components/site';
+
+@import '@fontsource-variable/public-sans/wght.css';
+@import '@fontsource-variable/literata/wght.css';
+
+@import './site.css';
