@@ -1,0 +1,147 @@
+/*
+ * Public site design tokens and components.
+ *
+ * Everything the public pages use for colour, type, spacing, radius and
+ * shadow is defined here. The admin panel keeps its own shadcn theme in
+ * app.css; the two do not share variables.
+ */
+
+@theme {
+    /* Colour: ink and rose come from the logo; the rest are neutrals. */
+    --color-ink: #1e2230;
+    --color-ink-soft: #4a5162;
+    --color-paper: #ffffff;
+    --color-mist: #f3f5f8;
+    --color-rule: #d8dde5;
+    --color-rose: #c2154f;
+    --color-rose-deep: #9c0f3e;
+    --color-rose-tint: #fbeaf0;
+    --color-ok: #1d6b44;
+    --color-ok-tint: #e9f5ee;
+
+    /* Type */
+    --font-display: 'Literata Variable', Georgia, 'Times New Roman', serif;
+    --font-body: 'Public Sans Variable', ui-sans-serif, system-ui, sans-serif;
+
+    --text-display: clamp(2.125rem, 1.4rem + 3.2vw, 3.5rem);
+    --text-display--line-height: 1.08;
+    --text-title: clamp(1.625rem, 1.3rem + 1.4vw, 2.25rem);
+    --text-title--line-height: 1.18;
+    --text-heading: 1.3125rem;
+    --text-heading--line-height: 1.3;
+    --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    --text-lead--line-height: 1.6;
+
+    /* Shape */
+    --radius-site: 4px;
+    --shadow-raised: 0 8px 24px -12px rgb(30 34 48 / 0.35);
+
+    /* Layout */
+    --container-site: 72rem;
+    --spacing-section: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+    --spacing-gutter: clamp(1.25rem, 0.75rem + 2vw, 2rem);
+}
+
+@layer components {
+    .site {
+        @apply bg-paper font-body text-ink antialiased;
+        font-size: 1rem;
+        line-height: 1.65;
+        color-scheme: light;
+    }
+
+    .site :where(a, button, input, select, textarea, summary):focus-visible {
+        outline: 3px solid var(--color-rose);
+        outline-offset: 2px;
+    }
+
+    .site-on-ink :where(a, button, summary):focus-visible {
+        outline-color: #fff;
+    }
+
+    .site-container {
+        @apply mx-auto w-full max-w-site px-gutter;
+    }
+
+    .site-section {
+        @apply border-t border-rule py-section;
+    }
+
+    /* Two-column section: heading on the left, content on the right. */
+    .site-split {
+        @apply grid gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)];
+    }
+
+    .site-display {
+        @apply font-display text-display font-medium tracking-tight text-balance text-ink;
+    }
+
+    .site-title {
+        @apply font-display text-title font-medium tracking-tight text-balance text-ink;
+    }
+
+    .site-heading {
+        @apply font-display text-heading font-medium text-ink;
+    }
+
+    .site-lead {
+        @apply max-w-[62ch] text-lead text-ink-soft;
+    }
+
+    .site-prose {
+        @apply max-w-[68ch] text-ink-soft;
+    }
+
+    .site-link {
+        @apply font-medium text-rose underline decoration-rose/40 underline-offset-4 transition-colors hover:text-rose-deep hover:decoration-rose-deep;
+    }
+
+    /* Buttons: one set, three weights. */
+    .site-btn {
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-site border px-5 text-base font-semibold transition-colors;
+    }
+
+    .site-btn-primary {
+        @apply border-rose bg-rose text-white hover:border-rose-deep hover:bg-rose-deep;
+    }
+
+    .site-btn-secondary {
+        @apply border-ink bg-paper text-ink hover:bg-ink hover:text-white;
+    }
+
+    .site-btn-on-ink {
+        @apply border-white/40 bg-transparent text-white hover:border-white hover:bg-white hover:text-ink;
+    }
+
+    .site-btn:disabled {
+        @apply cursor-not-allowed opacity-60;
+    }
+
+    /* Form fields: 16px text so iOS does not zoom on focus. */
+    .site-label {
+        @apply mb-1.5 block text-sm font-semibold text-ink;
+    }
+
+    .site-input {
+        @apply block min-h-12 w-full rounded-site border border-ink-soft/50 bg-paper px-3.5 py-2.5 text-base text-ink placeholder:text-ink-soft/70;
+    }
+
+    .site-input[aria-invalid='true'] {
+        @apply border-rose;
+    }
+
+    .site-error {
+        @apply mt-1.5 text-sm font-medium text-rose;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site *,
+    .site *::before,
+    .site *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
