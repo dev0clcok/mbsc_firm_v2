@@ -6,9 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import AuthBase from '@/layouts/AuthLayout.vue';
-import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/vue3';
@@ -17,7 +15,6 @@ import { CircleCheck } from 'lucide-vue-next';
 defineProps<{
     status?: string;
     canResetPassword: boolean;
-    canRegister: boolean;
 }>();
 </script>
 
@@ -101,13 +98,6 @@ defineProps<{
                 </Button>
             </div>
 
-            <template v-if="canRegister">
-                <Separator />
-                <div class="text-center text-sm text-muted-foreground">
-                    Don't have an account?
-                    <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
-                </div>
-            </template>
         </Form>
     </AuthBase>
 </template>

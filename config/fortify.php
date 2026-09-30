@@ -144,7 +144,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Public registration is off: admins create accounts on the Users page.
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([
