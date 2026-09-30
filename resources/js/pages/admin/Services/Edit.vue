@@ -60,7 +60,8 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(`/admin/services/${props.service.id}`);
+    // Files cannot be sent with a real PUT request, so post and spoof the method.
+    form.transform((data) => ({ ...data, _method: 'put' })).post(`/admin/services/${props.service.id}`, { forceFormData: true });
 };
 </script>
 

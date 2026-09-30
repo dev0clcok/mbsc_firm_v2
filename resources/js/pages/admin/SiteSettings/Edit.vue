@@ -41,6 +41,39 @@
                     </div>
                 </div>
 
+                <div class="rounded-lg border border-border bg-card p-6">
+                    <h2 class="text-xl font-semibold">{{ t('site_settings.groups.images.title') }}</h2>
+                    <p class="mt-1 text-sm text-muted-foreground">{{ t('site_settings.groups.images.help') }}</p>
+
+                    <div class="mt-4 grid gap-6 md:grid-cols-3">
+                        <div v-for="key in imageKeys" :key="key">
+                            <label :for="`setting-${key}`" class="mb-2 block text-sm font-medium">{{ t(`site_settings.images.${key}`) }}</label>
+                            <img
+                                v-if="images[key] && !form[`remove_${key}`]"
+                                :src="images[key]!.url"
+                                alt=""
+                                class="mb-3 aspect-[3/2] w-full rounded-md border border-border object-cover"
+                            />
+                            <div v-else class="mb-3 flex aspect-[3/2] w-full items-center justify-center rounded-md border border-dashed border-border text-sm text-muted-foreground">
+                                {{ t('site_settings.images.none') }}
+                            </div>
+                            <input
+                                :id="`setting-${key}`"
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                class="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90"
+                                :disabled="!canUpdate"
+                                @change="form[key] = ($event.target as HTMLInputElement).files?.[0] ?? null"
+                            />
+                            <div v-if="images[key] && canUpdate" class="mt-3 flex items-center gap-2">
+                                <input :id="`remove-${key}`" v-model="form[`remove_${key}`]" type="checkbox" class="rounded border-input" />
+                                <label :for="`remove-${key}`" class="text-sm font-medium">{{ t('site_settings.images.remove') }}</label>
+                            </div>
+                            <InputError :message="form.errors[key]" />
+                        </div>
+                    </div>
+                </div>
+
                 <div v-if="canUpdate" class="flex items-center justify-end">
                     <Button type="submit" :loading="form.processing">{{ t('site_settings.save') }}</Button>
                 </div>
@@ -80,8 +113,13 @@ interface Field {
     wide?: boolean;
 }
 
+type ImageKey = 'hero_home' | 'hero_services' | 'hero_about';
+
+const imageKeys: ImageKey[] = ['hero_home', 'hero_services', 'hero_about'];
+
 const props = defineProps<{
     settings: Record<SettingKey, string | null>;
+    images: Record<ImageKey, { url: string; width: number | null; height: number | null } | null>;
 }>();
 
 const { t } = useI18n();
@@ -123,9 +161,25 @@ const initial = Object.fromEntries(
     groups.flatMap((g) => g.fields).map((f) => [f.key, props.settings[f.key] ?? '']),
 ) as Record<SettingKey, string>;
 
-const form = useForm(initial);
+const form = useForm({
+    ...initial,
+    hero_home: null as File | null,
+    hero_services: null as File | null,
+    hero_about: null as File | null,
+    remove_hero_home: false,
+    remove_hero_services: false,
+    remove_hero_about: false,
+});
 
 const submit = () => {
-    form.put('/admin/site-settings', { preserveScroll: true });
+    // Files cannot be sent with a real PUT request, so post and spoof the method.
+    form.transform((data) => ({ ...data, _method: 'put' })).post('/admin/site-settings', {
+        preserveScroll: true,
+        forceFormData: true,
+        onSuccess: () => {
+            form.reset('hero_home', 'hero_services', 'hero_about', 'remove_hero_home', 'remove_hero_services', 'remove_hero_about');
+            document.querySelectorAll<HTMLInputElement>('input[type="file"]').forEach((input) => (input.value = ''));
+        },
+    });
 };
 </script>

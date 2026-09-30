@@ -30,5 +30,16 @@ class SiteSettingSeeder extends Seeder
         $existing = SiteSetting::query()->pluck('key')->all();
 
         SiteSetting::put(array_diff_key($defaults, array_flip($existing)));
+
+        // Starter pictures, listed in CREDITS.md. Replace them in the admin panel.
+        $heroes = [
+            'hero_home' => ['url' => '/images/seed/chattogram-port-1280.webp', 'width' => 1280, 'height' => 960],
+            'hero_services' => ['url' => '/images/seed/signing-documents-1280.webp', 'width' => 1280, 'height' => 854],
+            'hero_about' => ['url' => '/images/seed/office-interior-1280.webp', 'width' => 1280, 'height' => 854],
+        ];
+
+        foreach (array_diff_key($heroes, array_flip($existing)) as $key => $image) {
+            SiteSetting::putImage($key, $image);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\FAQ;
 use App\Models\Service;
+use App\Models\SiteSetting;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
 use Illuminate\Support\Collection;
@@ -15,7 +16,10 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
+        $hero = SiteSetting::image('hero_home');
+
         return Inertia::render('Welcome', [
+            'hero' => $hero,
             'services' => $this->serviceSummaries(),
             'teamMembers' => $this->teamMembers(),
             'testimonials' => Testimonial::query()->active()->orderBy('sort_order')->orderBy('id')->get()
@@ -35,12 +39,13 @@ class HomeController extends Controller
         ])->withViewData('seo', [
             'title' => 'Company registration, tax and VAT services in Chattogram',
             'description' => 'MBSC Firm handles RJSC company registration, income tax, VAT and audit support for businesses and individuals from its office in Kotowali, Chattogram.',
-        ]);
+        ])->withViewData('preloadImage', $hero);
     }
 
     public function services(): Response
     {
         return Inertia::render('Services', [
+            'hero' => SiteSetting::image('hero_services'),
             'services' => $this->serviceSummaries(),
         ])->withViewData('seo', [
             'title' => 'Services',
@@ -59,6 +64,8 @@ class HomeController extends Controller
                 'summary' => $service->short_description,
                 'description' => $service->description,
                 'features' => $service->features ?? [],
+                'icon' => $service->icon_svg,
+                'image' => $service->image(),
             ],
         ])->withViewData('seo', [
             'title' => $service->title,
@@ -69,6 +76,7 @@ class HomeController extends Controller
     public function about(): Response
     {
         return Inertia::render('About', [
+            'hero' => SiteSetting::image('hero_about'),
             'teamMembers' => $this->teamMembers(),
         ])->withViewData('seo', [
             'title' => 'About the firm',
@@ -94,6 +102,8 @@ class HomeController extends Controller
                 'slug' => $s->slug,
                 'title' => $s->title,
                 'summary' => $s->short_description,
+                'icon' => $s->icon_svg,
+                'image' => $s->image(),
             ])
             ->values();
     }

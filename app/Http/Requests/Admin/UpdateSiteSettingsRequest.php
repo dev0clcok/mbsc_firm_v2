@@ -21,7 +21,15 @@ class UpdateSiteSettingsRequest extends FormRequest
         $phone = ['nullable', 'string', 'max:30', 'regex:/^[0-9+\-\s()]+$/'];
         $url = ['nullable', 'url:http,https', 'max:500'];
 
+        $image = ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:8192'];
+
         return [
+            'hero_home' => $image,
+            'hero_services' => $image,
+            'hero_about' => $image,
+            'remove_hero_home' => ['nullable', 'boolean'],
+            'remove_hero_services' => ['nullable', 'boolean'],
+            'remove_hero_about' => ['nullable', 'boolean'],
             'phone' => $phone,
             'whatsapp' => $phone,
             'email' => ['nullable', 'email', 'max:255'],

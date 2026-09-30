@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use App\Models\AuditLog;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Throwable;
 
 class AuditRequest
@@ -25,14 +27,23 @@ class AuditRequest
         $route = $request->route();
         $routeName = $route?->getName();
 
-        $payload = $request->except([
+        $payload = collect($request->input())->except([
             'password',
             'password_confirmation',
             'current_password',
             '_token',
             'two_factor_code',
             'recovery_code',
-        ]);
+        ])->all();
+
+        // Uploaded files cannot be stored as JSON; record their names instead.
+        foreach ($request->allFiles() as $key => $file) {
+            $payload[$key] = collect(Arr::wrap($file))
+                ->map(fn ($f) => $f instanceof UploadedFile ? $f->getClientOriginalName() : null)
+                ->filter()
+                ->values()
+                ->all();
+        }
 
         try {
             $response = $next($request);

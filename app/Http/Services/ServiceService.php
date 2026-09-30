@@ -7,10 +7,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 
 class ServiceService
 {
+    public function __construct(private ImageStore $images) {}
+
     /**
      * @return LengthAwarePaginator|Collection<int, Service>
      */
@@ -47,16 +48,10 @@ class ServiceService
     public function store(array $data, Request $request): Service
     {
         unset($data['image']);
+        $data['features'] = $this->cleanFeatures($data['features'] ?? []);
 
-        $data['features'] = array_values(array_filter(
-            $data['features'] ?? [],
-            fn ($v) => is_string($v) && trim($v) !== ''
-        ));
-
-        $data['image_url'] = null;
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('services', 'public');
-            $data['image_url'] = '/storage/'.$path;
+            $data = [...$data, ...$this->storeImage($request)];
         }
 
         return Service::query()->create($data);
@@ -68,19 +63,14 @@ class ServiceService
     public function update(Service $service, array $data, Request $request): Service
     {
         unset($data['image'], $data['remove_image']);
+        $data['features'] = $this->cleanFeatures($data['features'] ?? []);
 
-        $data['features'] = array_values(array_filter(
-            $data['features'] ?? [],
-            fn ($v) => is_string($v) && trim($v) !== ''
-        ));
-
-        if ($request->boolean('remove_image')) {
-            $this->deleteStoredImage($service->image_url);
-            $data['image_url'] = null;
-        } elseif ($request->hasFile('image')) {
-            $this->deleteStoredImage($service->image_url);
-            $path = $request->file('image')->store('services', 'public');
-            $data['image_url'] = '/storage/'.$path;
+        if ($request->hasFile('image')) {
+            $this->images->delete($service->image_url);
+            $data = [...$data, ...$this->storeImage($request)];
+        } elseif ($request->boolean('remove_image')) {
+            $this->images->delete($service->image_url);
+            $data = [...$data, 'image_url' => null, 'image_width' => null, 'image_height' => null];
         }
 
         $service->update($data);
@@ -90,16 +80,30 @@ class ServiceService
 
     public function destroy(Service $service): void
     {
-        $this->deleteStoredImage($service->image_url);
+        $this->images->delete($service->image_url);
         $service->delete();
     }
 
-    private function deleteStoredImage(?string $imageUrl): void
+    /**
+     * @return array{image_url: string, image_width: int, image_height: int}
+     */
+    private function storeImage(Request $request): array
     {
-        if (! $imageUrl || ! str_starts_with($imageUrl, '/storage/')) {
-            return;
-        }
-        $path = str_replace('/storage/', '', $imageUrl);
-        Storage::disk('public')->delete($path);
+        $image = $this->images->store($request->file('image'), 'services');
+
+        return [
+            'image_url' => $image['url'],
+            'image_width' => $image['width'],
+            'image_height' => $image['height'],
+        ];
+    }
+
+    /**
+     * @param  array<int, mixed>  $features
+     * @return array<int, string>
+     */
+    private function cleanFeatures(array $features): array
+    {
+        return array_values(array_filter($features, fn ($v) => is_string($v) && trim($v) !== ''));
     }
 }

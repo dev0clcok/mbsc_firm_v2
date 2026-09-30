@@ -296,7 +296,7 @@
             "media": "Media",
             "image": "Image",
             "image_preview": "Image preview",
-            "image_help": "JPG, PNG or WebP. Max 2MB.",
+            "image_help": "JPG, PNG or WebP, up to 8 MB. Resized and converted to WebP automatically.",
             "clear_image": "Clear",
             "remove_image": "Remove current image",
             "icon_svg": "Icon (SVG)",
@@ -333,6 +333,10 @@
             "social": {
                 "title": "Social links",
                 "help": "An icon is shown only for links that are filled in."
+            },
+            "images": {
+                "title": "Page images",
+                "help": "The large picture at the top of each page. Uploads are resized and converted to WebP automatically. Use a landscape picture at least 1280 pixels wide."
             }
         },
         "fields": {
@@ -388,6 +392,13 @@
                 "label": "Instagram",
                 "help": "Profile URL."
             }
+        },
+        "images": {
+            "hero_home": "Home page",
+            "hero_services": "Services page",
+            "hero_about": "About page",
+            "none": "No image",
+            "remove": "Remove image"
         }
     },
     "enquiries": {

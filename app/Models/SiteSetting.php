@@ -40,6 +40,9 @@ class SiteSetting extends Model
         'instagram' => 'instagram_url',
     ];
 
+    /** Page hero pictures, each stored as JSON: {url, width, height}. */
+    public const IMAGE_KEYS = ['hero_home', 'hero_services', 'hero_about'];
+
     protected $table = 'site_settings';
 
     protected $fillable = ['key', 'value'];
@@ -49,12 +52,42 @@ class SiteSetting extends Model
      */
     public static function values(): array
     {
-        $stored = Cache::rememberForever(
+        return array_merge(array_fill_keys(self::KEYS, null), array_intersect_key(self::stored(), array_flip(self::KEYS)));
+    }
+
+    /**
+     * @return array<string, string|null>
+     */
+    private static function stored(): array
+    {
+        return Cache::rememberForever(
             self::CACHE_KEY,
             fn () => self::query()->pluck('value', 'key')->all(),
         );
+    }
 
-        return array_merge(array_fill_keys(self::KEYS, null), array_intersect_key($stored, array_flip(self::KEYS)));
+    /**
+     * @return array{url: string, width: int|null, height: int|null}|null
+     */
+    public static function image(string $key): ?array
+    {
+        $image = json_decode(self::stored()[$key] ?? '', true);
+
+        return is_array($image) && ! empty($image['url']) ? $image : null;
+    }
+
+    /**
+     * @param  array{url: string, width: int|null, height: int|null}|null  $image
+     */
+    public static function putImage(string $key, ?array $image): void
+    {
+        if (! in_array($key, self::IMAGE_KEYS, true)) {
+            return;
+        }
+
+        self::query()->updateOrCreate(['key' => $key], ['value' => $image ? json_encode($image) : null]);
+
+        Cache::forget(self::CACHE_KEY);
     }
 
     public static function get(string $key): ?string

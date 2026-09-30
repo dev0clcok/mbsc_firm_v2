@@ -70,6 +70,12 @@
             <meta name="robots" content="noindex">
         @endif
 
+        @if (! empty($preloadImage['url']))
+            @php $smallImage = str_replace('-1280.webp', '-640.webp', $preloadImage['url']); @endphp
+            <link rel="preload" as="image" href="{{ $preloadImage['url'] }}" fetchpriority="high"
+                @if ($smallImage !== $preloadImage['url']) imagesrcset="{{ $smallImage }} 640w, {{ $preloadImage['url'] }} {{ $preloadImage['width'] ?? 1280 }}w" imagesizes="(min-width: 1024px) 45vw, 100vw" @endif>
+        @endif
+
         <link rel="icon" href="/favicon.ico" sizes="48x48">
         <link rel="icon" href="/images/icon-192.png" type="image/png" sizes="192x192">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
