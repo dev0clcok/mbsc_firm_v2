@@ -9,6 +9,8 @@ export interface ServiceSummary {
     slug: string;
     title: string;
     summary: string | null;
+    /** The first few items the service covers. */
+    highlights: string[];
     /** Trusted SVG markup entered in the admin panel. */
     icon: string | null;
     image: SiteImageData | null;
@@ -38,6 +40,12 @@ withDefaults(
                     <span v-if="service.icon" class="site-icon-tile mb-4" v-html="service.icon"></span>
                     <component :is="headingLevel" class="site-heading">{{ service.title }}</component>
                     <p v-if="service.summary" class="mt-2 text-ink-soft">{{ service.summary }}</p>
+                    <ul v-if="service.highlights.length" class="mt-4 space-y-1.5 border-t border-rule pt-4 text-sm text-ink">
+                        <li v-for="highlight in service.highlights" :key="highlight" class="flex gap-2">
+                            <span class="mt-0.5 text-rose [&>svg]:h-4 [&>svg]:w-4"><SiteIcon name="check" /></span>
+                            {{ highlight }}
+                        </li>
+                    </ul>
                     <span class="mt-auto flex items-center gap-1 pt-5 font-semibold text-rose">
                         View service
                         <span class="transition-transform group-hover:translate-x-1"><SiteIcon name="chevron" /></span>

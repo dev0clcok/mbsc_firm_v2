@@ -106,6 +106,7 @@ class HomeController extends Controller
                 'slug' => $s->slug,
                 'title' => $s->title,
                 'summary' => $s->short_description,
+                'highlights' => array_slice($s->features ?? [], 0, 3),
                 'icon' => $s->icon_svg,
                 'image' => $s->image(),
             ])
