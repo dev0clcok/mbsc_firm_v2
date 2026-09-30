@@ -30,6 +30,19 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
+     * Only the public site is server-rendered; the admin panel gains nothing
+     * from it and relies on browser-only state (theme, locale).
+     */
+    public function handle(Request $request, \Closure $next)
+    {
+        if (! $request->routeIs('home', 'services', 'services.show', 'about', 'contact')) {
+            config(['inertia.ssr.enabled' => false]);
+        }
+
+        return parent::handle($request, $next);
+    }
+
+    /**
      * Define the props that are shared by default.
      *
      * @see https://inertiajs.com/shared-data
