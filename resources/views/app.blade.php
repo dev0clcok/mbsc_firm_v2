@@ -2,7 +2,7 @@
     use App\Http\Services\ImageStore;
     use App\Models\SiteSetting;
 
-    $isPublic = in_array($page['component'], ['Welcome', 'Services', 'Service', 'About', 'Contact'], true);
+    $isPublic = in_array($page['component'], ['Welcome', 'Services', 'Service', 'About', 'Contact', 'Error'], true);
     $seo = $seo ?? null;
     $siteName = config('app.name', 'MBSC Firm');
     $title = $seo ? $seo['title'].' | '.$siteName : $siteName;
@@ -80,11 +80,11 @@
                     ->implode(', ');
             @endphp
             <link rel="preload" as="image" href="{{ $large }}" fetchpriority="high"
-                @if (str_ends_with($large, '-'.ImageStore::LARGE.'.webp')) imagesrcset="{{ $srcset }}" imagesizes="(min-width: 1024px) 50vw, 72vw" @endif>
+                @if (str_ends_with($large, '-'.ImageStore::LARGE.'.webp')) imagesrcset="{{ $srcset }}" imagesizes="(min-width: 1024px) 45vw, 72vw" @endif>
         @endif
 
         <link rel="icon" href="/favicon.ico" sizes="48x48">
-        <link rel="icon" href="/images/icon-192.png" type="image/png" sizes="192x192">
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         @unless ($isPublic)

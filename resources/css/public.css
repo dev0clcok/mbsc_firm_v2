@@ -10,6 +10,7 @@
 @source '../js/pages/Service.vue';
 @source '../js/pages/About.vue';
 @source '../js/pages/Contact.vue';
+@source '../js/pages/Error.vue';
 @source '../js/layouts/PublicLayout.vue';
 @source '../js/components/site';
 @source '../js/directives';

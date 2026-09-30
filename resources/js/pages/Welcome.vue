@@ -30,35 +30,35 @@ const steps = [
 </script>
 
 <template>
-    <Head title="Company registration, tax and VAT services in Chattogram" />
+    <Head title="Legal and tax solutions for your business" />
 
     <PublicLayout current-page="home">
-        <section class="pt-section pb-12">
-            <div :class="['site-container grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
+        <section class="site-on-ink bg-ink text-white">
+            <div :class="['site-container grid items-center gap-x-14 gap-y-10 pt-section pb-12', hero && 'lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)]']">
                 <div>
-                    <h1 class="site-display">Company registration, tax and VAT compliance in Chattogram</h1>
-                    <p class="site-lead mt-6">
-                        {{ site.name }} handles RJSC filings, income tax, VAT and audit support for businesses and individuals in
-                        Bangladesh, with clear documentation and confident communication with regulators.
+                    <h1 class="font-display text-display font-medium tracking-tight text-balance">Expert legal and tax solutions for your business</h1>
+                    <p class="mt-6 max-w-[58ch] text-lead text-white/80">
+                        RJSC, income tax, VAT and audit support in Bangladesh, built for compliance-first execution, clear documentation
+                        and confident communication with regulators.
                     </p>
                     <div class="mt-8 flex flex-wrap gap-3">
                         <Link href="/contact#enquiry" class="site-btn site-btn-primary">Send an enquiry</Link>
-                        <a v-if="site.phone && site.phone_href" :href="site.phone_href" class="site-btn site-btn-secondary">
+                        <a v-if="site.phone && site.phone_href" :href="site.phone_href" class="site-btn site-btn-on-ink">
                             <SiteIcon name="phone" />
                             Call {{ site.phone }}
                         </a>
                     </div>
                 </div>
 
-                <div v-if="hero" class="site-figure aspect-[4/3]">
-                    <SiteImage :image="hero" eager sizes="(min-width: 1024px) 50vw, 72vw" />
+                <div v-if="hero" class="aspect-[4/3] overflow-hidden rounded-card ring-1 ring-white/15">
+                    <SiteImage :image="hero" eager sizes="(min-width: 1024px) 45vw, 72vw" />
                 </div>
             </div>
 
-            <div class="site-container mt-12">
-                <div class="flex flex-wrap justify-between gap-x-10 gap-y-2 border-y border-rule py-4 font-semibold text-ink-soft">
+            <div class="site-container pb-12">
+                <div class="flex flex-wrap justify-between gap-x-10 gap-y-2 border-t border-white/15 pt-5 font-semibold text-white/85">
                     <p>RJSC · Income tax · VAT · Audit</p>
-                    <p>Chattogram office · Free first consultation</p>
+                    <p>Free first consultation</p>
                 </div>
             </div>
         </section>

@@ -33,8 +33,8 @@ class SiteSettingSeeder extends Seeder
 
         // Starter pictures, listed in CREDITS.md. Replace them in the admin panel.
         $heroes = [
-            'hero_home' => ['url' => '/images/seed/chattogram-port-1280.webp', 'width' => 1280, 'height' => 960],
-            'hero_services' => ['url' => '/images/seed/signing-documents-1280.webp', 'width' => 1280, 'height' => 854],
+            'hero_home' => ['url' => '/images/seed/signing-documents-1280.webp', 'width' => 1280, 'height' => 854],
+            'hero_services' => ['url' => '/images/seed/office-towers-1280.webp', 'width' => 1280, 'height' => 854],
             'hero_about' => ['url' => '/images/seed/office-interior-1280.webp', 'width' => 1280, 'height' => 854],
         ];
 

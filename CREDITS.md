@@ -8,8 +8,8 @@ None of these pictures shows MBSC Firm's staff, clients or office. They are illu
 
 | File | Used for | Shows | Source | Licence |
 | --- | --- | --- | --- | --- |
-| `chattogram-port` | Home page hero | A container ship at the Port of Chittagong | [Wikimedia Commons, "PORT CTG TAZMEEM.JPG"](https://commons.wikimedia.org/wiki/File:PORT_CTG_TAZMEEM.JPG), by Tazmeem | Public domain, released by the author. No attribution required |
-| `signing-documents` | Services page hero | Hands signing a paper document | Unsplash, photo `1450101499163-c8848c66ca85` | Unsplash License |
+| `signing-documents` | Home page hero | Hands signing a paper document | Unsplash, photo `1450101499163-c8848c66ca85` | Unsplash License |
+| `office-towers` | Services page hero | Office towers seen from street level | Unsplash, photo `1486406146926-c627a92ad1ab` | Unsplash License |
 | `office-interior` | About page hero | Empty office with glass partitions | Unsplash, photo `1497366754035-f200968a6e72` | Unsplash License |
 | `vat` | VAT Advisory & Compliance | Phone calculator held over paperwork | Unsplash, photo `1554224155-8d04cb21cd6c` | Unsplash License |
 | `rjsc-limited-company` | RJSC Limited Company Services | Glass office building exterior | Unsplash, photo `1560179707-f14e90ef3623` | Unsplash License |

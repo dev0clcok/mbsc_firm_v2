@@ -9,7 +9,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'MBSC Firm';
 // Those are loaded only when the first page is an admin, auth or settings
 // page, which keeps them out of what visitors download. Public pages link
 // to the admin with plain <a> tags, so this choice holds for the session.
-const PUBLIC_PAGES = ['Welcome', 'Services', 'Service', 'About', 'Contact'];
+const PUBLIC_PAGES = ['Welcome', 'Services', 'Service', 'About', 'Contact', 'Error'];
 
 const initialPage = JSON.parse(document.getElementById('app')?.dataset.page ?? '{}');
 const isPublic = PUBLIC_PAGES.includes(initialPage.component);

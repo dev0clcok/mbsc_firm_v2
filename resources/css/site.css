@@ -18,6 +18,8 @@
     --color-rose-tint: #fbeaf0;
     --color-ok: #1d6b44;
     --color-ok-tint: #e9f5ee;
+    /* WhatsApp green, darkened so the white icon on it has 3:1 contrast. */
+    --color-whatsapp: #16a34a;
 
     /* Type */
     --font-display: 'Literata Variable', Georgia, 'Times New Roman', serif;

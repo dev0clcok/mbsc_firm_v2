@@ -37,7 +37,7 @@ class HomeController extends Controller
                 ])
                 ->values(),
         ])->withViewData('seo', [
-            'title' => 'Company registration, tax and VAT services in Chattogram',
+            'title' => 'Legal and tax solutions for your business',
             'description' => 'MBSC Firm handles RJSC company registration, income tax, VAT and audit support for businesses and individuals from its office in Kotowali, Chattogram.',
         ])->withViewData('preloadImage', $hero);
     }

@@ -34,7 +34,7 @@ const values = [
         <section class="py-section">
             <div :class="['site-container grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
                 <div>
-                    <h1 class="site-display">A compliance-first practice in Chattogram</h1>
+                    <h1 class="site-display">A compliance-first practice</h1>
                     <p class="site-lead mt-6">
                         {{ site.name }} provides professional services in Bangladesh across RJSC matters, income tax consultancy and
                         litigation, VAT advisory and compliance, and audit support. We combine precision, documentation discipline and
