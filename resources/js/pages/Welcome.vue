@@ -5,6 +5,7 @@ import ServiceGrid, { type ServiceSummary } from '@/components/site/ServiceGrid.
 import SiteIcon from '@/components/site/SiteIcon.vue';
 import SiteImage from '@/components/site/SiteImage.vue';
 import TeamList, { type TeamMember } from '@/components/site/TeamList.vue';
+import WhoWeHelp from '@/components/site/WhoWeHelp.vue';
 import { useSite } from '@/composables/useSite';
 import { vReveal } from '@/directives/reveal';
 import PublicLayout from '@/layouts/PublicLayout.vue';
@@ -63,7 +64,9 @@ const steps = [
             </div>
         </section>
 
-        <section v-if="services.length" class="py-section" aria-labelledby="home-services">
+        <WhoWeHelp />
+
+        <section v-if="services.length" class="site-section" aria-labelledby="home-services">
             <div class="site-container">
                 <div class="flex flex-wrap items-end justify-between gap-4">
                     <div>
