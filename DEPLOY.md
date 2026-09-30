@@ -7,6 +7,7 @@ What the server needs to run this application. Nothing here has been deployed or
 | Component | Requirement |
 | --- | --- |
 | PHP | 8.2 or newer (developed on 8.4), with the usual Laravel extensions: `mbstring`, `pdo_mysql`, `openssl`, `tokenizer`, `xml`, `ctype`, `fileinfo`, `bcmath`, `curl` |
+| PHP image support | The `gd` extension built with WebP support, and `exif`. Uploaded pictures are resized and converted to WebP with GD; without it image uploads in the admin panel fail. Check with `php -r "var_dump(function_exists('imagewebp'));"` |
 | Composer | 2.x |
 | MySQL | 8.x or MariaDB 10.6+. Sessions, cache and the queue also use the database |
 | Node.js | 22 (LTS). Needed on the server at runtime for the SSR process, and wherever assets are built |
@@ -106,6 +107,7 @@ Do not run `db:seed` again as a routine step. The service and FAQ seeders overwr
 - Enable gzip or Brotli for HTML, CSS, JavaScript and SVG. Local measurements were taken without compression, and the JavaScript shrinks to roughly a third of its size with it.
 - Redirect HTTP to HTTPS and pick one host name (`www` or bare) as canonical.
 - Uploaded images are stored in `storage/app/public` and served through the `public/storage` link.
+- Image uploads can be up to 8 MB. Set PHP `upload_max_filesize` and `post_max_size` to at least `10M`, and the web server's request body limit to match (`client_max_body_size 10m;` in Nginx).
 
 ## After going live
 

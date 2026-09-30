@@ -354,3 +354,26 @@ Mobile performance scores varied between runs by about 10 points because total b
 | Raw HTML contains page content | no | yes |
 
 After screenshots are in `doc/ux-audit/after/`.
+
+## Second design pass
+
+Hero pictures, a service card grid, softer cards and scroll reveals were added after Phase 3. Measured the same way as above. "Before" is the end of Phase 3.
+
+| Page | Mode | Performance | LCP | Weight |
+| --- | --- | --- | --- | --- |
+| Home | mobile | 71 → 80 | 3.7 s → 4.3 s | 0.48 MB → 0.60 MB |
+| Home | desktop | 99 → 99 | 0.8 s → 0.9 s | 0.48 MB → 0.60 MB |
+| Services | mobile | 89 → 83 | 3.4 s → 3.9 s | 0.44 MB → 0.57 MB |
+| Services | desktop | 99 → 99 | 0.8 s → 0.9 s | 0.44 MB → 0.58 MB |
+| Service page | mobile | 71 → 85 | 3.5 s → 3.6 s | 0.45 MB → 0.49 MB |
+| Service page | desktop | 100 → 99 | 0.7 s → 0.7 s | 0.45 MB → 0.48 MB |
+| About | mobile | 88 → 82 | 3.4 s → 3.7 s | 0.45 MB → 0.50 MB |
+| About | desktop | 100 → 99 | 0.7 s → 0.7 s | 0.45 MB → 0.48 MB |
+| Contact | mobile | 78 → 83 | 3.6 s → 3.6 s | 0.45 MB → 0.47 MB |
+| Contact | desktop | 100 → 99 | 0.7 s → 0.7 s | 0.45 MB → 0.45 MB |
+
+Accessibility, best practices and SEO are 100 on every page in both modes.
+
+Mobile performance scores moved by up to 14 points in either direction, which is within the run-to-run variation seen earlier, so the pictures did not lower the score in a measurable way. They did add weight, and mobile LCP is 0.1 to 0.6 s later on the pages where the hero picture is now the largest element. Phones are served an 800px hero (12 to 28 kB for the seeded pictures) and 480px card thumbnails to limit this.
+
+Screenshots for this pass are in `doc/ux-audit/pass2/`.
