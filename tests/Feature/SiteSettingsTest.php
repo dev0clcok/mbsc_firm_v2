@@ -71,3 +71,13 @@ test('map coordinates must be valid and come as a pair', function () {
     $this->put('/admin/site-settings', ['map_latitude' => '122', 'map_longitude' => ''])
         ->assertSessionHasErrors(['map_latitude', 'map_longitude']);
 });
+
+test('the home page title and description can be set in settings', function () {
+    $this->get('/')->assertSee('<title inertia>Legal and tax solutions for your business | ', false);
+
+    SiteSetting::put(['seo_home_title' => 'Tax and company law help', 'seo_home_description' => 'A short custom description.']);
+
+    $this->get('/')
+        ->assertSee('<title inertia>Tax and company law help | ', false)
+        ->assertSee('content="A short custom description."', false);
+});

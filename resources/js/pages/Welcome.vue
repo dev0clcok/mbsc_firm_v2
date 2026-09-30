@@ -13,6 +13,8 @@ import type { SiteImageData } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps<{
+    /** Browser-tab title, editable in site settings. */
+    pageTitle: string;
     hero: SiteImageData | null;
     services: ServiceSummary[];
     teamMembers: TeamMember[];
@@ -31,7 +33,7 @@ const steps = [
 </script>
 
 <template>
-    <Head title="Legal and tax solutions for your business" />
+    <Head :title="pageTitle" />
 
     <PublicLayout current-page="home">
         <section class="site-on-ink bg-ink text-white">

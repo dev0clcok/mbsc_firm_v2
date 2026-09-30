@@ -33,6 +33,8 @@ class SiteSetting extends Model
         'x_url',
         'youtube_url',
         'instagram_url',
+        'seo_home_title',
+        'seo_home_description',
         'privacy_policy',
         'privacy_published',
     ];

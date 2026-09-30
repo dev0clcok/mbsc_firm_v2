@@ -18,8 +18,10 @@ class HomeController extends Controller
     public function index(): Response
     {
         $hero = SiteSetting::image('hero_home');
+        $title = SiteSetting::get('seo_home_title') ?: 'Legal and tax solutions for your business';
 
         return Inertia::render('Welcome', [
+            'pageTitle' => $title,
             'hero' => $hero,
             'services' => $this->serviceSummaries(),
             'teamMembers' => $this->teamMembers(),
@@ -36,8 +38,9 @@ class HomeController extends Controller
                 ->map(fn (FAQ $f) => $this->faq($f))
                 ->values(),
         ])->withViewData('seo', [
-            'title' => 'Legal and tax solutions for your business',
-            'description' => 'MBSC Firm handles RJSC company registration, income tax, VAT and audit support for businesses and individuals from its office in Kotowali, Chattogram.',
+            'title' => $title,
+            'description' => SiteSetting::get('seo_home_description')
+                ?: 'MBSC Firm handles RJSC company registration, income tax, VAT and audit support for businesses and individuals from its office in Kotowali, Chattogram.',
         ])->withViewData('preloadImage', $hero);
     }
 

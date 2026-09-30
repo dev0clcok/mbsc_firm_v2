@@ -32,10 +32,16 @@ test('an upload is stored as three WebP sizes and never enlarged', function () {
 
 test('an admin can upload and remove a page hero image', function () {
     $this->post('/admin/site-settings', ['_method' => 'put', 'hero_home' => UploadedFile::fake()->image('hero.jpg', 1600, 900)])
+        ->assertSessionHasErrors('hero_home_alt');
+
+    $this->post('/admin/site-settings', ['_method' => 'put', 'hero_home' => UploadedFile::fake()->image('hero.jpg', 1600, 900), 'hero_home_alt' => 'A desk'])
         ->assertRedirect('/admin/site-settings');
 
     $image = SiteSetting::image('hero_home');
-    expect($image)->toMatchArray(['width' => 1280, 'height' => 720]);
+    expect($image)->toMatchArray(['width' => 1280, 'height' => 720, 'alt' => 'A desk']);
+
+    $this->post('/admin/site-settings', ['_method' => 'put', 'hero_home_alt' => 'A tidy desk']);
+    expect(SiteSetting::image('hero_home'))->toMatchArray(['url' => $image['url'], 'alt' => 'A tidy desk']);
     Storage::disk('public')->assertExists(str_replace('/storage/', '', $image['url']));
 
     $this->get('/')->assertSee('rel="preload" as="image"', false);

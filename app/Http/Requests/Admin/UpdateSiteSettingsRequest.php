@@ -27,6 +27,11 @@ class UpdateSiteSettingsRequest extends FormRequest
             'hero_home' => $image,
             'hero_services' => $image,
             'hero_about' => $image,
+            'hero_home_alt' => ['nullable', 'string', 'max:200', 'required_with:hero_home'],
+            'hero_services_alt' => ['nullable', 'string', 'max:200', 'required_with:hero_services'],
+            'hero_about_alt' => ['nullable', 'string', 'max:200', 'required_with:hero_about'],
+            'seo_home_title' => ['nullable', 'string', 'max:70'],
+            'seo_home_description' => ['nullable', 'string', 'max:170'],
             'remove_hero_home' => ['nullable', 'boolean'],
             'remove_hero_services' => ['nullable', 'boolean'],
             'remove_hero_about' => ['nullable', 'boolean'],
@@ -46,6 +51,20 @@ class UpdateSiteSettingsRequest extends FormRequest
             'x_url' => $url,
             'youtube_url' => $url,
             'instagram_url' => $url,
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        $alt = 'Describe the picture for visitors who cannot see it.';
+
+        return [
+            'hero_home_alt.required_with' => $alt,
+            'hero_services_alt.required_with' => $alt,
+            'hero_about_alt.required_with' => $alt,
         ];
     }
 }

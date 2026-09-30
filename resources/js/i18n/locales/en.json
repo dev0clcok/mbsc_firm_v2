@@ -383,78 +383,82 @@
     },
     "site_settings": {
         "title": "Site Settings",
-        "subtitle": "Contact details and links shown across the public website.",
+        "subtitle": "Contact details, links and pictures used across the public website. Leave a field empty to hide it.",
         "save": "Save settings",
         "groups": {
             "contact": {
                 "title": "Contact",
-                "help": "Shown in the header, footer and contact page. Leave a field empty to hide it."
+                "help": "How visitors reach you."
             },
             "office": {
-                "title": "Office",
-                "help": "Address, map link and hours."
+                "title": "Office and hours",
+                "help": "Where you are and when you are open."
             },
             "social": {
                 "title": "Social links",
-                "help": "An icon is shown only for links that are filled in."
+                "help": "An icon appears in the footer only for links that are filled in."
             },
             "images": {
                 "title": "Page images",
-                "help": "The large picture at the top of each page. Uploads are resized and converted to WebP automatically. Use a landscape picture at least 1280 pixels wide."
+                "help": "The large picture at the top of each page. Use a landscape picture."
+            },
+            "seo": {
+                "title": "Search and sharing",
+                "help": "What search engines and link previews show for the home page."
             }
         },
         "fields": {
             "phone": {
                 "label": "Phone number",
-                "help": "Used for click-to-call links."
+                "help": "Header, footer, contact page and the Call button on phones."
             },
             "whatsapp": {
                 "label": "WhatsApp number",
-                "help": "Include the country code. Used for the WhatsApp buttons."
+                "help": "Include the country code. Used by every WhatsApp button."
             },
             "email": {
                 "label": "Public email",
-                "help": "Shown to visitors."
+                "help": "Footer and contact page."
             },
             "enquiry_email": {
                 "label": "Enquiry notification email",
-                "help": "New enquiries from the website are emailed here. Not shown to visitors."
+                "help": "New enquiries from the website are emailed here. Never shown to visitors."
             },
             "address": {
                 "label": "Office address",
-                "help": "Full postal address."
+                "help": "Footer, contact page and search engine listings."
             },
             "maps_url": {
                 "label": "Google Maps link",
-                "help": "The share link for the office location."
+                "help": "Used for the \"Open in Google Maps\" link on the contact page."
             },
             "office_hours": {
                 "label": "Office hours",
-                "help": "For example: Saturday to Thursday, 10:00 AM to 7:00 PM."
+                "help": "Footer, contact page and the enquiry thank-you message."
             },
             "response_time": {
                 "label": "Response time",
-                "help": "For example: within one working day. Shown next to the enquiry form."
+                "help": "Finishes the sentence \"We reply …\", for example: within one working day. Shown beside the enquiry form and after sending."
             },
             "facebook_url": {
                 "label": "Facebook",
-                "help": "Page or profile URL."
+                "help": "Footer icon."
             },
             "linkedin_url": {
                 "label": "LinkedIn",
-                "help": "Company page URL."
+                "help": "Footer icon."
             },
             "x_url": {
                 "label": "X (Twitter)",
-                "help": "Profile URL."
+                "help": "Footer icon."
             },
             "youtube_url": {
                 "label": "YouTube",
-                "help": "Channel URL."
+                "help": "Footer icon."
             },
             "instagram_url": {
                 "label": "Instagram",
-                "help": "Profile URL."
+                "help": "Footer icon."
             },
             "whatsapp_message": {
                 "label": "WhatsApp template message",
@@ -467,6 +471,14 @@
             "map_longitude": {
                 "label": "Map longitude",
                 "help": "Optional. If both are empty the map searches for the office address instead."
+            },
+            "seo_home_title": {
+                "label": "Home page title",
+                "help": "Shown in the browser tab and as the headline in search results. Up to 70 characters. Empty uses the built-in title."
+            },
+            "seo_home_description": {
+                "label": "Home page description",
+                "help": "The two lines under the title in search results and link previews. Up to 170 characters. Empty uses the built-in description."
             }
         },
         "images": {
@@ -474,7 +486,10 @@
             "hero_services": "Services page",
             "hero_about": "About page",
             "none": "No image",
-            "remove": "Remove image"
+            "remove": "Remove image",
+            "hero_home_help": "Beside the headline on the home page.",
+            "hero_services_help": "Top of the Services page.",
+            "hero_about_help": "Top of the About page."
         }
     },
     "enquiries": {

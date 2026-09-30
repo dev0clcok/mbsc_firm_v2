@@ -39,12 +39,16 @@ class SiteSettingController extends Controller implements HasMiddleware
         foreach (SiteSetting::IMAGE_KEYS as $key) {
             $current = SiteSetting::image($key);
 
+            $alt = $request->input("{$key}_alt");
+
             if ($request->hasFile($key)) {
                 $images->delete($current['url'] ?? null);
-                SiteSetting::putImage($key, $images->store($request->file($key), 'heroes'));
+                SiteSetting::putImage($key, [...$images->store($request->file($key), 'heroes'), 'alt' => $alt]);
             } elseif ($request->boolean("remove_{$key}")) {
                 $images->delete($current['url'] ?? null);
                 SiteSetting::putImage($key, null);
+            } elseif ($current && $request->has("{$key}_alt") && $alt !== ($current['alt'] ?? null)) {
+                SiteSetting::putImage($key, [...$current, 'alt' => $alt]);
             }
         }
 
