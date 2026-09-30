@@ -69,10 +69,11 @@
                             v-for="(column, columnIndex) in columns"
                             :key="column.key"
                             :class="[
-                                'px-6 py-4 text-sm max-md:flex max-md:items-center max-md:justify-between max-md:gap-4 max-md:px-0 max-md:py-1.5 max-md:text-left',
+                                'px-6 py-4 text-sm max-md:px-0 max-md:py-1.5 max-md:text-left',
                                 column.align === 'center' && 'md:text-center',
                                 column.align === 'right' && 'md:text-right',
-                                columnIndex === 0 && 'max-md:block',
+                                // On phones the first column is the row's heading; the rest are label and value pairs.
+                                columnIndex === 0 ? 'max-md:block' : 'max-md:flex max-md:items-center max-md:justify-between max-md:gap-4',
                             ]"
                         >
                             <span v-if="columnIndex > 0" class="text-xs font-semibold tracking-wide text-muted-foreground uppercase md:hidden">
@@ -302,8 +303,13 @@ onMounted(() => {
     sortable = Sortable.create(tbody.value, {
         handle: '.drag-handle',
         animation: 150,
-        onEnd: ({ oldIndex, newIndex }) => {
+        onEnd: ({ item, from, oldIndex, newIndex }) => {
             if (oldIndex === undefined || newIndex === undefined || oldIndex === newIndex) return;
+
+            // Put the row back where it was and let Vue do the move, so the
+            // page and Vue's own record of the row order cannot drift apart.
+            from.removeChild(item);
+            from.insertBefore(item, from.children[oldIndex] ?? null);
 
             const next = [...rows.value];
             next.splice(newIndex, 0, next.splice(oldIndex, 1)[0]);

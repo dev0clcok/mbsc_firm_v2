@@ -54,7 +54,8 @@ class EnquiryController extends Controller implements HasMiddleware
                 'all' => $counts->sum(),
                 ...collect(Enquiry::STATUSES)->mapWithKeys(fn ($status) => [$status => (int) ($counts[$status] ?? 0)]),
             ],
-            'filters' => $request->only(['search', 'status', 'from', 'to', 'sort']),
+            // Cast so an empty set reaches the page as {} rather than [].
+            'filters' => (object) $request->only(['search', 'status', 'from', 'to', 'sort']),
         ]);
     }
 
