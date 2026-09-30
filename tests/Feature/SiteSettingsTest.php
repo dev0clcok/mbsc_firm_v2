@@ -35,13 +35,15 @@ test('public pages receive derived contact links and only filled-in socials', fu
     SiteSetting::put([
         'phone' => '+88 01700-000000',
         'whatsapp' => '+88 01700-111111',
+        'whatsapp_message' => 'Hello there',
         'facebook_url' => 'https://facebook.com/example',
         'linkedin_url' => '',
     ]);
 
     $this->get('/contact')->assertInertia(fn (Assert $page) => $page
         ->where('site.phone_href', 'tel:+8801700000000')
-        ->where('site.whatsapp_url', 'https://wa.me/8801700111111')
+        ->where('site.whatsapp_url', 'https://wa.me/8801700111111?text=Hello%20there')
+        ->where('site.whatsapp_base_url', 'https://wa.me/8801700111111')
         ->where('site.socials', [['platform' => 'facebook', 'url' => 'https://facebook.com/example']])
     );
 });

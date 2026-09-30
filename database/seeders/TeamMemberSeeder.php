@@ -25,11 +25,7 @@ class TeamMemberSeeder extends Seeder
                     ],
                     [
                         'platform' => 'facebook',
-                        'url' => 'https://www.facebook.com/rifat.s.m.sirajul.monir',
-                    ],
-                    [
-                        'platform' => 'twitter',
-                        'url' => 'https://twitter.com/rifat_s_m_sirajul_monir',
+                        'url' => 'https://www.facebook.com/ocena.pothik.330',
                     ],
                 ],
             ],

@@ -155,7 +155,15 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
             <div class="border-t border-white/15">
                 <div class="site-container flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-5 text-sm text-white/70">
                     <p>&copy; {{ new Date().getFullYear() }} {{ site.name }}. All rights reserved.</p>
-                    <p>Design &amp; development by Devoclock</p>
+                    <p>
+                        Design &amp; development by
+                        <a
+                            href="https://www.devoclock.com"
+                            target="_blank"
+                            rel="noopener"
+                            class="inline-flex min-h-11 items-center font-semibold text-white/85 underline underline-offset-4 hover:text-white"
+                        >Devoclock</a>
+                    </p>
                 </div>
             </div>
         </footer>

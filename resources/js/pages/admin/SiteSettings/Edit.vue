@@ -94,6 +94,7 @@ import { useI18n } from 'vue-i18n';
 type SettingKey =
     | 'phone'
     | 'whatsapp'
+    | 'whatsapp_message'
     | 'email'
     | 'enquiry_email'
     | 'address'
@@ -134,6 +135,7 @@ const groups: Array<{ key: string; fields: Field[] }> = [
             { key: 'whatsapp', type: 'tel', placeholder: '+88 01XXX-XXXXXX' },
             { key: 'email', type: 'email' },
             { key: 'enquiry_email', type: 'email' },
+            { key: 'whatsapp_message', type: 'textarea', wide: true },
         ],
     },
     {

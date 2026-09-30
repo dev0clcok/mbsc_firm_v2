@@ -19,6 +19,7 @@ class SiteSetting extends Model
     public const KEYS = [
         'phone',
         'whatsapp',
+        'whatsapp_message',
         'email',
         'enquiry_email',
         'address',
@@ -130,7 +131,12 @@ class SiteSetting extends Model
         return [
             'phone' => $s['phone'],
             'phone_href' => $s['phone'] ? 'tel:+'.$digits($s['phone']) : null,
-            'whatsapp_url' => $s['whatsapp'] ? 'https://wa.me/'.$digits($s['whatsapp']) : null,
+            // whatsapp_url opens a chat with the template message already typed;
+            // whatsapp_base_url is for callers that supply their own text.
+            'whatsapp_url' => $s['whatsapp']
+                ? 'https://wa.me/'.$digits($s['whatsapp']).($s['whatsapp_message'] ? '?text='.rawurlencode($s['whatsapp_message']) : '')
+                : null,
+            'whatsapp_base_url' => $s['whatsapp'] ? 'https://wa.me/'.$digits($s['whatsapp']) : null,
             'email' => $s['email'],
             'address' => $s['address'],
             'maps_url' => $s['maps_url'],

@@ -41,6 +41,7 @@ export interface SiteSettings {
     phone: string | null;
     phone_href: string | null;
     whatsapp_url: string | null;
+    whatsapp_base_url: string | null;
     email: string | null;
     address: string | null;
     maps_url: string | null;

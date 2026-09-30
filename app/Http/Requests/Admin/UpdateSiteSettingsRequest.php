@@ -32,6 +32,7 @@ class UpdateSiteSettingsRequest extends FormRequest
             'remove_hero_about' => ['nullable', 'boolean'],
             'phone' => $phone,
             'whatsapp' => $phone,
+            'whatsapp_message' => ['nullable', 'string', 'max:500'],
             'email' => ['nullable', 'email', 'max:255'],
             'enquiry_email' => ['nullable', 'email', 'max:255'],
             'address' => ['nullable', 'string', 'max:500'],

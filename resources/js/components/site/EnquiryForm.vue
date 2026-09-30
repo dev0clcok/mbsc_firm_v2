@@ -42,9 +42,10 @@ const submit = () => {
     });
 };
 
-// The WhatsApp option carries over whatever has been typed so far.
+// The WhatsApp option carries over whatever has been typed so far, and
+// falls back to the standard template message when the form is empty.
 const whatsappHref = computed(() => {
-    if (!site.value.whatsapp_url) return null;
+    if (!site.value.whatsapp_base_url) return null;
 
     const lines = [
         form.name && `Name: ${form.name}`,
@@ -52,7 +53,7 @@ const whatsappHref = computed(() => {
         form.message,
     ].filter(Boolean);
 
-    return lines.length ? `${site.value.whatsapp_url}?text=${encodeURIComponent(lines.join('\n'))}` : site.value.whatsapp_url;
+    return lines.length ? `${site.value.whatsapp_base_url}?text=${encodeURIComponent(lines.join('\n'))}` : site.value.whatsapp_url;
 });
 </script>
 

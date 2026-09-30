@@ -391,6 +391,10 @@
             "instagram_url": {
                 "label": "Instagram",
                 "help": "Profile URL."
+            },
+            "whatsapp_message": {
+                "label": "WhatsApp template message",
+                "help": "Already typed for the visitor when they tap a WhatsApp button. Leave empty to open a blank chat."
             }
         },
         "images": {
