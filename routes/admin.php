@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\FAQController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\AuditLogController;
@@ -25,6 +26,9 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
     Route::resource('testimonials', TestimonialController::class)->except(['show']);
 
     Route::resource('services', ServiceController::class)->except(['show']);
+
+    Route::get('site-settings', [SiteSettingController::class, 'edit'])->name('site-settings.edit');
+    Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');
 
     Route::resource('roles', RoleController::class)->except(['show']);
 

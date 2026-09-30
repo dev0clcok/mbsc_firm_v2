@@ -69,6 +69,14 @@ return [
                     ],
                 ],
                 [
+                    'key' => 'settings',
+                    'label' => 'Site Settings',
+                    'permissions' => [
+                        ['slug' => 'settings.view', 'label' => 'View'],
+                        ['slug' => 'settings.update', 'label' => 'Update'],
+                    ],
+                ],
+                [
                     'key' => 'faqs',
                     'label' => 'FAQs',
                     'permissions' => [

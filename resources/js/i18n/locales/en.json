@@ -24,7 +24,8 @@
         "audit_logs": "Audit Logs",
         "users_roles": "Users & Roles",
         "users": "Users",
-        "roles": "Roles"
+        "roles": "Roles",
+        "site_settings": "Site Settings"
     },
     "language": {
         "label": "Language",
@@ -314,6 +315,78 @@
         "of": "of",
         "results": "results",
         "total": "total"
+    },
+    "site_settings": {
+        "title": "Site Settings",
+        "subtitle": "Contact details and links shown across the public website.",
+        "save": "Save settings",
+        "groups": {
+            "contact": {
+                "title": "Contact",
+                "help": "Shown in the header, footer and contact page. Leave a field empty to hide it."
+            },
+            "office": {
+                "title": "Office",
+                "help": "Address, map link and hours."
+            },
+            "social": {
+                "title": "Social links",
+                "help": "An icon is shown only for links that are filled in."
+            }
+        },
+        "fields": {
+            "phone": {
+                "label": "Phone number",
+                "help": "Used for click-to-call links."
+            },
+            "whatsapp": {
+                "label": "WhatsApp number",
+                "help": "Include the country code. Used for the WhatsApp buttons."
+            },
+            "email": {
+                "label": "Public email",
+                "help": "Shown to visitors."
+            },
+            "enquiry_email": {
+                "label": "Enquiry notification email",
+                "help": "New enquiries from the website are emailed here. Not shown to visitors."
+            },
+            "address": {
+                "label": "Office address",
+                "help": "Full postal address."
+            },
+            "maps_url": {
+                "label": "Google Maps link",
+                "help": "The share link for the office location."
+            },
+            "office_hours": {
+                "label": "Office hours",
+                "help": "For example: Saturday to Thursday, 10:00 AM to 7:00 PM."
+            },
+            "response_time": {
+                "label": "Response time",
+                "help": "For example: within one working day. Shown next to the enquiry form."
+            },
+            "facebook_url": {
+                "label": "Facebook",
+                "help": "Page or profile URL."
+            },
+            "linkedin_url": {
+                "label": "LinkedIn",
+                "help": "Company page URL."
+            },
+            "x_url": {
+                "label": "X (Twitter)",
+                "help": "Profile URL."
+            },
+            "youtube_url": {
+                "label": "YouTube",
+                "help": "Channel URL."
+            },
+            "instagram_url": {
+                "label": "Instagram",
+                "help": "Profile URL."
+            }
+        }
     }
 }
-

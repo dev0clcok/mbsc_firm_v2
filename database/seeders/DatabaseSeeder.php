@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         // Seed in order (services first as other seeders may depend on them)
         $this->call([
             PermissionsSeeder::class,
+            SiteSettingSeeder::class,
             ServiceSeeder::class,
             TeamMemberSeeder::class,
             TestimonialSeeder::class,
