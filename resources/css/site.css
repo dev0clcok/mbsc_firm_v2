@@ -118,6 +118,23 @@
         @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-site bg-rose-tint text-rose [&>svg]:h-6 [&>svg]:w-6;
     }
 
+    /* Formatted text from the admin's editor (FAQ answers, privacy policy). */
+    .site-rich :where(p, ul, ol) + :where(p, ul, ol) {
+        @apply mt-3;
+    }
+
+    .site-rich :where(ul) {
+        @apply list-disc pl-5;
+    }
+
+    .site-rich :where(ol) {
+        @apply list-decimal pl-5;
+    }
+
+    .site-rich :where(a) {
+        @apply font-medium text-rose underline underline-offset-4 hover:text-rose-deep;
+    }
+
     /* Buttons: one set, three weights. */
     .site-btn {
         @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-site border px-5 text-base font-semibold transition-colors;

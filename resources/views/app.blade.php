@@ -2,7 +2,7 @@
     use App\Http\Services\ImageStore;
     use App\Models\SiteSetting;
 
-    $isPublic = in_array($page['component'], ['Welcome', 'Services', 'Service', 'About', 'Contact', 'Error'], true);
+    $isPublic = in_array($page['component'], ['Welcome', 'Services', 'Service', 'Faqs', 'About', 'Contact', 'Privacy', 'Error'], true);
     $seo = $seo ?? null;
     $siteName = config('app.name', 'MBSC Firm');
     $title = $seo ? $seo['title'].' | '.$siteName : $siteName;
@@ -67,6 +67,9 @@
             <meta name="twitter:image" content="{{ asset('images/og.png') }}">
             <meta name="theme-color" content="#1e2230">
             <script type="application/ld+json">{!! json_encode(SiteSetting::structuredData(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>
+            @if (! empty($structuredData))
+                <script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>
+            @endif
         @else
             <meta name="robots" content="noindex">
         @endif

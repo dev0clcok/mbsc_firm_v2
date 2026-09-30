@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function handle(Request $request, \Closure $next)
     {
-        if (! $request->routeIs('home', 'services', 'services.show', 'about', 'contact')) {
+        if (! $request->routeIs('home', 'services', 'services.show', 'faqs', 'about', 'contact', 'privacy')) {
             config(['inertia.ssr.enabled' => false]);
         }
 

@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 defineProps<{
-    currentPage?: 'home' | 'services' | 'about' | 'contact';
+    currentPage?: 'home' | 'services' | 'faqs' | 'about' | 'contact';
 }>();
 
 const site = useSite();
@@ -16,6 +16,7 @@ const menuOpen = ref(false);
 const navLinks = [
     { name: 'Home', href: '/', page: 'home' },
     { name: 'Services', href: '/services', page: 'services' },
+    { name: 'FAQs', href: '/faqs', page: 'faqs' },
     { name: 'About', href: '/about', page: 'about' },
     { name: 'Contact', href: '/contact', page: 'contact' },
 ];

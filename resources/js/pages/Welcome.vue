@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EnquiryForm from '@/components/site/EnquiryForm.vue';
-import FaqList from '@/components/site/FaqList.vue';
+import FaqList, { type Faq } from '@/components/site/FaqList.vue';
 import ServiceGrid, { type ServiceSummary } from '@/components/site/ServiceGrid.vue';
 import SiteIcon from '@/components/site/SiteIcon.vue';
 import SiteImage from '@/components/site/SiteImage.vue';
@@ -17,7 +17,7 @@ defineProps<{
     services: ServiceSummary[];
     teamMembers: TeamMember[];
     testimonials: Array<{ name: string; position: string | null; company: string | null; text: string }>;
-    faqs: Array<{ question: string; answer: string }>;
+    faqs: Faq[];
 }>();
 
 const site = useSite();
@@ -135,6 +135,7 @@ const steps = [
                     <p class="site-lead mt-3">
                         If yours is not here, <Link href="/contact#enquiry" class="site-link">ask us directly</Link>.
                     </p>
+                    <p class="mt-4"><Link href="/faqs" class="site-link inline-flex min-h-11 items-center">All questions</Link></p>
                 </div>
                 <FaqList :faqs="faqs" />
             </div>

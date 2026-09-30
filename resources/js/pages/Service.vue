@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ContactDetails from '@/components/site/ContactDetails.vue';
 import EnquiryForm from '@/components/site/EnquiryForm.vue';
+import FaqList, { type Faq } from '@/components/site/FaqList.vue';
 import SiteIcon from '@/components/site/SiteIcon.vue';
 import SiteImage from '@/components/site/SiteImage.vue';
 import { useSite } from '@/composables/useSite';
@@ -24,6 +25,7 @@ const props = defineProps<{
         icon: string | null;
         image: SiteImageData | null;
     };
+    faqs: Faq[];
 }>();
 
 const site = useSite();
@@ -127,6 +129,16 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
                 </div>
             </div>
         </article>
+
+        <section v-if="faqs.length" class="site-section" aria-labelledby="service-faqs">
+            <div class="site-container site-split">
+                <div>
+                    <h2 id="service-faqs" class="site-title">Questions about this service</h2>
+                    <p class="mt-3"><Link href="/faqs" class="site-link inline-flex min-h-11 items-center">All questions</Link></p>
+                </div>
+                <FaqList :faqs="faqs" />
+            </div>
+        </section>
 
         <section id="enquiry" class="site-section scroll-mt-20 bg-mist" aria-labelledby="service-enquiry">
             <div class="site-container site-split">

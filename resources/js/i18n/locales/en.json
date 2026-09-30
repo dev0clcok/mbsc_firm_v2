@@ -230,7 +230,9 @@
         "filters": {
             "status": "Status",
             "all_status": "All Status",
-            "search_placeholder": "Search questions or answers..."
+            "search_placeholder": "Search questions or answers...",
+            "service": "Shown under",
+            "all_services": "Everywhere"
         },
         "status": {
             "active": "Active",
@@ -239,11 +241,35 @@
         "columns": {
             "question": "Question",
             "status": "Status",
-            "sort": "Sort"
+            "sort": "Sort",
+            "service": "Shown under"
         },
         "empty": {
             "no_faqs": "No FAQs found.",
             "create_first": "Create your first FAQ"
+        },
+        "back_to_list": "Back to FAQs",
+        "create": {
+            "heading": "Add FAQ",
+            "save": "Create FAQ"
+        },
+        "edit": {
+            "heading": "Edit FAQ",
+            "save": "Update FAQ"
+        },
+        "form": {
+            "details": "Question and answer",
+            "details_help": "Write the question the way a client would ask it.",
+            "question": "Question",
+            "answer": "Answer",
+            "answer_placeholder": "Write the answer...",
+            "placement": "Where it appears",
+            "placement_help": "General questions show on the home page and the FAQ page. A question assigned to a service also shows on that service page.",
+            "service": "Service",
+            "service_help": "Leave as General if it applies to the whole firm.",
+            "general": "General",
+            "sort_order": "Sort order",
+            "active": "Shown on the website"
         }
     },
     "services": {

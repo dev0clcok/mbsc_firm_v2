@@ -15,6 +15,7 @@ class SeoController extends Controller
         $urls = collect([
             ['loc' => route('home'), 'lastmod' => null],
             ['loc' => route('services'), 'lastmod' => $services->max('updated_at')],
+            ['loc' => route('faqs'), 'lastmod' => null],
             ['loc' => route('about'), 'lastmod' => null],
             ['loc' => route('contact'), 'lastmod' => null],
         ])->concat($services->map(fn (Service $s) => [

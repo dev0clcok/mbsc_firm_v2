@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
@@ -50,6 +51,11 @@ class Service extends Model
         return $this->image_url
             ? ['url' => $this->image_url, 'width' => $this->image_width, 'height' => $this->image_height, 'alt' => $this->image_alt]
             : null;
+    }
+
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(FAQ::class)->orderBy('sort_order')->orderBy('id');
     }
 
     public function scopeActive($query)

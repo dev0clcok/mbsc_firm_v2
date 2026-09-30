@@ -34,6 +34,19 @@
                         <option value="0">{{ t('faqs.status.inactive') }}</option>
                     </select>
                 </div>
+                <div>
+                    <label for="faq-service-filter" class="mb-2 block text-sm font-medium">{{ t('faqs.filters.service') }}</label>
+                    <select
+                        id="faq-service-filter"
+                        v-model="selectedService"
+                        class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        @change="handleFilter"
+                    >
+                        <option value="">{{ t('faqs.filters.all_services') }}</option>
+                        <option value="general">{{ t('faqs.form.general') }}</option>
+                        <option v-for="service in services" :key="service.id" :value="String(service.id)">{{ service.title }}</option>
+                    </select>
+                </div>
             </template>
         </AppFilters>
 
@@ -49,12 +62,8 @@
                 </div>
             </template>
 
-            <template #cell-category="{ value }">
-                <span v-if="value"
-                    class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20">
-                    {{ value }}
-                </span>
-                <span v-else class="text-sm font-medium text-muted-foreground">—</span>
+            <template #cell-service="{ row }">
+                <span class="text-sm text-muted-foreground">{{ row.service?.title ?? t('faqs.form.general') }}</span>
             </template>
 
             <template #cell-is_active="{ value }">
@@ -119,6 +128,7 @@ interface Props {
             answer: string;
             sort_order: number;
             is_active: boolean;
+            service: { id: number; title: string } | null;
         }>;
         links: Array<{
             url: string | null;
@@ -129,9 +139,11 @@ interface Props {
         to: number | null;
         total: number;
     };
+    services: Array<{ id: number; title: string }>;
     filters?: {
         search?: string;
         status?: string;
+        service?: string;
     };
 }
 
@@ -142,6 +154,7 @@ const { confirm } = useConfirm();
 
 const search = ref(props.filters?.search || '');
 const selectedStatus = ref(props.filters?.status || '');
+const selectedService = ref(props.filters?.service || '');
 
 const canCreate = computed(() => can('faqs.create'));
 const canEdit = computed(() => can('faqs.update'));
@@ -149,6 +162,7 @@ const canDelete = computed(() => can('faqs.delete'));
 
 const columns = computed(() => [
     { key: 'question', label: t('faqs.columns.question') },
+    { key: 'service', label: t('faqs.columns.service') },
     { key: 'is_active', label: t('faqs.columns.status'), align: 'center' as const },
     { key: 'sort_order', label: t('faqs.columns.sort'), align: 'center' as const },
 ]);
@@ -201,6 +215,7 @@ const handleSearch = () => {
         {
             search: search.value || null,
             status: selectedStatus.value || null,
+            service: selectedService.value || null,
         },
         {
             preserveState: true,
@@ -215,6 +230,7 @@ const handleFilter = () => {
         {
             search: search.value || null,
             status: selectedStatus.value || null,
+            service: selectedService.value || null,
         },
         {
             preserveState: true,
@@ -226,6 +242,7 @@ const handleFilter = () => {
 const resetFilters = () => {
     search.value = '';
     selectedStatus.value = '';
+    selectedService.value = '';
 
     router.get(
         faqsIndex().url,

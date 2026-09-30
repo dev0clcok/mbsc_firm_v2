@@ -88,3 +88,24 @@ test('a service page carries its steps, documents, timeline and fees', function 
         ->where('service.timeline', 'About a week.')
         ->where('service.fees', null));
 });
+
+test('the FAQ page groups questions by service and publishes them as structured data', function () {
+    $vat = Service::where('slug', 'vat')->first();
+    App\Models\FAQ::create(['question' => 'What are your fees?', 'answer' => 'Ask us.', 'is_active' => true]);
+    App\Models\FAQ::create(['service_id' => $vat->id, 'question' => 'How long does BIN take?', 'answer' => '<p>About <strong>a week</strong>.</p><script>alert(1)</script>', 'is_active' => true]);
+    App\Models\FAQ::create(['question' => 'Hidden?', 'answer' => 'No.', 'is_active' => false]);
+
+    $this->get('/faqs')
+        ->assertOk()
+        ->assertSee('"@type":"FAQPage"', false)
+        ->assertDontSee('Hidden?')
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Faqs')
+            ->has('groups', 2)
+            ->where('groups.0.title', 'General')
+            ->where('groups.1.slug', 'vat')
+            ->where('groups.1.faqs.0.answer', '<p>About <strong>a week</strong>.</p>alert(1)'));
+
+    $this->get('/services/vat')->assertInertia(fn (Assert $page) => $page->has('faqs', 1));
+    $this->get('/')->assertInertia(fn (Assert $page) => $page->has('faqs', 1));
+});

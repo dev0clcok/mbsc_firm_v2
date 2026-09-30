@@ -1,124 +1,86 @@
-<template>
-    <div class="space-y-6 p-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-            <h1 class="text-2xl font-semibold tracking-tight">
-                {{ mode === 'edit' ? 'Edit FAQ' : 'Create New FAQ' }}
-            </h1>
-            <Link :href="faqsIndex().url" class="text-muted-foreground hover:text-foreground">
-                Back to FAQs
-            </Link>
-        </div>
-
-        <form @submit.prevent="emit('submit')" class="space-y-6">
-            <div class="grid gap-6">
-                <div class="space-y-6">
-                    <!-- Basic Information -->
-                    <div class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="mb-4 text-xl font-semibold">FAQ Details</h2>
-
-                        <div class="space-y-4">
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">
-                                    Question <span class="text-destructive">*</span>
-                                </label>
-                                <textarea
-                                    v-model="question"
-                                    rows="3"
-                                    required
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                    placeholder="Enter the question..."
-                                ></textarea>
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">
-                                    Answer <span class="text-destructive">*</span>
-                                </label>
-                                <RichTextEditor v-model="answer" placeholder="Enter the answer..." />
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="space-y-6">
-                    <!-- Settings -->
-                    <div class="rounded-lg border border-border bg-card p-6">
-                        <h2 class="mb-4 text-xl font-semibold">Settings</h2>
-
-                        <div class="space-y-4 grid gap-6 grid-cols-1 md:grid-cols-3">
-                            <div class="flex items-center gap-2">
-                                <input v-model="isActive" type="checkbox" id="is_active" class="rounded border-input" />
-                                <label for="is_active" class="text-sm font-medium">
-                                    Active
-                                </label>
-                            </div>
-
-                            <div>
-                                <label class="mb-2 block text-sm font-medium">Sort Order</label>
-                                <input v-model.number="sortOrder" type="number"
-                                    class="w-full rounded-md border border-input bg-background px-3 py-2" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end gap-4">
-                <Button as-child variant="secondary">
-                    <Link :href="faqsIndex().url">Cancel</Link>
-                </Button>
-                <Button type="submit" :loading="processing">
-                    <span v-if="mode === 'edit'">
-                        Update FAQ
-                    </span>
-                    <span v-else>
-                        Create FAQ
-                    </span>
-                </Button>
-            </div>
-        </form>
-    </div>
-</template>
-
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import FormActions from '@/components/admin/FormActions.vue';
+import FormField from '@/components/admin/FormField.vue';
+import FormSection from '@/components/admin/FormSection.vue';
 import RichTextEditor from '@/components/admin/RichTextEditor.vue';
-import { index as faqsIndex } from '@/routes/admin/faqs';
-import { Button } from '@/components/ui/button';
+import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
+import type { InertiaForm } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+export interface FaqFormData {
+    service_id: number | null;
+    question: string;
+    answer: string;
+    sort_order: number;
+    is_active: boolean;
+}
 
 const props = defineProps<{
     mode: 'create' | 'edit';
-    question: string;
-    answer: string;
-    sortOrder: number;
-    isActive: boolean;
-    processing: boolean;    
+    form: InertiaForm<FaqFormData>;
+    services: Array<{ id: number; title: string }>;
+    viewHref?: string;
 }>();
 
-const emit = defineEmits<{
-    (e: 'submit'): void;
-    (e: 'update:question', value: string): void;
-    (e: 'update:answer', value: string): void;
-    (e: 'update:sortOrder', value: number): void;
-    (e: 'update:isActive', value: boolean): void;
-}>();
+const emit = defineEmits<{ (e: 'submit'): void }>();
 
-const question = computed({
-    get: () => props.question,
-    set: (v: string) => emit('update:question', v),
-});
-const answer = computed({
-    get: () => props.answer,
-    set: (v: string) => emit('update:answer', v),
-});
-const sortOrder = computed({
-    get: () => props.sortOrder,
-    set: (v: number) => emit('update:sortOrder', v),
-});
-const isActive = computed({
-    get: () => props.isActive,
-    set: (v: boolean) => emit('update:isActive', v),
-});
+const { t } = useI18n();
+
+useUnsavedWarning(() => props.form.isDirty, t('common.leave_unsaved'));
+
+const errors = () => props.form.errors as Record<string, string | undefined>;
 </script>
+
+<template>
+    <div class="space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h1 class="text-2xl font-semibold tracking-tight">{{ mode === 'edit' ? t('faqs.edit.heading') : t('faqs.create.heading') }}</h1>
+                <p class="mt-1 text-sm text-muted-foreground">{{ t('common.required_note') }}</p>
+            </div>
+            <Link href="/admin/faqs" class="inline-flex min-h-10 items-center text-sm font-medium text-muted-foreground hover:text-foreground">
+                {{ t('faqs.back_to_list') }}
+            </Link>
+        </div>
+
+        <form class="space-y-6" novalidate @submit.prevent="emit('submit')">
+            <FormSection :title="t('faqs.form.details')" :description="t('faqs.form.details_help')">
+                <FormField v-slot="f" :label="t('faqs.form.question')" required :error="errors().question">
+                    <textarea :id="f.id" v-model="form.question" rows="2" required class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="form.clearErrors('question')" />
+                </FormField>
+                <div>
+                    <p class="mb-1.5 block text-sm font-medium">{{ t('faqs.form.answer') }} <span class="text-destructive" aria-hidden="true">*</span></p>
+                    <RichTextEditor v-model="form.answer" :placeholder="t('faqs.form.answer_placeholder')" />
+                    <p v-if="errors().answer" class="mt-1.5 text-sm font-medium text-red-600 dark:text-red-500">{{ errors().answer }}</p>
+                </div>
+            </FormSection>
+
+            <FormSection :title="t('faqs.form.placement')" :description="t('faqs.form.placement_help')">
+                <div class="grid gap-5 md:grid-cols-3">
+                    <FormField v-slot="f" :label="t('faqs.form.service')" :help="t('faqs.form.service_help')" :error="errors().service_id">
+                        <select :id="f.id" v-model="form.service_id" class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-describedby="f.describedBy">
+                            <option :value="null">{{ t('faqs.form.general') }}</option>
+                            <option v-for="service in services" :key="service.id" :value="service.id">{{ service.title }}</option>
+                        </select>
+                    </FormField>
+                    <FormField v-slot="f" :label="t('faqs.form.sort_order')" :error="errors().sort_order">
+                        <input :id="f.id" v-model.number="form.sort_order" type="number" class="w-full rounded-md border border-input bg-background px-3 py-2" />
+                    </FormField>
+                    <label class="flex min-h-10 items-center gap-3 self-end text-sm font-medium">
+                        <input v-model="form.is_active" type="checkbox" class="size-4 rounded border-input" />
+                        {{ t('faqs.form.active') }}
+                    </label>
+                </div>
+            </FormSection>
+
+            <FormActions
+                :save-label="mode === 'edit' ? t('faqs.edit.save') : t('faqs.create.save')"
+                cancel-href="/admin/faqs"
+                :processing="form.processing"
+                :dirty="form.isDirty"
+                :view-href="viewHref"
+            />
+        </form>
+    </div>
+</template>

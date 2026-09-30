@@ -30,11 +30,9 @@ class HomeController extends Controller
                     'text' => $t->text,
                 ])
                 ->values(),
-            'faqs' => FAQ::query()->active()->orderBy('sort_order')->orderBy('id')->get()
-                ->map(fn (FAQ $f) => [
-                    'question' => $f->question,
-                    'answer' => $f->answer,
-                ])
+            // General questions only; service-specific ones live on the service pages and /faqs.
+            'faqs' => FAQ::query()->active()->whereNull('service_id')->orderBy('sort_order')->orderBy('id')->limit(6)->get()
+                ->map(fn (FAQ $f) => $this->faq($f))
                 ->values(),
         ])->withViewData('seo', [
             'title' => 'Legal and tax solutions for your business',
@@ -71,9 +69,44 @@ class HomeController extends Controller
                 'icon' => $service->icon_svg,
                 'image' => $service->image(),
             ],
+            'faqs' => $service->faqs()->active()->get()->map(fn (FAQ $f) => $this->faq($f))->values(),
         ])->withViewData('seo', [
             'title' => $service->title,
             'description' => $service->short_description ?: str($service->description)->limit(155)->toString(),
+        ]);
+    }
+
+    public function faqs(): Response
+    {
+        $faqs = FAQ::query()->active()->orderBy('sort_order')->orderBy('id')->get();
+        $services = Service::query()->active()->orderBy('sort_order')->orderBy('id')->get(['id', 'slug', 'title']);
+
+        $groups = collect([['title' => 'General', 'slug' => null, 'faqs' => $faqs->whereNull('service_id')]])
+            ->concat($services->map(fn (Service $s) => [
+                'title' => $s->title,
+                'slug' => $s->slug,
+                'faqs' => $faqs->where('service_id', $s->id),
+            ]))
+            ->filter(fn (array $group) => $group['faqs']->isNotEmpty())
+            ->map(fn (array $group) => [...$group, 'faqs' => $group['faqs']->map(fn (FAQ $f) => $this->faq($f))->values()])
+            ->values();
+
+        // Only questions that are actually shown on the page go into the structured data.
+        $shown = $groups->flatMap(fn (array $group) => $group['faqs'])->pluck('id');
+
+        return Inertia::render('Faqs', [
+            'groups' => $groups,
+        ])->withViewData('seo', [
+            'title' => 'Frequently asked questions',
+            'description' => 'Answers to common questions about company registration, income tax, VAT and audit support with MBSC Firm.',
+        ])->withViewData('structuredData', $shown->isEmpty() ? null : [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => $faqs->whereIn('id', $shown)->map(fn (FAQ $f) => [
+                '@type' => 'Question',
+                'name' => $f->question,
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $f->answerText()],
+            ])->values()->all(),
         ]);
     }
 
@@ -130,5 +163,13 @@ class HomeController extends Controller
                 ])->values()->all(),
             ])
             ->values();
+    }
+
+    /**
+     * @return array{id: int, question: string, answer: string}
+     */
+    private function faq(FAQ $faq): array
+    {
+        return ['id' => $faq->id, 'question' => $faq->question, 'answer' => $faq->answerHtml()];
     }
 }
