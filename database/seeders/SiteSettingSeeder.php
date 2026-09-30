@@ -24,6 +24,9 @@ class SiteSettingSeeder extends Seeder
             'x_url' => null,
             'youtube_url' => null,
             'instagram_url' => null,
+            // A starting draft. It stays off the website until it is marked as reviewed in the admin.
+            'privacy_policy' => file_get_contents(__DIR__.'/content/privacy-policy.md'),
+            'privacy_published' => '0',
         ];
 
         // Only fill in settings that have never been saved, so re-seeding

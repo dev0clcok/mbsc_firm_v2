@@ -33,6 +33,8 @@ class SiteSetting extends Model
         'x_url',
         'youtube_url',
         'instagram_url',
+        'privacy_policy',
+        'privacy_published',
     ];
 
     public const SOCIAL_KEYS = [
@@ -148,8 +150,20 @@ class SiteSetting extends Model
                 ? preg_replace('/(\d)\s+(AM|PM)\b/i', "$1\u{00A0}$2", $s['office_hours'])
                 : null,
             'response_time' => $s['response_time'],
+            'privacy_published' => self::privacyPublished(),
             'socials' => $socials,
         ];
+    }
+
+    /**
+     * The privacy policy is only public once it has text and someone has
+     * confirmed in the admin that it has been reviewed.
+     */
+    public static function privacyPublished(): bool
+    {
+        $s = self::values();
+
+        return $s['privacy_published'] === '1' && filled($s['privacy_policy']);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\SiteSetting;
 use Illuminate\Http\Response;
 
 class SeoController extends Controller
@@ -18,7 +19,8 @@ class SeoController extends Controller
             ['loc' => route('faqs'), 'lastmod' => null],
             ['loc' => route('about'), 'lastmod' => null],
             ['loc' => route('contact'), 'lastmod' => null],
-        ])->concat($services->map(fn (Service $s) => [
+        ])->when(SiteSetting::privacyPublished(), fn ($urls) => $urls->push(['loc' => route('privacy'), 'lastmod' => null]))
+            ->concat($services->map(fn (Service $s) => [
             'loc' => route('services.show', $s->slug),
             'lastmod' => $s->updated_at,
         ]));

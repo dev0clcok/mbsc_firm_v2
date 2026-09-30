@@ -156,6 +156,7 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
             <div class="border-t border-white/15">
                 <div class="site-container flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-5 text-sm text-white/70">
                     <p>&copy; {{ new Date().getFullYear() }} {{ site.name }}. All rights reserved.</p>
+                    <Link v-if="site.privacy_published" href="/privacy" class="inline-flex min-h-11 items-center underline-offset-4 hover:text-white hover:underline">Privacy policy</Link>
                     <p>
                         Design &amp; development by
                         <a

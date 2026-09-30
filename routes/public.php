@@ -11,6 +11,7 @@ Route::get('/services/{slug}', [HomeController::class, 'service'])->name('servic
 Route::get('/faqs', [HomeController::class, 'faqs'])->name('faqs');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 
 Route::post('/enquiries', [EnquiryController::class, 'store'])
     ->middleware('throttle:enquiries')

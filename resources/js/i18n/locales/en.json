@@ -31,7 +31,8 @@
         "roles": "Roles",
         "site_settings": "Site Settings",
         "enquiries": "Enquiries",
-        "view_site": "View website"
+        "view_site": "View website",
+        "privacy_policy": "Privacy Policy"
     },
     "language": {
         "label": "Language",
@@ -558,5 +559,18 @@
         "crop_help": "Drag to choose the part of the picture to keep.",
         "crop_apply": "Use this crop",
         "crop_cancel": "Cancel"
+    },
+    "privacy": {
+        "title": "Privacy policy",
+        "subtitle": "The privacy page of the public website.",
+        "draft_title": "Draft: needs legal review",
+        "draft_text": "This text was drafted from how the website works. It has not been checked by a lawyer. It is not shown on the website, and no link to it appears, until you tick the box below and save.",
+        "published_title": "Published",
+        "published_text": "The policy is live at /privacy and linked from the footer and the enquiry form.",
+        "policy": "Policy text",
+        "policy_help": "Start a line with ## for a heading and with - for a list item. Leave a blank line between paragraphs.",
+        "publish": "A lawyer has reviewed this policy. Publish it on the website.",
+        "publish_help": "Untick to take the page down again.",
+        "save": "Save policy"
     }
 }

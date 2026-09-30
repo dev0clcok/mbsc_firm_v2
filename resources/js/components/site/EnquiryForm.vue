@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SiteIcon from '@/components/site/SiteIcon.vue';
 import { useSite } from '@/composables/useSite';
-import { useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { computed, nextTick, ref, useId } from 'vue';
 
 const props = defineProps<{
@@ -163,7 +163,12 @@ const whatsappHref = computed(() => {
                 </a>
             </div>
 
-            <p class="text-sm text-ink-soft">We use these details only to reply to your enquiry.</p>
+            <p class="text-sm text-ink-soft">
+                We use these details only to reply to your enquiry.
+                <template v-if="site.privacy_published">
+                    See our <Link href="/privacy" class="site-link">privacy policy</Link>.
+                </template>
+            </p>
         </form>
     </div>
 </template>

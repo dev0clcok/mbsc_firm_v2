@@ -109,3 +109,24 @@ test('the FAQ page groups questions by service and publishes them as structured 
     $this->get('/services/vat')->assertInertia(fn (Assert $page) => $page->has('faqs', 1));
     $this->get('/')->assertInertia(fn (Assert $page) => $page->has('faqs', 1));
 });
+
+test('the privacy policy is hidden until it is marked as reviewed', function () {
+    SiteSetting::put(['privacy_policy' => "## Who we are\n\nA firm.", 'privacy_published' => '0']);
+
+    $this->get('/privacy')->assertNotFound();
+    $this->get('/contact')->assertInertia(fn (Assert $page) => $page->where('site.privacy_published', false));
+    $this->get('/sitemap.xml')->assertDontSee('/privacy');
+
+    $this->actingAs(App\Models\User::factory()->create(['email' => config('admin.super_admin_email')]));
+    $this->put('/admin/privacy-policy', ['policy' => "## Who we are\n\nA firm.", 'published' => true])->assertRedirect();
+
+    $this->get('/privacy')->assertOk()->assertInertia(fn (Assert $page) => $page->component('Privacy')->where('policy', "## Who we are\n\nA firm."));
+    $this->get('/contact')->assertInertia(fn (Assert $page) => $page->where('site.privacy_published', true));
+    $this->get('/sitemap.xml')->assertSee('/privacy');
+});
+
+test('an empty policy cannot be published', function () {
+    $this->actingAs(App\Models\User::factory()->create(['email' => config('admin.super_admin_email')]));
+
+    $this->put('/admin/privacy-policy', ['policy' => '', 'published' => true])->assertSessionHasErrors('policy');
+});

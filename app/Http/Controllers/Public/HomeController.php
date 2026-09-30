@@ -129,6 +129,19 @@ class HomeController extends Controller
         ]);
     }
 
+    public function privacy(): Response
+    {
+        abort_unless(SiteSetting::privacyPublished(), 404);
+
+        return Inertia::render('Privacy', [
+            'policy' => SiteSetting::get('privacy_policy'),
+            'updatedAt' => SiteSetting::query()->where('key', 'privacy_policy')->value('updated_at'),
+        ])->withViewData('seo', [
+            'title' => 'Privacy policy',
+            'description' => 'How MBSC Firm collects, uses and protects personal information sent through this website.',
+        ]);
+    }
+
     /**
      * @return Collection<int, array<string, mixed>>
      */
