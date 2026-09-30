@@ -7,10 +7,10 @@ import { createApp, h } from 'vue';
 import { initializeTheme } from './composables/useAppearance';
 import { i18n, setAppLocale } from './i18n';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'MBSC Firm';
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => (title ? `${title} | ${appName}` : appName),
     resolve: (name) =>
         resolvePageComponent(
             `./pages/${name}.vue`,

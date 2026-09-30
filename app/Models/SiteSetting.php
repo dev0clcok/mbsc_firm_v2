@@ -106,4 +106,37 @@ class SiteSetting extends Model
             'socials' => $socials,
         ];
     }
+
+    /**
+     * schema.org description of the firm for search engines. Only facts
+     * held in settings are included.
+     *
+     * @return array<string, mixed>
+     */
+    public static function structuredData(): array
+    {
+        $s = self::values();
+        $digits = fn (?string $number) => $number ? preg_replace('/\D+/', '', $number) : null;
+
+        return array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'ProfessionalService',
+            'name' => config('app.name'),
+            'url' => url('/'),
+            'logo' => asset('images/icon-192.png'),
+            'image' => asset('images/og.png'),
+            'description' => 'RJSC company registration, income tax, VAT and audit support services in Chattogram, Bangladesh.',
+            'telephone' => $s['phone'] ? '+'.$digits($s['phone']) : null,
+            'email' => $s['email'],
+            'address' => $s['address'] ? [
+                '@type' => 'PostalAddress',
+                'streetAddress' => $s['address'],
+                'addressLocality' => 'Chattogram',
+                'addressCountry' => 'BD',
+            ] : null,
+            'areaServed' => ['@type' => 'Country', 'name' => 'Bangladesh'],
+            'hasMap' => $s['maps_url'],
+            'sameAs' => array_values(array_filter(array_map(fn ($key) => $s[$key], self::SOCIAL_KEYS))) ?: null,
+        ]);
+    }
 }
