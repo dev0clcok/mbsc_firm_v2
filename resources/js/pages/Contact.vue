@@ -23,7 +23,9 @@ const site = useSite();
                 <div class="mt-12 grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
                     <section id="enquiry" class="scroll-mt-24" aria-labelledby="contact-enquiry">
                         <h2 id="contact-enquiry" class="site-title mb-6">Send an enquiry</h2>
-                        <EnquiryForm />
+                        <div class="site-card p-6 sm:p-8">
+                            <EnquiryForm />
+                        </div>
                     </section>
 
                     <section aria-labelledby="contact-office">

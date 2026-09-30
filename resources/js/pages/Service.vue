@@ -2,8 +2,10 @@
 import ContactDetails from '@/components/site/ContactDetails.vue';
 import EnquiryForm from '@/components/site/EnquiryForm.vue';
 import SiteIcon from '@/components/site/SiteIcon.vue';
+import SiteImage from '@/components/site/SiteImage.vue';
 import { useSite } from '@/composables/useSite';
 import PublicLayout from '@/layouts/PublicLayout.vue';
+import type { SiteImageData } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
@@ -14,6 +16,9 @@ const props = defineProps<{
         summary: string | null;
         description: string | null;
         features: string[];
+        /** Trusted SVG markup entered in the admin panel. */
+        icon: string | null;
+        image: SiteImageData | null;
     };
 }>();
 
@@ -27,7 +32,7 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
 
     <PublicLayout current-page="services">
         <article>
-            <header class="pt-10 pb-section">
+            <header class="pt-8 pb-section">
                 <div class="site-container">
                     <nav aria-label="Breadcrumb">
                         <ol class="flex flex-wrap items-center gap-2 text-sm text-ink-soft">
@@ -36,8 +41,18 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
                             <li aria-current="page">{{ service.title }}</li>
                         </ol>
                     </nav>
-                    <h1 class="site-display mt-8">{{ service.title }}</h1>
-                    <p v-if="service.summary" class="site-lead mt-6">{{ service.summary }}</p>
+                    <div :class="['mt-8 grid items-center gap-x-14 gap-y-10', service.image && 'lg:grid-cols-2']">
+                        <div>
+                            <!-- eslint-disable-next-line vue/no-v-html -->
+                            <span v-if="service.icon" class="site-icon-tile mb-5" v-html="service.icon"></span>
+                            <h1 class="site-display">{{ service.title }}</h1>
+                            <p v-if="service.summary" class="site-lead mt-6">{{ service.summary }}</p>
+                            <p class="mt-8"><a href="#enquiry" class="site-btn site-btn-primary">Ask about this service</a></p>
+                        </div>
+                        <div v-if="service.image" class="site-figure aspect-[3/2]">
+                            <SiteImage :image="service.image" eager sizes="(min-width: 1024px) 50vw, 72vw" />
+                        </div>
+                    </div>
                 </div>
             </header>
 
@@ -61,9 +76,9 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
                         </template>
                     </div>
 
-                    <aside v-if="otherServices.length" aria-labelledby="other-services">
+                    <aside v-if="otherServices.length" aria-labelledby="other-services" class="site-card self-start p-6">
                         <h2 id="other-services" class="site-heading">Other services</h2>
-                        <ul class="mt-3 divide-y divide-rule border-y border-rule">
+                        <ul class="mt-3 divide-y divide-rule border-t border-rule">
                             <li v-for="other in otherServices" :key="other.slug">
                                 <Link :href="`/services/${other.slug}`" class="flex min-h-12 items-center py-2 font-medium text-ink transition-colors hover:text-rose">
                                     {{ other.title }}
@@ -82,7 +97,9 @@ const otherServices = computed(() => site.value.services.filter((s) => s.slug !=
                     <p class="site-lead mt-3 mb-8">The first consultation is free.</p>
                     <ContactDetails />
                 </div>
-                <EnquiryForm :service="service.title" />
+                <div class="site-card p-6 sm:p-8">
+                    <EnquiryForm :service="service.title" />
+                </div>
             </div>
         </section>
     </PublicLayout>

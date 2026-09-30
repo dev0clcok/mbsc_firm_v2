@@ -12,6 +12,7 @@
 @source '../js/pages/Contact.vue';
 @source '../js/layouts/PublicLayout.vue';
 @source '../js/components/site';
+@source '../js/directives';
 
 @import '@fontsource-variable/public-sans/wght.css';
 @import '@fontsource-variable/literata/wght.css';

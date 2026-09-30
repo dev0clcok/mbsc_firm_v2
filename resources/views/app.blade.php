@@ -1,4 +1,5 @@
 @php
+    use App\Http\Services\ImageStore;
     use App\Models\SiteSetting;
 
     $isPublic = in_array($page['component'], ['Welcome', 'Services', 'Service', 'About', 'Contact'], true);
@@ -71,9 +72,15 @@
         @endif
 
         @if (! empty($preloadImage['url']))
-            @php $smallImage = str_replace('-1280.webp', '-640.webp', $preloadImage['url']); @endphp
-            <link rel="preload" as="image" href="{{ $preloadImage['url'] }}" fetchpriority="high"
-                @if ($smallImage !== $preloadImage['url']) imagesrcset="{{ $smallImage }} 640w, {{ $preloadImage['url'] }} {{ $preloadImage['width'] ?? 1280 }}w" imagesizes="(min-width: 1024px) 45vw, 100vw" @endif>
+            @php
+                $large = $preloadImage['url'];
+                $srcset = collect(ImageStore::VARIANTS)->reverse()
+                    ->map(fn ($width) => ImageStore::variant($large, $width)." {$width}w")
+                    ->push($large.' '.($preloadImage['width'] ?? ImageStore::LARGE).'w')
+                    ->implode(', ');
+            @endphp
+            <link rel="preload" as="image" href="{{ $large }}" fetchpriority="high"
+                @if (str_ends_with($large, '-'.ImageStore::LARGE.'.webp')) imagesrcset="{{ $srcset }}" imagesizes="(min-width: 1024px) 50vw, 72vw" @endif>
         @endif
 
         <link rel="icon" href="/favicon.ico" sizes="48x48">

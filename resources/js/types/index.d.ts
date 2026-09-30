@@ -30,6 +30,12 @@ export type AppPageProps<
     sidebarOpen: boolean;
 };
 
+export interface SiteImageData {
+    url: string;
+    width: number | null;
+    height: number | null;
+}
+
 export interface SiteSettings {
     name: string;
     phone: string | null;

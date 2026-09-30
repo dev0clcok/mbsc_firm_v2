@@ -12,7 +12,7 @@ beforeEach(function () {
     $this->actingAs(User::factory()->create(['email' => config('admin.super_admin_email')]));
 });
 
-test('an upload is stored as two WebP sizes and never enlarged', function () {
+test('an upload is stored as three WebP sizes and never enlarged', function () {
     $store = app(ImageStore::class);
 
     $large = $store->store(UploadedFile::fake()->image('wide.jpg', 2400, 1600), 'heroes');
@@ -20,14 +20,14 @@ test('an upload is stored as two WebP sizes and never enlarged', function () {
         ->and($large['url'])->toEndWith('-1280.webp');
 
     $path = str_replace('/storage/', '', $large['url']);
-    Storage::disk('public')->assertExists([$path, str_replace('-1280.webp', '-640.webp', $path)]);
-    expect(getimagesize(Storage::disk('public')->path(str_replace('-1280.webp', '-640.webp', $path)))[0])->toBe(640);
+    Storage::disk('public')->assertExists([$path, ImageStore::variant($path, 800), ImageStore::variant($path, 480)]);
+    expect(getimagesize(Storage::disk('public')->path(ImageStore::variant($path, 480)))[0])->toBe(480);
 
     $small = $store->store(UploadedFile::fake()->image('small.png', 300, 200), 'heroes');
     expect($small)->toMatchArray(['width' => 300, 'height' => 200]);
 
     $store->delete($large['url']);
-    Storage::disk('public')->assertMissing($path);
+    Storage::disk('public')->assertMissing([$path, ImageStore::variant($path, 800), ImageStore::variant($path, 480)]);
 });
 
 test('an admin can upload and remove a page hero image', function () {

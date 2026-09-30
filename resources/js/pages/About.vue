@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import CtaBand from '@/components/site/CtaBand.vue';
 import SiteIcon from '@/components/site/SiteIcon.vue';
+import SiteImage from '@/components/site/SiteImage.vue';
 import TeamList, { type TeamMember } from '@/components/site/TeamList.vue';
 import { useSite } from '@/composables/useSite';
+import { vReveal } from '@/directives/reveal';
 import PublicLayout from '@/layouts/PublicLayout.vue';
+import type { SiteImageData } from '@/types';
 import { Head } from '@inertiajs/vue3';
 
-defineProps<{ teamMembers: TeamMember[] }>();
+defineProps<{ hero: SiteImageData | null; teamMembers: TeamMember[] }>();
 
 const site = useSite();
 
@@ -29,13 +32,18 @@ const values = [
 
     <PublicLayout current-page="about">
         <section class="py-section">
-            <div class="site-container">
-                <h1 class="site-display max-w-[18ch]">A compliance-first practice in Chattogram</h1>
-                <p class="site-lead mt-6">
-                    {{ site.name }} provides professional services in Bangladesh across RJSC matters, income tax consultancy and
-                    litigation, VAT advisory and compliance, and audit support. We combine precision, documentation discipline and
-                    practical execution so clients stay confident with regulators and stakeholders.
-                </p>
+            <div :class="['site-container grid items-center gap-x-14 gap-y-10', hero && 'lg:grid-cols-2']">
+                <div>
+                    <h1 class="site-display">A compliance-first practice in Chattogram</h1>
+                    <p class="site-lead mt-6">
+                        {{ site.name }} provides professional services in Bangladesh across RJSC matters, income tax consultancy and
+                        litigation, VAT advisory and compliance, and audit support. We combine precision, documentation discipline and
+                        practical execution so clients stay confident with regulators and stakeholders.
+                    </p>
+                </div>
+                <div v-if="hero" class="site-figure aspect-[3/2]">
+                    <SiteImage :image="hero" eager sizes="(min-width: 1024px) 50vw, 72vw" />
+                </div>
             </div>
         </section>
 
@@ -71,7 +79,7 @@ const values = [
             <div class="site-container site-split">
                 <h2 id="about-values" class="site-title">What we hold to</h2>
                 <dl class="grid gap-x-10 gap-y-8 sm:grid-cols-2">
-                    <div v-for="value in values" :key="value.title" class="border-t-2 border-ink pt-4">
+                    <div v-for="value in values" :key="value.title" v-reveal class="border-t-2 border-ink pt-4">
                         <dt class="site-heading">{{ value.title }}</dt>
                         <dd class="mt-1 text-ink-soft">{{ value.description }}</dd>
                     </div>

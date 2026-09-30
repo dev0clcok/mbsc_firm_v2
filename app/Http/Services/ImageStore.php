@@ -9,19 +9,21 @@ use Illuminate\Support\Str;
 use RuntimeException;
 
 /**
- * Turns an uploaded picture into two WebP files for the public site:
- * a large one (up to 1280px wide) and a small one (up to 640px wide).
+ * Turns an uploaded picture into three WebP files for the public site, up
+ * to 1280, 800 and 480 pixels wide, so each screen downloads a fitting size.
  *
- * Files are named "{name}-1280.webp" and "{name}-640.webp" whatever their
- * real width, so the small variant can always be derived from the large URL.
+ * Files are named "{name}-1280.webp", "{name}-800.webp" and
+ * "{name}-480.webp" whatever their real width, so the smaller variants can
+ * always be derived from the large URL.
  */
 class ImageStore
 {
     public const LARGE = 1280;
 
-    public const SMALL = 640;
+    /** Smaller variants, widest first. */
+    public const VARIANTS = [800, 480];
 
-    private const QUALITY = 78;
+    private const QUALITY = 74;
 
     /**
      * Store an upload on the public disk.
@@ -40,7 +42,7 @@ class ImageStore
     }
 
     /**
-     * Write both variants into a directory and return the large one's size.
+     * Write every variant into a directory and return the large one's size.
      *
      * @return array{width: int, height: int}
      */
@@ -55,18 +57,17 @@ class ImageStore
         $source = $this->applyOrientation($source, $binary);
 
         $large = $this->resize($source, self::LARGE);
-        $small = $this->resize($source, self::SMALL);
-
-        $size = ['width' => imagesx($large), 'height' => imagesy($large)];
-
         imagewebp($large, "{$directory}/{$name}-".self::LARGE.'.webp', self::QUALITY);
-        imagewebp($small, "{$directory}/{$name}-".self::SMALL.'.webp', self::QUALITY);
 
-        return $size;
+        foreach (self::VARIANTS as $width) {
+            imagewebp($this->resize($source, $width), "{$directory}/{$name}-{$width}.webp", self::QUALITY);
+        }
+
+        return ['width' => imagesx($large), 'height' => imagesy($large)];
     }
 
     /**
-     * Delete both variants of an image stored by store(). Anything that is
+     * Delete every variant of an image stored by store(). Anything that is
      * not an uploaded file on the public disk (seeded or remote images) is
      * left alone.
      */
@@ -80,8 +81,16 @@ class ImageStore
 
         Storage::disk('public')->delete([
             $path,
-            str_replace('-'.self::LARGE.'.webp', '-'.self::SMALL.'.webp', $path),
+            ...array_map(fn (int $width) => self::variant($path, $width), self::VARIANTS),
         ]);
+    }
+
+    /**
+     * The URL or path of a smaller variant, given the large one.
+     */
+    public static function variant(string $large, int $width): string
+    {
+        return str_replace('-'.self::LARGE.'.webp', "-{$width}.webp", $large);
     }
 
     private function resize(GdImage $source, int $maxWidth): GdImage

@@ -15,23 +15,23 @@ const linkHref = (link: { platform: string; url: string }) => (link.platform ===
 </script>
 
 <template>
-    <ul :class="['grid gap-8', members.length > 1 && 'sm:grid-cols-2']">
-        <li v-for="member in members" :key="member.name" class="flex items-start gap-5">
+    <ul :class="['grid gap-6', members.length > 1 && 'sm:grid-cols-2']">
+        <li v-for="member in members" :key="member.name" class="site-card flex flex-col gap-6 p-6 sm:flex-row sm:items-center">
             <img
                 v-if="member.image"
                 :src="member.image"
                 :alt="`Portrait of ${member.name}`"
-                width="112"
-                height="112"
+                width="176"
+                height="176"
                 loading="lazy"
                 decoding="async"
-                class="h-28 w-28 shrink-0 rounded-site object-cover"
+                class="h-44 w-44 shrink-0 rounded-card object-cover"
             />
             <div class="min-w-0">
-                <h3 class="site-heading">{{ member.name }}</h3>
-                <p v-if="member.position" class="font-semibold text-rose">{{ member.position }}</p>
+                <h3 class="font-display text-2xl font-medium text-ink">{{ member.name }}</h3>
+                <p v-if="member.position" class="mt-1 font-semibold text-rose">{{ member.position }}</p>
                 <p v-if="member.specialization" class="text-ink-soft">{{ member.specialization }}</p>
-                <ul v-if="member.social_links.length" class="mt-2 -ml-3 flex">
+                <ul v-if="member.social_links.length" class="mt-3 -ml-3 flex">
                     <li v-for="link in member.social_links" :key="link.platform + link.url">
                         <a
                             :href="linkHref(link)"
