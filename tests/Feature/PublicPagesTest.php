@@ -130,3 +130,13 @@ test('an empty policy cannot be published', function () {
 
     $this->put('/admin/privacy-policy', ['policy' => '', 'published' => true])->assertSessionHasErrors('policy');
 });
+
+test('a server error shows the site error page when debug mode is off', function () {
+    config(['app.debug' => false]);
+    Illuminate\Support\Facades\Route::get('/__boom', fn () => throw new RuntimeException('boom'));
+
+    $this->get('/__boom')
+        ->assertStatus(500)
+        ->assertDontSee('boom')
+        ->assertInertia(fn (Assert $page) => $page->component('Error')->where('status', 500));
+});
