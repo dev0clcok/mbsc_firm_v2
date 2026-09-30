@@ -198,7 +198,7 @@ const setActiveService = (id: string) => {
                             <p class="text-base leading-relaxed text-slate-600">{{ currentService.description }}</p>
                             
                             <p class="mt-6 text-base leading-relaxed text-slate-600">
-                                {{ currentService.shortDescription || '' }}
+                                Each engagement is handled with clear documentation, compliance-first execution, and proactive updates—so you stay audit-ready and confident with regulators.
                             </p>
                         </div>
 

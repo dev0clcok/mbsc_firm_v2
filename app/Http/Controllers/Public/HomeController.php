@@ -49,6 +49,7 @@ class HomeController extends Controller
             ->values();
 
         $services = $serviceService->index($request, false)
+            ->take(6)
             ->map(fn(Service $s) => [
                 'slug' => $s->slug,
                 'title' => $s->title,
