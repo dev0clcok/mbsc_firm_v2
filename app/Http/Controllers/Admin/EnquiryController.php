@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Enquiry;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\EnquiryNote;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -12,66 +13,155 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class EnquiryController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:enquiries.list', only: ['index']),
-            new Middleware('permission:enquiries.update', only: ['update']),
+            new Middleware('permission:enquiries.list', only: ['index', 'show', 'export']),
+            new Middleware('permission:enquiries.update', only: ['update', 'storeNote']),
             new Middleware('permission:enquiries.delete', only: ['destroy']),
         ];
     }
 
     public function index(Request $request): Response
     {
-        $query = Enquiry::query();
+        $request->validate([
+            'status' => ['nullable', Rule::in(Enquiry::STATUSES)],
+            'from' => ['nullable', 'date'],
+            'to' => ['nullable', 'date'],
+            'sort' => ['nullable', Rule::in(['newest', 'oldest'])],
+        ]);
 
-        if ($request->filled('search')) {
-            $search = $request->string('search');
-            $query->where(function (Builder $q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('message', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->string('status'));
-        }
-
-        $enquiries = $query->latest()
+        $enquiries = $this->query($request)
+            ->with('assignee:id,name')
+            ->withCount('notes')
             ->paginate(config('app.settings.pagination.per_page'))
             ->withQueryString();
+
+        // Tab counts respect the search and dates, but not the status tab itself.
+        $counts = Enquiry::query()->filtered($request)
+            ->selectRaw('status, count(*) as total')
+            ->groupBy('status')
+            ->pluck('total', 'status');
 
         return Inertia::render('admin/Enquiries/Index', [
             'enquiries' => $enquiries,
             'statuses' => Enquiry::STATUSES,
-            'newCount' => Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count(),
-            'filters' => [
-                'search' => $request->search,
-                'status' => $request->status,
+            'counts' => [
+                'all' => $counts->sum(),
+                ...collect(Enquiry::STATUSES)->mapWithKeys(fn ($status) => [$status => (int) ($counts[$status] ?? 0)]),
             ],
+            'filters' => $request->only(['search', 'status', 'from', 'to', 'sort']),
+        ]);
+    }
+
+    public function show(Enquiry $enquiry): Response
+    {
+        $enquiry->load(['assignee:id,name', 'notes.author:id,name']);
+
+        return Inertia::render('admin/Enquiries/Show', [
+            'enquiry' => [
+                ...$enquiry->only(['id', 'name', 'phone', 'email', 'service', 'message', 'status', 'assigned_to', 'created_at']),
+                'whatsapp_number' => $enquiry->whatsappNumber(),
+                'notes' => $enquiry->notes->map(fn (EnquiryNote $note) => [
+                    'id' => $note->id,
+                    'body' => $note->body,
+                    'author' => $note->author?->name,
+                    'created_at' => $note->created_at,
+                ]),
+            ],
+            'statuses' => Enquiry::STATUSES,
+            'users' => User::query()->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
     public function update(Request $request, Enquiry $enquiry): RedirectResponse
     {
         $validated = $request->validate([
-            'status' => ['required', Rule::in(Enquiry::STATUSES)],
+            'status' => ['sometimes', 'required', Rule::in(Enquiry::STATUSES)],
+            'assigned_to' => ['sometimes', 'nullable', 'exists:users,id'],
         ]);
 
         $enquiry->update($validated);
 
-        return back()->with('success', 'Enquiry status updated.');
+        return back()->with('success', 'Enquiry updated.');
+    }
+
+    public function storeNote(Request $request, Enquiry $enquiry): RedirectResponse
+    {
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'max:5000'],
+        ], [
+            'body.required' => 'Write the note before saving it.',
+        ]);
+
+        $enquiry->notes()->create([
+            'user_id' => $request->user()->id,
+            'body' => trim($validated['body']),
+        ]);
+
+        return back()->with('success', 'Note added.');
     }
 
     public function destroy(Enquiry $enquiry): RedirectResponse
     {
         $enquiry->delete();
 
-        return back()->with('success', 'Enquiry deleted successfully.');
+        return redirect()->route('admin.enquiries.index')->with('success', 'Enquiry deleted successfully.');
+    }
+
+    /**
+     * The list as a spreadsheet, with the same filters as the screen.
+     */
+    public function export(Request $request): StreamedResponse
+    {
+        $query = $this->query($request)->with('assignee:id,name');
+
+        return response()->streamDownload(function () use ($query) {
+            $out = fopen('php://output', 'w');
+            // Byte-order mark so Excel reads Bengali and other non-Latin text correctly.
+            fwrite($out, "\xEF\xBB\xBF");
+            fputcsv($out, ['Received', 'Name', 'Phone', 'Email', 'Service', 'Status', 'Assigned to', 'Message']);
+
+            $query->chunk(200, function ($enquiries) use ($out) {
+                foreach ($enquiries as $enquiry) {
+                    fputcsv($out, array_map($this->safeCell(...), [
+                        $enquiry->created_at->timezone('Asia/Dhaka')->format('Y-m-d H:i'),
+                        $enquiry->name,
+                        $enquiry->phone,
+                        $enquiry->email,
+                        $enquiry->service,
+                        $enquiry->status,
+                        $enquiry->assignee?->name,
+                        $enquiry->message,
+                    ]));
+                }
+            });
+
+            fclose($out);
+        }, 'enquiries-'.now()->timezone('Asia/Dhaka')->format('Y-m-d').'.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    private function query(Request $request)
+    {
+        return Enquiry::query()
+            ->filtered($request)
+            ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
+            ->orderBy('created_at', $request->input('sort') === 'oldest' ? 'asc' : 'desc')
+            ->orderBy('id', $request->input('sort') === 'oldest' ? 'asc' : 'desc');
+    }
+
+    /**
+     * Visitors type these values. A cell that starts with a formula
+     * character would be executed by a spreadsheet, so it is neutralised.
+     */
+    private function safeCell(?string $value): string
+    {
+        $value = (string) $value;
+
+        return preg_match('/^[=+\-@\t\r]/', $value) ? "'".$value : $value;
     }
 }

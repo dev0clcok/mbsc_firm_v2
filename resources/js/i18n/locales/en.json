@@ -469,7 +469,12 @@
         "filters": {
             "status": "Status",
             "all_status": "All statuses",
-            "search_placeholder": "Search name, phone, email or message..."
+            "search_placeholder": "Search name, phone, email or message...",
+            "from": "From date",
+            "to": "To date",
+            "sort": "Order",
+            "newest": "Newest first",
+            "oldest": "Oldest first"
         },
         "status": {
             "new": "New",
@@ -479,12 +484,45 @@
         "columns": {
             "enquiry": "Enquiry",
             "received": "Received",
-            "status": "Status"
+            "status": "Status",
+            "assigned": "Assigned to"
         },
         "delete": {
             "title": "Delete enquiry?",
             "description": "This will permanently delete the enquiry. This action cannot be undone.",
             "confirm": "Delete"
+        },
+        "subtitle": "Messages sent through the website form.",
+        "export": "Export CSV",
+        "open": "Open enquiry",
+        "back_to_list": "Back to enquiries",
+        "unassigned": "Unassigned",
+        "notes_count": "{count} note | {count} notes",
+        "empty_filtered": "No enquiries match these filters.",
+        "tabs": {
+            "all": "All"
+        },
+        "detail": {
+            "title": "Enquiry",
+            "received": "Received {date}",
+            "message": "Message",
+            "reply": "Reply",
+            "call": "Call {phone}",
+            "whatsapp": "WhatsApp",
+            "email": "Email {email}",
+            "reply_help": "WhatsApp and email open with a greeting already written. Change the status once you have replied.",
+            "notes": "Internal notes",
+            "notes_help": "Only staff can see these. Record calls, promises and next steps.",
+            "add_note": "Add note",
+            "note_placeholder": "What was said, or what happens next...",
+            "no_notes": "No notes yet.",
+            "removed_user": "Former user",
+            "handling": "Handling",
+            "contact": "Contact details",
+            "phone": "Phone",
+            "email_label": "Email",
+            "service": "Service",
+            "not_given": "Not given"
         }
     },
     "dashboard": {

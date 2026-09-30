@@ -29,7 +29,9 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
 
     Route::resource('services', ServiceController::class)->except(['show']);
 
-    Route::resource('enquiries', EnquiryController::class)->only(['index', 'update', 'destroy']);
+    Route::get('enquiries/export', [EnquiryController::class, 'export'])->name('enquiries.export');
+    Route::post('enquiries/{enquiry}/notes', [EnquiryController::class, 'storeNote'])->name('enquiries.notes.store');
+    Route::resource('enquiries', EnquiryController::class)->only(['index', 'show', 'update', 'destroy']);
 
     Route::get('site-settings', [SiteSettingController::class, 'edit'])->name('site-settings.edit');
     Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');
