@@ -319,3 +319,38 @@ Two of these names, Mohammad Rahman and Karim Hassan, also appear as team member
 - Live site checked with `curl` for raw HTML, headers and asset responses.
 
 Not covered: real-device testing, screen-reader testing, the admin panel, and field performance data from real visitors.
+
+## Phase 3 results
+
+Added after implementation on the `ux-audit` branch. Measured on a production build with server-side rendering, served by `php artisan serve` without compression, the same way as the baseline.
+
+### Lighthouse, before and after
+
+| Page | Mode | Performance | Accessibility | Best practices | SEO | LCP | Weight |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Home | mobile | 63 → 71 | 78 → 100 | 100 → 100 | 83 → 100 | 7.9 s → 3.7 s | 3.4 MB → 0.48 MB |
+| Home | desktop | 88 → 99 | 84 → 100 | 100 → 100 | 83 → 100 | 1.7 s → 0.8 s | 3.4 MB → 0.48 MB |
+| Services | mobile | 67 → 89 | 81 → 100 | 100 → 100 | 92 → 100 | 6.0 s → 3.4 s | 1.2 MB → 0.44 MB |
+| Services | desktop | 97 → 99 | 90 → 100 | 100 → 100 | 92 → 100 | 1.2 s → 0.8 s | 1.2 MB → 0.44 MB |
+| Service page (new) | mobile | 71 | 100 | 100 | 100 | 3.5 s | 0.45 MB |
+| Service page (new) | desktop | 100 | 100 | 100 | 100 | 0.7 s | 0.45 MB |
+| About | mobile | 62 → 88 | 86 → 100 | 100 → 100 | 92 → 100 | 6.9 s → 3.4 s | 1.2 MB → 0.45 MB |
+| About | desktop | 97 → 100 | 93 → 100 | 100 → 100 | 92 → 100 | 1.3 s → 0.7 s | 1.2 MB → 0.45 MB |
+| Contact | mobile | 67 → 78 | 72 → 100 | 100 → 100 | 92 → 100 | 6.6 s → 3.6 s | 1.1 MB → 0.45 MB |
+| Contact | desktop | 97 → 100 | 72 → 100 | 100 → 100 | 92 → 100 | 1.2 s → 0.7 s | 1.1 MB → 0.45 MB |
+
+Mobile performance scores varied between runs by about 10 points because total blocking time moved between 50 ms and 650 ms; other processes were running on the test machine. Mobile LCP is still above the 2.5 s target in this setup. Most of the remaining weight is uncompressed JavaScript, so enabling gzip or Brotli on the production server is the next step; that has not been measured.
+
+### Other measurements at 375 px
+
+| Measure | Before | After |
+| --- | --- | --- |
+| Home page height | 15,952 px | 7,380 px |
+| Dead links on the home page | 22 | 0 |
+| Interactive elements under 44 px on the home page | 40 of 57 | 3 of 49: the off-screen skip link, the hidden honeypot field and one link inside a sentence |
+| Form fields without an associated label | all | none |
+| Horizontal overflow | 9 px | none |
+| Images on the home page | 31, all remote stock | 2, both local |
+| Raw HTML contains page content | no | yes |
+
+After screenshots are in `doc/ux-audit/after/`.
