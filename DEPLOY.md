@@ -76,11 +76,7 @@ php artisan inertia:start-ssr
 
 It listens on `127.0.0.1:13714`; do not expose that port. If it is down, public pages still work but are rendered in the browser, and titles, descriptions and social tags are still served because they come from the PHP template.
 
-Restart it after every `npm run build:ssr`, because it loads the bundle once at start:
-
-```bash
-php artisan inertia:stop-ssr   # the process manager then starts it again
-```
+Restart it through the process manager after every `npm run build:ssr`, because it loads the bundle once at start, for example `supervisorctl restart mbsc-ssr`. The server runs in cluster mode with several workers, and in local testing `php artisan inertia:stop-ssr` stopped only one of them, so do not rely on that command.
 
 ## Cron
 
@@ -99,10 +95,10 @@ npm ci && npm run build:ssr
 php artisan migrate --force
 php artisan config:cache && php artisan route:cache && php artisan view:cache
 php artisan queue:restart
-php artisan inertia:stop-ssr
+supervisorctl restart mbsc-ssr   # or the systemd equivalent
 ```
 
-Do not run `db:seed` again as a routine step. The service, FAQ and team seeders overwrite rows with the same slug, question or name, which would undo edits made in the admin panel. Site settings are safe: that seeder only fills in settings that have never been saved.
+Do not run `db:seed` again as a routine step. The service and FAQ seeders overwrite rows that have the same slug or question, which would undo edits made in the admin panel. Site settings are safe: that seeder only fills in settings that have never been saved.
 
 ## Web server settings
 
