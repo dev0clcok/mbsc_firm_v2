@@ -11,7 +11,7 @@ class SiteSettingSeeder extends Seeder
     {
         $defaults = [
             'phone' => '+88 01868-196716',
-            'whatsapp' => '+88 01868-196716',
+            'whatsapp' => '+880 1868-196716',
             'email' => 'mbscfirm@gmail.com',
             'enquiry_email' => 'mbscfirm@gmail.com',
             'address' => 'Burma Razu Building (2nd Floor), beside Fancy Tailors, Kotowali, Chattogram, Bangladesh',
