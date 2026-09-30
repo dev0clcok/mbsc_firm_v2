@@ -374,6 +374,6 @@ Hero pictures, a service card grid, softer cards and scroll reveals were added a
 
 Accessibility, best practices and SEO are 100 on every page in both modes.
 
-Mobile performance scores moved by up to 14 points in either direction, which is within the run-to-run variation seen earlier, so the pictures did not lower the score in a measurable way. They did add weight, and mobile LCP is 0.1 to 0.6 s later on the pages where the hero picture is now the largest element. Phones are served an 800px hero (12 to 28 kB for the seeded pictures) and 480px card thumbnails to limit this.
+Mobile performance scores moved by up to 14 points in either direction, which is within the run-to-run variation seen earlier, so the pictures did not lower the score in a measurable way. They did add weight, and mobile LCP is 0.1 to 0.6 s later on the pages where the hero picture is now the largest element. Phones are served an 800px hero (12 to 28 kB for the three seeded page heroes, up to 69 kB for a service picture) and 480px card thumbnails to limit this.
 
 Screenshots for this pass are in `doc/ux-audit/pass2/`.
