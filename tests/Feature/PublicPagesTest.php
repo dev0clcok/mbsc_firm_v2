@@ -60,3 +60,16 @@ test('structured data only contains settings that are filled in', function () {
     expect($data['telephone'])->toBe('+8801700000000')
         ->and($data)->not->toHaveKeys(['email', 'sameAs']);
 });
+
+test('unknown addresses show the site error page with a 404 status', function () {
+    $this->get('/no-such-page')
+        ->assertNotFound()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Error')
+            ->where('status', 404)
+            ->has('site.services'));
+});
+
+test('missing admin pages keep the default response', function () {
+    $this->get('/admin/no-such-page')->assertNotFound()->assertDontSee('data-page');
+});

@@ -43,6 +43,24 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
+     * Contact details and the service list used by the public layout. Also
+     * used by the error page, which renders outside this middleware.
+     *
+     * @return array<string, mixed>
+     */
+    public static function siteProps(): array
+    {
+        return [
+            ...SiteSetting::forPublic(),
+            'name' => config('app.name'),
+            'services' => Service::query()->active()->orderBy('sort_order')->orderBy('id')
+                ->get(['slug', 'title'])
+                ->map(fn (Service $s) => ['slug' => $s->slug, 'title' => $s->title])
+                ->all(),
+        ];
+    }
+
+    /**
      * Define the props that are shared by default.
      *
      * @see https://inertiajs.com/shared-data
@@ -57,14 +75,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'site' => fn () => [
-                ...SiteSetting::forPublic(),
-                'name' => config('app.name'),
-                'services' => Service::query()->active()->orderBy('sort_order')->orderBy('id')
-                    ->get(['slug', 'title'])
-                    ->map(fn (Service $s) => ['slug' => $s->slug, 'title' => $s->title])
-                    ->all(),
-            ],
+            'site' => fn () => self::siteProps(),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $user,
