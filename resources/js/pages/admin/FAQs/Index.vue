@@ -51,7 +51,9 @@
         </AppFilters>
 
         <!-- DataTable -->
-        <DataTable :columns="columns" :data="faqs.data" :actions="actions" :pagination="pagination">
+        <p v-if="canEdit" class="text-sm text-muted-foreground">{{ t('datatable.reorder_hint') }}</p>
+
+        <DataTable :key="reorderUrl ?? 'fixed'" :reorder-url="reorderUrl" :columns="columns" :data="faqs.data" :actions="actions" :pagination="pagination">
             <template #cell-question="{ row }">
                 <div class="max-w-lg">
                     <div class="font-semibold text-foreground">
@@ -66,19 +68,8 @@
                 <span class="text-sm text-muted-foreground">{{ row.service?.title ?? t('faqs.form.general') }}</span>
             </template>
 
-            <template #cell-is_active="{ value }">
-                <span :class="[
-                    'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-sm transition-all',
-                    value
-                        ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/20 dark:text-emerald-400 dark:ring-emerald-400/30'
-                        : 'bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/20 dark:bg-gray-800/50 dark:text-gray-400 dark:ring-gray-400/20',
-                ]">
-                    <span :class="[
-                        'h-2 w-2 rounded-full',
-                        value ? 'bg-emerald-500' : 'bg-gray-400',
-                    ]" />
-                    {{ value ? t('faqs.status.active') : t('faqs.status.inactive') }}
-                </span>
+            <template #cell-is_active="{ row, value }">
+                <StatusToggle :active="value" :url="`/admin/faqs/${row.id}/toggle`" :label="row.question" :disabled="!canEdit" />
             </template>
 
             <template #cell-sort_order="{ value }">
@@ -109,6 +100,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
+import StatusToggle from '@/components/admin/StatusToggle.vue';
 import AppFilters from '@/components/admin/AppFilters.vue';
 import { usePermissions } from '@/composables/usePermissions';
 import { useConfirm } from '@/composables/useConfirm';
@@ -158,6 +150,9 @@ const selectedService = ref(props.filters?.service || '');
 
 const canCreate = computed(() => can('faqs.create'));
 const canEdit = computed(() => can('faqs.update'));
+
+// Ordering only makes sense on the full, unfiltered list.
+const reorderUrl = computed(() => (canEdit.value && !search.value && !selectedStatus.value && !selectedService.value ? '/admin/faqs/reorder' : undefined));
 const canDelete = computed(() => can('faqs.delete'));
 
 const columns = computed(() => [

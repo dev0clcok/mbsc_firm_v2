@@ -56,18 +56,8 @@
                 </span>
             </template>
 
-            <template #cell-is_active="{ value }">
-                <span
-                    :class="[
-                        'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold shadow-sm transition-all',
-                        value
-                            ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20 dark:bg-emerald-900/20 dark:text-emerald-400 dark:ring-emerald-400/30'
-                            : 'bg-gray-50 text-gray-600 ring-1 ring-inset ring-gray-500/20 dark:bg-gray-800/50 dark:text-gray-400 dark:ring-gray-400/20',
-                    ]"
-                >
-                    <span :class="['h-2 w-2 rounded-full', value ? 'bg-emerald-500' : 'bg-gray-400']" />
-                    {{ value ? t('testimonials.status.active') : t('testimonials.status.inactive') }}
-                </span>
+            <template #cell-is_active="{ row, value }">
+                <StatusToggle :active="value" :url="`/admin/testimonials/${row.id}/toggle`" :label="row.name" :disabled="!canEdit" />
             </template>
 
             <template #cell-sort_order="{ value }">
@@ -94,6 +84,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
+import StatusToggle from '@/components/admin/StatusToggle.vue';
 import AppFilters from '@/components/admin/AppFilters.vue';
 import { useConfirm } from '@/composables/useConfirm';
 import { usePermissions } from '@/composables/usePermissions';

@@ -5,6 +5,9 @@
             <table class="w-full max-md:block">
                 <thead class="max-md:hidden">
                     <tr class="border-b border-border bg-muted/60">
+                        <th v-if="reorderUrl" class="w-px py-4 pr-0 pl-4 text-left text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                            <span class="sr-only">{{ t('datatable.order') }}</span>
+                        </th>
                         <th
                             v-for="column in columns"
                             :key="column.key"
@@ -27,12 +30,41 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border bg-background max-md:block">
+                <tbody ref="tbody" class="divide-y divide-border bg-background max-md:block">
                     <tr
-                        v-for="(row, index) in data"
+                        v-for="(row, index) in rows"
                         :key="getRowKey(row, index)"
                         class="transition-colors duration-150 hover:bg-muted/40 max-md:block max-md:px-4 max-md:py-3"
                     >
+                        <td v-if="reorderUrl" class="w-px py-4 pr-0 pl-4 align-middle max-md:block max-md:px-0 max-md:py-0 max-md:pb-1">
+                            <div class="flex items-center gap-0.5">
+                                <span
+                                    class="drag-handle flex h-9 w-7 cursor-grab items-center justify-center rounded text-muted-foreground hover:bg-muted active:cursor-grabbing max-md:hidden"
+                                    :title="t('datatable.drag')"
+                                    aria-hidden="true"
+                                >
+                                    <Icon name="gripVertical" class="h-4 w-4" />
+                                </span>
+                                <button
+                                    type="button"
+                                    class="flex h-9 w-8 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30"
+                                    :aria-label="t('datatable.move_up')"
+                                    :disabled="index === 0"
+                                    @click="move(index, -1)"
+                                >
+                                    <Icon name="chevronUp" class="h-4 w-4" />
+                                </button>
+                                <button
+                                    type="button"
+                                    class="flex h-9 w-8 items-center justify-center rounded text-muted-foreground hover:bg-muted disabled:opacity-30"
+                                    :aria-label="t('datatable.move_down')"
+                                    :disabled="index === rows.length - 1"
+                                    @click="move(index, 1)"
+                                >
+                                    <Icon name="chevronDown" class="h-4 w-4" />
+                                </button>
+                            </div>
+                        </td>
                         <td
                             v-for="(column, columnIndex) in columns"
                             :key="column.key"
@@ -105,9 +137,9 @@
                             </div>
                         </td>
                     </tr>
-                    <tr v-if="data.length === 0" class="max-md:block">
+                    <tr v-if="rows.length === 0" class="max-md:block">
                         <td
-                            :colspan="columns.length + (actions && actions.length > 0 ? 1 : 0)"
+                            :colspan="columns.length + (actions && actions.length > 0 ? 1 : 0) + (reorderUrl ? 1 : 0)"
                             class="px-6 py-16 text-center max-md:block"
                         >
                             <slot name="empty">
@@ -180,8 +212,10 @@
 </template>
 
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import Icon from '@/components/Icon.vue';
+import Sortable from 'sortablejs';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 interface Column {
@@ -217,6 +251,12 @@ interface Props {
     actions?: Action[];
     pagination?: Pagination;
     rowKey?: string | ((row: any, index: number) => string | number);
+    /**
+     * When set, rows can be dragged (or moved with the arrow buttons) and
+     * the new order of ids is posted here. Leave unset while the list is
+     * filtered, since a partial list cannot be ordered meaningfully.
+     */
+    reorderUrl?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -225,6 +265,55 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
+
+// A local copy so a drag shows its result at once, before the server confirms.
+const rows = ref<any[]>([...props.data]);
+watch(
+    () => props.data,
+    (data) => (rows.value = [...data]),
+);
+
+const tbody = ref<HTMLElement | null>(null);
+let sortable: Sortable | null = null;
+
+const saveOrder = () => {
+    if (!props.reorderUrl) return;
+
+    router.post(
+        props.reorderUrl,
+        { ids: rows.value.map((row) => row.id), offset: (props.pagination?.from ?? 1) - 1 },
+        { preserveScroll: true, preserveState: true },
+    );
+};
+
+const move = (index: number, by: number) => {
+    const target = index + by;
+    if (target < 0 || target >= rows.value.length) return;
+
+    const next = [...rows.value];
+    [next[index], next[target]] = [next[target], next[index]];
+    rows.value = next;
+    saveOrder();
+};
+
+onMounted(() => {
+    if (!props.reorderUrl || !tbody.value) return;
+
+    sortable = Sortable.create(tbody.value, {
+        handle: '.drag-handle',
+        animation: 150,
+        onEnd: ({ oldIndex, newIndex }) => {
+            if (oldIndex === undefined || newIndex === undefined || oldIndex === newIndex) return;
+
+            const next = [...rows.value];
+            next.splice(newIndex, 0, next.splice(oldIndex, 1)[0]);
+            rows.value = next;
+            saveOrder();
+        },
+    });
+});
+
+onBeforeUnmount(() => sortable?.destroy());
 
 const getRowKey = (row: any, index: number) => {
     if (typeof props.rowKey === 'function') {

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\ListActionController;
 use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -18,6 +19,10 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
     ->name('admin.')
     ->group(function () {
     Route::get('/', DashboardController::class)->name('dashboard');
+
+    // Shared quick actions for the content lists.
+    Route::patch('{resource}/{id}/toggle', [ListActionController::class, 'toggle'])->whereNumber('id')->name('list.toggle');
+    Route::post('{resource}/reorder', [ListActionController::class, 'reorder'])->name('list.reorder');
 
     Route::get('audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
 

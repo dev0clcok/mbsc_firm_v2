@@ -16,7 +16,10 @@
         "view_on_site": "View on site",
         "unsaved_changes": "Unsaved changes",
         "leave_unsaved": "You have unsaved changes. Leave this page without saving?",
-        "required_note": "Fields marked * are required."
+        "required_note": "Fields marked * are required.",
+        "shown": "Shown",
+        "hidden": "Hidden",
+        "shown_on_site_for": "Show {name} on the website"
     },
     "nav": {
         "main": "Main",
@@ -364,7 +367,12 @@
         "to": "to",
         "of": "of",
         "results": "results",
-        "total": "total"
+        "total": "total",
+        "order": "Order",
+        "drag": "Drag to reorder",
+        "move_up": "Move up",
+        "move_down": "Move down",
+        "reorder_hint": "Drag rows, or use the arrows, to change the order on the website. Clear the filters to reorder."
     },
     "site_settings": {
         "title": "Site Settings",
