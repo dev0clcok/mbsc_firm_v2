@@ -377,3 +377,22 @@ Accessibility, best practices and SEO are 100 on every page in both modes.
 Mobile performance scores moved by up to 14 points in either direction, which is within the run-to-run variation seen earlier, so the pictures did not lower the score in a measurable way. They did add weight, and mobile LCP is 0.1 to 0.6 s later on the pages where the hero picture is now the largest element. Phones are served an 800px hero (12 to 28 kB for the three seeded page heroes, up to 69 kB for a service picture) and 480px card thumbnails to limit this.
 
 Screenshots for this pass are in `doc/ux-audit/pass2/`.
+
+## Fourth pass: content structure, enquiries and admin
+
+Public site: "Who we help" block, per-service steps, documents, timeline and fees, FAQ page, office map, privacy policy (hidden until reviewed), enquiry form states, breadcrumbs. Admin: enquiry handling, list ordering and visibility switches, rebuilt forms, image cropping, grouped settings, dashboard chart. Public registration is off.
+
+Measured on an isolated production build with server-side rendering, the same way as earlier passes.
+
+| Page | Mode | Performance | Accessibility | Best practices | SEO | LCP |
+| --- | --- | --- | --- | --- | --- | --- |
+| Home | mobile | 82 → 77 | 100 → 100 | 100 → 100 | 100 → 100 | 4.1 s → 4.5 s |
+| Home | desktop | 99 → 99 | 100 → 100 | 100 → 100 | 100 → 100 | 0.9 s → 0.9 s |
+| Service page | mobile | 85 → 81 | 100 → 100 | 100 → 100 | 100 → 100 | 3.7 s → 4.1 s |
+| Service page | desktop | 99 → 99 | 100 → 100 | 100 → 100 | 100 → 100 | 0.8 s → 0.9 s |
+| Contact | mobile | 87 → 82 | 100 → 100 | 100 → 100 | 100 → 100 | 3.5 s → 3.8 s |
+| Contact | desktop | 100 → 99 | 100 → 100 | 100 → 100 | 100 → 100 | 0.7 s → 0.8 s |
+
+An earlier run of the same build gave mobile scores of 87, 77 and 84, so the mobile differences are within run-to-run variation. The pages did get longer, and mobile LCP is still above the 2.5 s target in this uncompressed test setup.
+
+Screenshots of every public and admin page at 390 and 1440 px are in `doc/ux-audit/pass4-before/` and `doc/ux-audit/pass4-after/`.

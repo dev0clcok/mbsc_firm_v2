@@ -13,7 +13,7 @@ const shown = ref(false);
 </script>
 
 <template>
-    <div v-if="site.map_embed_url" class="site-figure aspect-[4/3] sm:aspect-[16/9]">
+    <div v-if="site.map_embed_url" :class="['site-figure', shown ? 'aspect-[4/3] sm:aspect-[16/9]' : 'min-h-64']">
         <iframe
             v-if="shown"
             :src="site.map_embed_url"
@@ -23,7 +23,7 @@ const shown = ref(false);
             referrerpolicy="no-referrer-when-downgrade"
             allowfullscreen
         ></iframe>
-        <div v-else class="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
+        <div v-else class="flex min-h-64 flex-col items-center justify-center gap-4 p-6 text-center">
             <span class="site-icon-tile"><SiteIcon name="pin" /></span>
             <p v-if="site.address" class="max-w-[40ch] text-ink-soft">{{ site.address }}</p>
             <div class="flex flex-wrap justify-center gap-3">

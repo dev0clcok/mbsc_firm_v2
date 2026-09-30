@@ -53,6 +53,10 @@ php artisan view:cache
 
 After seeding, sign in, change the admin password, and check Admin > Site Settings.
 
+There is no public sign-up. Further accounts are created by an admin under Users.
+
+The seeded privacy policy is a draft and is not shown on the website. It goes live only when someone ticks the "reviewed" box under Admin > Privacy Policy.
+
 ## Long-running processes
 
 Both must be kept alive by Supervisor or systemd and restarted on each deploy.
