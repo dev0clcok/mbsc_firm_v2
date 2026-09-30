@@ -25,7 +25,8 @@
         "users_roles": "Users & Roles",
         "users": "Users",
         "roles": "Roles",
-        "site_settings": "Site Settings"
+        "site_settings": "Site Settings",
+        "enquiries": "Enquiries"
     },
     "language": {
         "label": "Language",
@@ -387,6 +388,31 @@
                 "label": "Instagram",
                 "help": "Profile URL."
             }
+        }
+    },
+    "enquiries": {
+        "title": "Enquiries",
+        "new_count": "{count} new",
+        "empty": "No enquiries yet.",
+        "filters": {
+            "status": "Status",
+            "all_status": "All statuses",
+            "search_placeholder": "Search name, phone, email or message..."
+        },
+        "status": {
+            "new": "New",
+            "contacted": "Contacted",
+            "closed": "Closed"
+        },
+        "columns": {
+            "enquiry": "Enquiry",
+            "received": "Received",
+            "status": "Status"
+        },
+        "delete": {
+            "title": "Delete enquiry?",
+            "description": "This will permanently delete the enquiry. This action cannot be undone.",
+            "confirm": "Delete"
         }
     }
 }

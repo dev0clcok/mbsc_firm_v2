@@ -69,6 +69,15 @@ return [
                     ],
                 ],
                 [
+                    'key' => 'enquiries',
+                    'label' => 'Enquiries',
+                    'permissions' => [
+                        ['slug' => 'enquiries.list', 'label' => 'List'],
+                        ['slug' => 'enquiries.update', 'label' => 'Update'],
+                        ['slug' => 'enquiries.delete', 'label' => 'Delete'],
+                    ],
+                ],
+                [
                     'key' => 'settings',
                     'label' => 'Site Settings',
                     'permissions' => [

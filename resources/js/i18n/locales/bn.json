@@ -25,7 +25,8 @@
         "users_roles": "ইউজার ও রোল",
         "users": "ইউজার",
         "roles": "রোল",
-        "site_settings": "সাইট সেটিংস"
+        "site_settings": "সাইট সেটিংস",
+        "enquiries": "অনুসন্ধান"
     },
     "language": {
         "label": "ভাষা",
@@ -387,6 +388,31 @@
                 "label": "ইনস্টাগ্রাম",
                 "help": "প্রোফাইলের URL।"
             }
+        }
+    },
+    "enquiries": {
+        "title": "অনুসন্ধান",
+        "new_count": "{count}টি নতুন",
+        "empty": "এখনো কোনো অনুসন্ধান নেই।",
+        "filters": {
+            "status": "অবস্থা",
+            "all_status": "সব অবস্থা",
+            "search_placeholder": "নাম, ফোন, ইমেইল বা বার্তা খুঁজুন..."
+        },
+        "status": {
+            "new": "নতুন",
+            "contacted": "যোগাযোগ করা হয়েছে",
+            "closed": "বন্ধ"
+        },
+        "columns": {
+            "enquiry": "অনুসন্ধান",
+            "received": "প্রাপ্তির সময়",
+            "status": "অবস্থা"
+        },
+        "delete": {
+            "title": "অনুসন্ধান মুছবেন?",
+            "description": "অনুসন্ধানটি স্থায়ীভাবে মুছে যাবে। এটি ফিরিয়ে আনা যাবে না।",
+            "confirm": "মুছুন"
         }
     }
 }

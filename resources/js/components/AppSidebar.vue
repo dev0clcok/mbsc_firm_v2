@@ -16,7 +16,7 @@ import { index as faqsIndex } from '@/routes/admin/faqs';
 import { index as servicesIndex } from '@/routes/admin/services';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid, HelpCircle, Users, Shield, ScrollText, Briefcase, MessageSquareQuote, UsersRound, Settings } from 'lucide-vue-next';
+import { LayoutGrid, HelpCircle, Users, Shield, ScrollText, Briefcase, MessageSquareQuote, UsersRound, Settings, Inbox } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
@@ -32,6 +32,10 @@ const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [
         { title: t('nav.dashboard'), href: dashboard(), icon: LayoutGrid },
     ];
+
+    if (canAny(['enquiries.list', 'enquiries.update', 'enquiries.delete'])) {
+        items.push({ title: t('nav.enquiries'), href: '/admin/enquiries', icon: Inbox });
+    }
 
     if (canAny(['services.list', 'services.view', 'services.create', 'services.update', 'services.delete'])) {
         items.push({ title: t('nav.services'), href: servicesIndex().url, icon: Briefcase });

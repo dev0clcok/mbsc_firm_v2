@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::middleware(['auth', 'verified', 'permission:admin.access'])
     Route::resource('testimonials', TestimonialController::class)->except(['show']);
 
     Route::resource('services', ServiceController::class)->except(['show']);
+
+    Route::resource('enquiries', EnquiryController::class)->only(['index', 'update', 'destroy']);
 
     Route::get('site-settings', [SiteSettingController::class, 'edit'])->name('site-settings.edit');
     Route::put('site-settings', [SiteSettingController::class, 'update'])->name('site-settings.update');
