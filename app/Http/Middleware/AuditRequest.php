@@ -49,7 +49,8 @@ class AuditRequest
             $response = $next($request);
 
             AuditLog::create([
-                'user_id' => $user?->id,
+                // The request may have deleted the user's own account.
+                'user_id' => $user?->exists ? $user->id : null,
                 'event' => 'request',
                 'action' => $routeName,
                 'route' => $routeName,

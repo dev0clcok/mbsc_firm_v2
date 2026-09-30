@@ -133,10 +133,10 @@ test('an empty policy cannot be published', function () {
 
 test('a server error shows the site error page when debug mode is off', function () {
     config(['app.debug' => false]);
-    Illuminate\Support\Facades\Route::get('/__boom', fn () => throw new RuntimeException('boom'));
+    Illuminate\Support\Facades\Route::get('/__crash', fn () => throw new RuntimeException('internal detail'));
 
-    $this->get('/__boom')
+    $this->get('/__crash')
         ->assertStatus(500)
-        ->assertDontSee('boom')
+        ->assertDontSee('internal detail')
         ->assertInertia(fn (Assert $page) => $page->component('Error')->where('status', 500));
 });
