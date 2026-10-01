@@ -9,6 +9,7 @@ use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\TeamMember;
 use App\Models\Testimonial;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Inertia\Inertia;
@@ -23,21 +24,31 @@ class DashboardController extends Controller implements HasMiddleware
         ];
     }
 
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
+        $user = $request->user();
+        $slugs = $user->isSuperAdmin() ? null : $user->allPermissionSlugs();
+        $can = fn (string $permission) => $slugs === null || in_array($permission, $slugs, true);
+
+        // A count is sent only to staff who may open the list behind it;
+        // null hides the card.
+        $count = fn (string $permission, \Closure $query) => $can($permission) ? $query() : null;
+        $seesEnquiries = $can('enquiries.list');
+
         return Inertia::render('admin/Dashboard', [
             'stats' => [
-                'new_enquiries' => Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count(),
-                'enquiries' => Enquiry::query()->count(),
-                'services' => Service::query()->active()->count(),
-                'team_members' => TeamMember::query()->active()->count(),
-                'faqs' => FAQ::query()->active()->count(),
-                'testimonials' => Testimonial::query()->active()->count(),
+                'new_enquiries' => $count('enquiries.list', fn () => Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count()),
+                'enquiries' => $count('enquiries.list', fn () => Enquiry::query()->count()),
+                'services' => $count('services.list', fn () => Service::query()->active()->count()),
+                'team_members' => $count('team_members.list', fn () => TeamMember::query()->active()->count()),
+                'faqs' => $count('faqs.list', fn () => FAQ::query()->active()->count()),
+                'testimonials' => $count('testimonials.list', fn () => Testimonial::query()->active()->count()),
             ],
-            'recentEnquiries' => Enquiry::query()->latest()->limit(5)
-                ->get(['id', 'name', 'service', 'message', 'status', 'created_at']),
-            'weeklyEnquiries' => $this->weeklyEnquiries(),
-            'checklist' => $this->checklist(),
+            'recentEnquiries' => $seesEnquiries
+                ? Enquiry::query()->latest()->limit(5)->get(['id', 'name', 'service', 'message', 'status', 'created_at'])
+                : null,
+            'weeklyEnquiries' => $seesEnquiries ? $this->weeklyEnquiries() : null,
+            'checklist' => $can('settings.view') ? $this->checklist() : [],
         ]);
     }
 

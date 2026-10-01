@@ -78,7 +78,7 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'site' => fn () => self::siteProps(),
             // Badge in the admin sidebar.
-            'newEnquiries' => fn () => $request->is('admin*')
+            'newEnquiries' => fn () => $request->is('admin*') && $user?->hasPermission('enquiries.list')
                 ? Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count()
                 : null,
             'quote' => ['message' => trim($message), 'author' => trim($author)],

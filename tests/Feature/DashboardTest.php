@@ -37,3 +37,26 @@ test('the dashboard counts enquiries in eight weekly buckets', function () {
         ->where('weeklyEnquiries.6.count', 1)
         ->where('weeklyEnquiries.0.count', 0));
 });
+
+test('the dashboard only sends counts for lists the person may open', function () {
+    $role = App\Models\Role::create(['name' => 'FAQ editor', 'slug' => 'faq-editor']);
+    $role->permissions()->sync(
+        collect(['admin.access', 'faqs.list'])->map(fn ($slug) => App\Models\Permission::firstOrCreate(['slug' => $slug], ['name' => $slug])->id)
+    );
+    $user = User::factory()->create();
+    $user->roles()->sync([$role->id]);
+
+    App\Models\Enquiry::create(['name' => 'Private', 'phone' => '01700000002', 'message' => 'Not for this role.']);
+    App\Models\FAQ::create(['question' => 'Q', 'answer' => 'A', 'is_active' => true]);
+
+    $this->actingAs($user)->get(route('admin.dashboard'))->assertOk()->assertInertia(fn ($page) => $page
+        ->where('stats.faqs', 1)
+        ->where('stats.services', null)
+        ->where('stats.team_members', null)
+        ->where('stats.testimonials', null)
+        ->where('stats.new_enquiries', null)
+        ->where('stats.enquiries', null)
+        ->where('recentEnquiries', null)
+        ->where('weeklyEnquiries', null)
+        ->where('checklist', []));
+});

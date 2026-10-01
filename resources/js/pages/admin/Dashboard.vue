@@ -9,32 +9,35 @@ import { useI18n } from 'vue-i18n';
 type Status = 'new' | 'contacted' | 'closed';
 
 const props = defineProps<{
+    /** A count is null when the signed-in person may not open that list; its card is hidden. */
     stats: {
-        new_enquiries: number;
-        enquiries: number;
-        services: number;
-        team_members: number;
-        faqs: number;
-        testimonials: number;
+        new_enquiries: number | null;
+        enquiries: number | null;
+        services: number | null;
+        team_members: number | null;
+        faqs: number | null;
+        testimonials: number | null;
     };
-    recentEnquiries: Array<{ id: number; name: string; service: string | null; message: string; status: Status; created_at: string }>;
-    weeklyEnquiries: Array<{ from: string; to: string; count: number }>;
+    recentEnquiries: Array<{ id: number; name: string; service: string | null; message: string; status: Status; created_at: string }> | null;
+    weeklyEnquiries: Array<{ from: string; to: string; count: number }> | null;
     checklist: Array<{ key: string; done: boolean; href: string }>;
 }>();
 
 const { t, locale } = useI18n();
 const { formatNumber } = useLocaleFormat();
 
-const cards = computed(() => [
-    { key: 'services', value: props.stats.services, href: '/admin/services', icon: Briefcase },
-    { key: 'team_members', value: props.stats.team_members, href: '/admin/team-members', icon: UsersRound },
-    { key: 'faqs', value: props.stats.faqs, href: '/admin/faqs', icon: HelpCircle },
-    { key: 'testimonials', value: props.stats.testimonials, href: '/admin/testimonials', icon: MessageSquareQuote },
-]);
+const cards = computed(() =>
+    [
+        { key: 'services', value: props.stats.services, href: '/admin/services', icon: Briefcase },
+        { key: 'team_members', value: props.stats.team_members, href: '/admin/team-members', icon: UsersRound },
+        { key: 'faqs', value: props.stats.faqs, href: '/admin/faqs', icon: HelpCircle },
+        { key: 'testimonials', value: props.stats.testimonials, href: '/admin/testimonials', icon: MessageSquareQuote },
+    ].filter((card) => card.value !== null),
+);
 
 // Bar chart: heights are a share of the busiest week, with room left for the count above each bar.
-const weekMax = computed(() => Math.max(1, ...props.weeklyEnquiries.map((w) => w.count)));
-const weekTotal = computed(() => props.weeklyEnquiries.reduce((sum, w) => sum + w.count, 0));
+const weekMax = computed(() => Math.max(1, ...(props.weeklyEnquiries ?? []).map((w) => w.count)));
+const weekTotal = computed(() => (props.weeklyEnquiries ?? []).reduce((sum, w) => sum + w.count, 0));
 const shortDate = (value: string) => new Date(`${value}T00:00:00`).toLocaleDateString(locale.value === 'bn' ? 'bn-BD' : 'en-GB', { day: 'numeric', month: 'short' });
 
 const remaining = computed(() => props.checklist.filter((item) => !item.done).length);
@@ -77,6 +80,7 @@ const formatDate = (value: string) =>
 
         <div class="grid grid-cols-2 gap-4 xl:grid-cols-5">
             <Link
+                v-if="stats.new_enquiries !== null"
                 href="/admin/enquiries?status=new"
                 class="rounded-lg border border-primary bg-primary p-5 text-primary-foreground transition-colors hover:bg-primary/90 col-span-2 xl:col-span-1"
             >
@@ -103,7 +107,7 @@ const formatDate = (value: string) =>
             </Link>
         </div>
 
-        <section class="rounded-lg border border-border bg-card p-5" aria-labelledby="dashboard-weekly">
+        <section v-if="weeklyEnquiries" class="rounded-lg border border-border bg-card p-5" aria-labelledby="dashboard-weekly">
             <div class="flex flex-wrap items-baseline justify-between gap-2">
                 <h2 id="dashboard-weekly" class="text-base font-semibold">{{ t('dashboard.weekly.title') }}</h2>
                 <p class="text-sm text-muted-foreground">{{ t('dashboard.weekly.total', { count: formatNumber(weekTotal) }) }}</p>
@@ -125,7 +129,7 @@ const formatDate = (value: string) =>
         </section>
 
         <div class="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-            <section class="rounded-lg border border-border bg-card" aria-labelledby="dashboard-recent">
+            <section v-if="recentEnquiries" class="rounded-lg border border-border bg-card" aria-labelledby="dashboard-recent">
                 <div class="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
                     <h2 id="dashboard-recent" class="text-base font-semibold">{{ t('dashboard.recent.title') }}</h2>
                     <Link href="/admin/enquiries" class="text-sm font-medium text-primary underline-offset-4 hover:underline">
@@ -149,7 +153,7 @@ const formatDate = (value: string) =>
                 <p v-else class="px-5 py-10 text-center text-sm text-muted-foreground">{{ t('dashboard.recent.empty') }}</p>
             </section>
 
-            <section class="rounded-lg border border-border bg-card" aria-labelledby="dashboard-checklist">
+            <section v-if="checklist.length" class="rounded-lg border border-border bg-card" aria-labelledby="dashboard-checklist">
                 <div class="border-b border-border px-5 py-4">
                     <h2 id="dashboard-checklist" class="text-base font-semibold">{{ t('dashboard.checklist.title') }}</h2>
                     <p class="mt-0.5 text-sm text-muted-foreground">
