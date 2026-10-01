@@ -77,3 +77,27 @@ test('a position chosen on the create form is kept', function () {
 
     expect(Service::where('slug', 'tax')->value('sort_order'))->toBe(2);
 });
+
+test('validation errors name fields in plain words', function () {
+    $this->actingAs($this->admin);
+
+    $this->post('/admin/team-members', [
+        'name' => 'Someone', 'position' => 'Associate',
+        'social_links' => [['platform' => '', 'url' => 'https://example.com'], ['platform' => 'facebook', 'url' => 'not a link']],
+    ])->assertSessionHasErrors(['social_links.0.platform', 'social_links.1.url']);
+
+    expect(session('errors')->first('social_links.0.platform'))
+        ->toBe('The social link platform field is required when social link address is present.');
+    foreach (session('errors')->all() as $message) {
+        expect($message)->not->toMatch('/[a-z]+_[a-z]+|\.\d+\.|:attribute/');
+    }
+
+    $this->post('/admin/services', [
+        'slug' => 'vat', 'title' => 'VAT', 'sort_order' => 'first',
+        'process_steps' => [['title' => str_repeat('a', 121)]],
+    ])->assertSessionHasErrors(['process_steps.0.title', 'sort_order']);
+
+    foreach (session('errors')->all() as $message) {
+        expect($message)->not->toMatch('/[a-z]+_[a-z]+|\.\d+\./');
+    }
+});
