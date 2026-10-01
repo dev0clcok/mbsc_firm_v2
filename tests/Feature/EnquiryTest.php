@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Schema;
 
 beforeEach(function () {
     Mail::fake();
@@ -64,6 +65,56 @@ test('the service must be one that is shown on the site, or left empty', functio
     $this->post('/enquiries', [...$valid, 'service' => ''])->assertSessionHasNoErrors();
     $this->post('/enquiries', $valid)->assertSessionHasNoErrors();
     expect(Enquiry::count())->toBe(2);
+});
+
+test('phone numbers typed with Bengali digits are accepted and stored as 0-9', function () use ($valid) {
+    $this->post('/enquiries', [...$valid, 'phone' => '০১৭০০-০০০০০২'])->assertSessionHasNoErrors();
+
+    $enquiry = Enquiry::sole();
+    expect($enquiry->phone)->toBe('01700-000002')
+        ->and($enquiry->phone_normalized)->toBe('01700000002')
+        ->and($enquiry->whatsappNumber())->toBe('8801700000002');
+});
+
+test('phone numbers must be complete', function (string $phone, bool $ok) use ($valid) {
+    $response = $this->post('/enquiries', [...$valid, 'phone' => $phone]);
+
+    $ok ? $response->assertSessionHasNoErrors() : $response->assertSessionHasErrors('phone');
+})->with([
+    'too short' => ['018681967', false],
+    'letters' => ['call me', false],
+    'not a mobile prefix' => ['01200000000', false],
+    'too long' => ['017000000021', false],
+    'foreign without country code' => ['2025550123', false],
+    'local mobile' => ['01700000002', true],
+    'local with hyphen' => ['01700-000002', true],
+    'with +880' => ['+880 1700-000002', true],
+    'with 880' => ['8801700000002', true],
+    'international' => ['+44 20 7946 0958', true],
+]);
+
+test('an enquiry is found by its phone number however it is typed', function () use ($valid) {
+    Enquiry::create([...$valid, 'phone' => '+880 1700-000002']);
+    Enquiry::create([...$valid, 'name' => 'Someone else', 'phone' => '01811-111111']);
+
+    $this->actingAs(User::factory()->create(['email' => config('admin.super_admin_email')]));
+
+    foreach (['01700000002', '8801700000002', '01700-000002', '+880 1700 000002', '০১৭০০০০০০০২', '1700'] as $search) {
+        $this->get('/admin/enquiries?search='.urlencode($search))->assertInertia(fn ($page) => $page
+            ->has('enquiries.data', 1)
+            ->where('enquiries.data.0.name', 'Rahim Uddin'));
+    }
+});
+
+test('existing enquiries get a searchable phone number', function () use ($valid) {
+    $enquiry = Enquiry::create([...$valid, 'phone' => '8801700000002']);
+
+    $migration = require database_path('migrations/2026_10_01_000002_add_phone_normalized_to_enquiries.php');
+    $migration->down();
+    expect(Schema::hasColumn('enquiries', 'phone_normalized'))->toBeFalse();
+    $migration->up();
+
+    expect($enquiry->fresh()->phone_normalized)->toBe('01700000002');
 });
 
 test('honeypot submissions look successful but are discarded', function () use ($valid) {

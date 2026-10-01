@@ -31,12 +31,22 @@ const root = ref<HTMLElement | null>(null);
 // server applies the same rules, so these only save a round trip.
 const touched = reactive<Record<Field, boolean>>({ name: false, phone: false, email: false, message: false });
 
+// Same rules as App\Support\Phone on the server: Bengali digits count as
+// 0-9, and the number is a Bangladeshi mobile (with or without +880) or an
+// international number with its country code.
+const validPhone = (value: string) => {
+    const compact = value.replace(/[০-৯]/g, (d) => String('০১২৩৪৫৬৭৮৯'.indexOf(d))).replace(/[\s\-().]+/g, '');
+    return /^(?:\+?880|0)1[3-9]\d{8}$/.test(compact) || /^(?:\+|00)[1-9]\d{7,14}$/.test(compact);
+};
+
 const rules: Record<Field, () => string | undefined> = {
     name: () => (form.name.trim() ? undefined : 'Enter your name.'),
     phone: () => {
         const phone = form.phone.trim();
         if (!phone) return form.email.trim() ? undefined : 'Enter a phone number or an email address so we can reply.';
-        return /^[0-9+\-\s()]{6,}$/.test(phone) ? undefined : 'Enter a valid phone number, for example 01XXX-XXXXXX.';
+        return validPhone(phone)
+            ? undefined
+            : 'Enter a full phone number, for example 01XXX-XXXXXX, or with the country code for a number outside Bangladesh.';
     },
     email: () => {
         const email = form.email.trim();

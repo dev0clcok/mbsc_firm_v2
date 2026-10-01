@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\Auditable;
+use App\Support\Phone;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +37,14 @@ class Enquiry extends Model
         'status' => self::STATUS_NEW,
     ];
 
+    protected static function booted(): void
+    {
+        // Kept in step with the phone number however the enquiry is saved.
+        static::saving(function (Enquiry $enquiry) {
+            $enquiry->phone_normalized = Phone::normalize($enquiry->phone);
+        });
+    }
+
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
@@ -54,9 +63,13 @@ class Enquiry extends Model
     {
         if ($request->filled('search')) {
             $search = $request->string('search');
-            $query->where(function (Builder $q) use ($search) {
+            // A search that is a phone number matches however it was typed.
+            $digits = preg_match('/^[\d\s+\-().০-৯]{3,}$/u', $search) ? Phone::normalize($search) : null;
+
+            $query->where(function (Builder $q) use ($search, $digits) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
+                    ->when($digits, fn (Builder $q) => $q->orWhere('phone_normalized', 'like', "%{$digits}%"))
                     ->orWhere('email', 'like', "%{$search}%")
                     ->orWhere('service', 'like', "%{$search}%")
                     ->orWhere('message', 'like', "%{$search}%");
@@ -80,7 +93,7 @@ class Enquiry extends Model
      */
     public function whatsappNumber(): ?string
     {
-        $digits = preg_replace('/\D+/', '', (string) $this->phone);
+        $digits = preg_replace('/\D+/', '', (string) Phone::toAscii($this->phone));
 
         if (strlen($digits) < 10) {
             return null;
