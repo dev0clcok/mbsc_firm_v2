@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Models\Enquiry;
 use App\Models\Service;
 use App\Models\SiteSetting;
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -70,7 +69,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
         $user = $request->user();
 
         return [
@@ -81,7 +79,6 @@ class HandleInertiaRequests extends Middleware
             'newEnquiries' => fn () => $request->is('admin*') && $user?->hasPermission('enquiries.list')
                 ? Enquiry::query()->where('status', Enquiry::STATUS_NEW)->count()
                 : null,
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $user,
                 'roles' => fn () => $user ? $user->roles()->pluck('slug')->all() : [],
