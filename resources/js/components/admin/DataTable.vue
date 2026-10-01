@@ -84,15 +84,7 @@
                                 :row="row"
                                 :value="getNestedValue(row, column.key)"
                             >
-                                <span
-                                    v-if="column.format === 'html'"
-                                    v-html="getNestedValue(row, column.key)"
-                                    class="text-foreground"
-                                />
-                                <span
-                                    v-else
-                                    class="text-foreground"
-                                >
+                                <span class="text-foreground">
                                     {{ getNestedValue(row, column.key) || '—' }}
                                 </span>
                             </slot>
@@ -215,7 +207,6 @@ interface Column {
     key: string;
     label: string;
     align?: 'left' | 'center' | 'right';
-    format?: 'text' | 'html';
 }
 
 interface Action {

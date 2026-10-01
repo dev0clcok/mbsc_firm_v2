@@ -8,6 +8,7 @@ import StringList from '@/components/admin/StringList.vue';
 import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import type { InertiaForm } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export interface ServiceFormData {
@@ -43,6 +44,12 @@ const { t } = useI18n();
 useUnsavedWarning(() => props.form.isDirty, t('common.leave_unsaved'));
 
 const errors = () => props.form.errors as Record<string, string | undefined>;
+
+// A data address in an <img> draws the icon without running anything inside it.
+const iconPreview = computed(() => {
+    const svg = props.form.icon_svg?.trim();
+    return svg && svg.startsWith('<svg') ? `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` : null;
+});
 </script>
 
 <template>
@@ -115,8 +122,10 @@ const errors = () => props.form.errors as Record<string, string | undefined>;
                 />
                 <FormField v-slot="f" :label="t('services.form.icon_svg')" :help="t('services.form.icon_svg_help')" :error="errors().icon_svg">
                     <div class="flex items-start gap-3">
-                        <!-- eslint-disable-next-line vue/no-v-html -->
-                        <span v-if="form.icon_svg" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border bg-muted [&>svg]:h-6 [&>svg]:w-6" aria-hidden="true" v-html="form.icon_svg"></span>
+                        <!-- Shown as an image so pasted markup can never run in the admin. -->
+                        <span v-if="iconPreview" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-border bg-muted" aria-hidden="true">
+                            <img :src="iconPreview" alt="" class="h-6 w-6 dark:invert" />
+                        </span>
                         <textarea :id="f.id" v-model="form.icon_svg" rows="4" class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-xs" :placeholder="t('services.form.icon_svg_placeholder')" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" />
                     </div>
                 </FormField>

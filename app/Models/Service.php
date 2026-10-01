@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Concerns\Auditable;
+use App\Support\SvgIcon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -51,6 +53,15 @@ class Service extends Model
         return $this->image_url
             ? ['url' => $this->image_url, 'width' => $this->image_width, 'height' => $this->image_height, 'alt' => $this->image_alt]
             : null;
+    }
+
+    /**
+     * The icon is printed as markup on public pages, so it is cleaned every
+     * time it is saved, whichever form, seeder or import it comes from.
+     */
+    protected function iconSvg(): Attribute
+    {
+        return Attribute::make(set: fn (?string $value) => SvgIcon::clean($value));
     }
 
     public function faqs(): HasMany

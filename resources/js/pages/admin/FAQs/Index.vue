@@ -59,8 +59,9 @@
                     <div class="font-semibold text-foreground">
                         {{ row.question }}
                     </div>
-                    <div class="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2"
-                        v-html="truncateHtml(row.answer, 80)" />
+                    <div class="mt-1.5 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                        {{ answerPreview(row.answer, 80) }}
+                    </div>
                 </div>
             </template>
 
@@ -241,11 +242,13 @@ const resetFilters = () => {
     );
 };
 
-const truncateHtml = (html: string, length: number) => {
-    // Remove HTML tags for length calculation
-    const text = html.replace(/<[^>]*>/g, '');
-    if (text.length <= length) return html;
-    // Truncate and add ellipsis
-    return text.substring(0, length) + '...';
+// Answers hold rich text; the list shows them as plain text only.
+const answerPreview = (html: string, length: number) => {
+    const text = (html ?? '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    return text.length <= length ? text : text.substring(0, length) + '...';
 };
 </script>
