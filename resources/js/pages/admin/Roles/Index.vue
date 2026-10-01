@@ -133,13 +133,14 @@ const confirmDelete = async (id: number) => {
         title: t('roles.delete.title'),
         description: t('roles.delete.description'),
         confirmText: t('roles.delete.confirm'),
+        cancelText: t('common.cancel'),
         confirmVariant: 'destructive',
     });
     if (!ok) return;
 
     router.delete(`/admin/roles/${id}`, {
-        onSuccess: () => toast({ variant: 'success', message: 'Role deleted.' }),
-        onError: () => toast({ variant: 'error', message: 'Failed to delete role.' }),
+        onSuccess: () => toast({ variant: 'success', message: t('roles.deleted') }),
+        onError: () => toast({ variant: 'error', message: t('roles.delete_failed') }),
     });
 };
 </script>

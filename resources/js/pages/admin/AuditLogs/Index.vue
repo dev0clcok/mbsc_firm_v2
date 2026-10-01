@@ -30,7 +30,7 @@
                     >
                         <option value="">{{ t('audit.filters.all_events') }}</option>
                         <option v-for="e in eventOptions" :key="e" :value="e">
-                            {{ e }}
+                            {{ eventLabel(e) }}
                         </option>
                     </select>
                 </div>
@@ -71,7 +71,7 @@
                         {{ row.user?.name || '—' }}
                     </div>
                     <div class="truncate text-xs text-muted-foreground">
-                        {{ row.user?.email || (row.user_id ? `User #${row.user_id}` : 'Guest') }}
+                        {{ row.user?.email || (row.user_id ? t('audit.user_number', { id: row.user_id }) : t('audit.guest')) }}
                     </div>
                 </div>
             </template>
@@ -80,7 +80,7 @@
                 <span
                     class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary ring-1 ring-inset ring-primary/20"
                 >
-                    {{ value }}
+                    {{ eventLabel(value) }}
                 </span>
             </template>
 
@@ -145,6 +145,10 @@
                     {{ value || '—' }}
                 </span>
             </template>
+
+            <template #empty>
+                <p class="text-sm text-muted-foreground">{{ t('audit.empty') }}</p>
+            </template>
         </DataTable>
     </AppLayout>
 </template>
@@ -163,7 +167,13 @@ const props = defineProps<{
     eventOptions: string[];
 }>();
 
-const { t } = useI18n();
+const { t, te, locale } = useI18n();
+
+// Events are stored as "model.created"; show a translated label, or the stored name when there is none.
+const eventLabel = (value: string) => {
+    const key = `audit.events.${String(value).replace(/\./g, '_')}`;
+    return te(key) ? t(key) : value;
+};
 
 const search = ref(props.filters?.search || '');
 const event = ref(props.filters?.event || '');
@@ -210,7 +220,7 @@ const formatDate = (value: string | null) => {
     if (!value) return '—';
     const d = new Date(value);
     if (Number.isNaN(d.getTime())) return value;
-    return d.toLocaleString();
+    return d.toLocaleString(locale.value === 'bn' ? 'bn-BD' : 'en-GB');
 };
 </script>
 

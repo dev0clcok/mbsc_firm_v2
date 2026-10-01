@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DataTable from '@/components/admin/DataTable.vue';
 import { useConfirm } from '@/composables/useConfirm';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { usePermissions } from '@/composables/usePermissions';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
@@ -37,6 +38,7 @@ const props = defineProps<{
 }>();
 
 const { t, locale } = useI18n();
+const { formatNumber } = useLocaleFormat();
 const { confirm } = useConfirm();
 const { can } = usePermissions();
 
@@ -145,7 +147,7 @@ const confirmDelete = async (row: Enquiry) => {
                 @click="((filters.status = tab.key), apply())"
             >
                 {{ tab.label }}
-                <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold tabular-nums">{{ tab.count }}</span>
+                <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold tabular-nums">{{ formatNumber(tab.count) }}</span>
             </button>
         </div>
 
@@ -184,7 +186,7 @@ const confirmDelete = async (row: Enquiry) => {
                 </Link>
                 <span v-if="row.notes_count" class="mt-1.5 inline-flex items-center gap-1 text-xs text-muted-foreground">
                     <MessageSquareText class="size-3.5" />
-                    {{ t('enquiries.notes_count', { count: row.notes_count }, row.notes_count) }}
+                    {{ t('enquiries.notes_count', { count: formatNumber(row.notes_count) }, row.notes_count) }}
                 </span>
             </template>
 

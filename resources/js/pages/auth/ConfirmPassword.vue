@@ -6,14 +6,17 @@ import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/password/confirm';
 import { Form, Head } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 </script>
 
 <template>
     <AuthLayout
-        title="Confirm your password"
-        description="This is a secure area of the application. Please confirm your password before continuing."
+        :title="t('settings.confirm_password.heading')"
+        :description="t('settings.confirm_password.description')"
     >
-        <Head title="Confirm password" />
+        <Head :title="t('settings.confirm_password.title')" />
 
         <Form
             v-bind="store.form()"
@@ -22,7 +25,7 @@ import { Form, Head } from '@inertiajs/vue3';
         >
             <div class="space-y-6">
                 <div class="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{{ t('settings.confirm_password.password') }}</Label>
                     <Input
                         id="password"
                         type="password"
@@ -31,7 +34,7 @@ import { Form, Head } from '@inertiajs/vue3';
                         required
                         autocomplete="current-password"
                         autofocus
-                        placeholder="Enter your password"
+                        :placeholder="t('settings.confirm_password.placeholder')"
                     />
 
                     <InputError :message="errors.password" />
@@ -43,7 +46,7 @@ import { Form, Head } from '@inertiajs/vue3';
                         :loading="processing"
                         data-test="confirm-password-button"
                     >
-                        Confirm Password
+                        {{ t('settings.confirm_password.submit') }}
                     </Button>
                 </div>
             </div>

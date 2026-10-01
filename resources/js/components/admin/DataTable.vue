@@ -85,7 +85,7 @@
                                 :value="getNestedValue(row, column.key)"
                             >
                                 <span class="text-foreground">
-                                    {{ getNestedValue(row, column.key) || '—' }}
+                                    {{ displayValue(getNestedValue(row, column.key)) }}
                                 </span>
                             </slot>
                         </td>
@@ -163,21 +163,21 @@
                 <div class="text-sm text-muted-foreground">
                     <span v-if="pagination.from && pagination.to" class="font-medium">
                         {{ t('datatable.showing') }}
-                        <span class="font-semibold text-foreground">{{ pagination.from }}</span>
+                        <span class="font-semibold text-foreground">{{ formatNumber(pagination.from) }}</span>
                         {{ t('datatable.to') }}
-                        <span class="font-semibold text-foreground">{{ pagination.to }}</span>
+                        <span class="font-semibold text-foreground">{{ formatNumber(pagination.to) }}</span>
                         {{ t('datatable.of') }}
-                        <span class="font-semibold text-foreground">{{ pagination.total }}</span>
+                        <span class="font-semibold text-foreground">{{ formatNumber(pagination.total) }}</span>
                         {{ t('datatable.results') }}
                     </span>
                     <span v-else class="font-medium">
-                        <span class="font-semibold text-foreground">{{ pagination.total }}</span>
+                        <span class="font-semibold text-foreground">{{ formatNumber(pagination.total) }}</span>
                         {{ t('datatable.total') }}
                     </span>
                 </div>
-                <nav class="flex items-center gap-1" aria-label="Pagination">
+                <nav class="flex items-center gap-1" :aria-label="t('datatable.pagination')">
                     <Link
-                        v-for="link in pagination.links"
+                        v-for="(link, linkIndex) in pagination.links"
                         :key="link.label"
                         :href="link.url || '#'"
                         :class="[
@@ -188,8 +188,9 @@
                             !link.url && 'pointer-events-none opacity-40 cursor-not-allowed',
                             link.url && !link.active && 'hover:shadow-sm',
                         ]"
-                        v-html="link.label"
-                    />
+                    >
+                        {{ pageLabel(link.label, linkIndex, pagination.links.length) }}
+                    </Link>
                 </nav>
             </div>
         </div>
@@ -202,6 +203,7 @@ import Icon from '@/components/Icon.vue';
 import Sortable from 'sortablejs';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 
 interface Column {
     key: string;
@@ -249,6 +251,19 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { t } = useI18n();
+const { formatNumber } = useLocaleFormat();
+
+// Laravel sends the first and last links as "&laquo; Previous" and "Next &raquo;"; the rest are page numbers or "...".
+const pageLabel = (label: string, index: number, count: number) => {
+    if (index === 0) return `« ${t('datatable.previous')}`;
+    if (index === count - 1) return `${t('datatable.next')} »`;
+    return /^\d+$/.test(label) ? formatNumber(Number(label)) : label;
+};
+
+const displayValue = (value: unknown) => {
+    if (!value) return '—';
+    return typeof value === 'number' ? formatNumber(value) : value;
+};
 
 // A local copy so a drag shows its result at once, before the server confirms.
 const rows = ref<any[]>([...props.data]);

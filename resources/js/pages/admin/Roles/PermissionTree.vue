@@ -14,6 +14,8 @@ import {
     Square,
     SquareCheck,
 } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 
 type PermissionDef = { slug: string; label: string };
 type ModuleDef = { key: string; label: string; permissions: PermissionDef[] };
@@ -33,6 +35,27 @@ const selected = computed({
     set: (set: Set<string>) => emit('update:modelValue', Array.from(set)),
 });
 
+const { t, te } = useI18n();
+const { formatNumber } = useLocaleFormat();
+
+// Labels arrive from the server in English; translate them by key and keep the server label when no translation exists.
+const label = (key: string, fallback: string) => (te(key) ? t(key) : fallback);
+
+const localizedGroups = computed<GroupDef[]>(() =>
+    props.groups.map((g) => ({
+        ...g,
+        label: label(`permissions.groups.${g.key}`, g.label),
+        modules: g.modules.map((m) => ({
+            ...m,
+            label: label(`permissions.modules.${m.key}`, m.label),
+            permissions: m.permissions.map((p) => ({
+                ...p,
+                label: label(`permissions.actions.${p.slug.split('.').pop()}`, p.label),
+            })),
+        })),
+    })),
+);
+
 const search = ref<string>('');
 
 const expanded = reactive({
@@ -44,11 +67,11 @@ const normalize = (v: string) => v.trim().toLowerCase();
 
 const filteredGroups = computed<GroupDef[]>(() => {
     const q = normalize(search.value);
-    if (!q) return props.groups;
+    if (!q) return localizedGroups.value;
 
     const matches = (s: string) => normalize(s).includes(q);
 
-    return props.groups
+    return localizedGroups.value
         .map((g) => {
             const groupMatches = matches(g.label) || matches(g.key);
             const modules = g.modules
@@ -166,33 +189,33 @@ watch(
                     <Input
                         v-model="search"
                         class="pl-9"
-                        placeholder="Search permissions (e.g. users, delete, admin...)"
+                        :placeholder="t('roles.tree.search_placeholder')"
                     />
                 </div>
 
                 <div class="flex flex-wrap items-center justify-end gap-2">
                     <Badge variant="secondary">
-                        Selected: {{ modelValue.length }}
+                        {{ t('common.selected') }} {{ formatNumber(modelValue.length) }}
                     </Badge>
 
                     <Button type="button" variant="secondary" size="sm" @click="expandAllVisible">
                         <ChevronsUpDown class="mr-2 h-4 w-4" />
-                        Expand
+                        {{ t('roles.tree.expand') }}
                     </Button>
                     <Button type="button" variant="secondary" size="sm" @click="collapseAll">
                         <ChevronsDownUp class="mr-2 h-4 w-4" />
-                        Collapse
+                        {{ t('roles.tree.collapse') }}
                     </Button>
 
                     <Separator orientation="vertical" class="mx-1 hidden h-8 sm:block" />
 
                     <Button type="button" variant="outline" size="sm" @click="selectAllVisible">
                         <SquareCheck class="mr-2 h-4 w-4" />
-                        Select all
+                        {{ t('roles.tree.select_all') }}
                     </Button>
                     <Button type="button" variant="outline" size="sm" @click="clearVisible">
                         <Square class="mr-2 h-4 w-4" />
-                        Clear
+                        {{ t('roles.tree.clear') }}
                     </Button>
                 </div>
             </div>
@@ -211,7 +234,7 @@ watch(
                             class="mt-0.5 text-muted-foreground hover:text-foreground"
                             @click="toggleGroupExpanded(group.key)"
                             :aria-label="
-                                expanded.groups.has(group.key) ? 'Collapse group' : 'Expand group'
+                                expanded.groups.has(group.key) ? t('roles.tree.collapse_group') : t('roles.tree.expand_group')
                             "
                         >
                             <ChevronDown
@@ -233,13 +256,13 @@ watch(
                             <div class="flex items-center gap-2">
                                 <div class="truncate font-medium">{{ group.label }}</div>
                                 <Badge variant="secondary" class="shrink-0">
-                                    {{ selectedCountFor(groupPermissionSlugs(group)) }}/{{
-                                        groupPermissionSlugs(group).length
+                                    {{ formatNumber(selectedCountFor(groupPermissionSlugs(group))) }}/{{
+                                        formatNumber(groupPermissionSlugs(group).length)
                                     }}
                                 </Badge>
                             </div>
                             <div class="mt-0.5 text-xs text-muted-foreground">
-                                Toggle the group checkbox to select all permissions in this group.
+                                {{ t('roles.tree.group_help') }}
                             </div>
                         </div>
                     </div>
@@ -256,8 +279,8 @@ watch(
                                         @click="toggleModuleExpanded(`${group.key}:${module.key}`)"
                                         :aria-label="
                                             expanded.modules.has(`${group.key}:${module.key}`)
-                                                ? 'Collapse module'
-                                                : 'Expand module'
+                                                ? t('roles.tree.collapse_module')
+                                                : t('roles.tree.expand_module')
                                         "
                                     >
                                         <ChevronDown
@@ -279,8 +302,8 @@ watch(
                                         <div class="flex items-center gap-2">
                                             <div class="truncate font-medium">{{ module.label }}</div>
                                             <span class="text-xs text-muted-foreground">
-                                                {{ selectedCountFor(modulePermissionSlugs(module)) }}/{{
-                                                    modulePermissionSlugs(module).length
+                                                {{ formatNumber(selectedCountFor(modulePermissionSlugs(module))) }}/{{
+                                                    formatNumber(modulePermissionSlugs(module).length)
                                                 }}
                                             </span>
                                         </div>

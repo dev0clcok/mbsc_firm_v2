@@ -1,32 +1,32 @@
 <template>
     <AppLayout>
-        <Head title="Edit User" />
+        <Head :title="t('users.edit.title')" />
 
         <div class="space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-3">
-                <h1 class="text-2xl font-semibold tracking-tight">Edit User</h1>
+                <h1 class="text-2xl font-semibold tracking-tight">{{ t('users.edit.title') }}</h1>
                 <Link href="/admin/users" class="text-muted-foreground hover:text-foreground">
-                    Back to Users
+                    {{ t('users.back_to_list') }}
                 </Link>
             </div>
 
             <form @submit.prevent="submit" class="space-y-6">
                 <div class="rounded-lg border border-border bg-card p-6">
-                    <h2 class="mb-4 text-xl font-semibold">User</h2>
+                    <h2 class="mb-4 text-xl font-semibold">{{ t('users.edit.user') }}</h2>
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
-                            <div class="text-sm font-medium text-muted-foreground">Name</div>
+                            <div class="text-sm font-medium text-muted-foreground">{{ t('users.form.name') }}</div>
                             <div class="mt-1">{{ user.name }}</div>
                         </div>
                         <div>
-                            <div class="text-sm font-medium text-muted-foreground">Email</div>
+                            <div class="text-sm font-medium text-muted-foreground">{{ t('users.form.email') }}</div>
                             <div class="mt-1">{{ user.email }}</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="rounded-lg border border-border bg-card p-6">
-                    <h2 class="mb-4 text-xl font-semibold">Roles</h2>
+                    <h2 class="mb-4 text-xl font-semibold">{{ t('users.form.roles') }}</h2>
                     <div class="grid gap-2 md:grid-cols-2">
                         <label
                             v-for="role in roles"
@@ -47,10 +47,10 @@
 
                 <div class="flex items-center justify-end gap-4">
                     <Button as-child variant="secondary">
-                        <Link href="/admin/users">Cancel</Link>
+                        <Link href="/admin/users">{{ t('common.cancel') }}</Link>
                     </Button>
                     <Button type="submit" :loading="form.processing">
-                        Save
+                        {{ t('common.save') }}
                     </Button>
                 </div>
             </form>

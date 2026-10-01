@@ -10,25 +10,29 @@ import { show } from '@/routes/two-factor';
 import { edit as editPassword } from '@/routes/user-password';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-const sidebarNavItems: NavItem[] = [
+const { t } = useI18n();
+
+const sidebarNavItems = computed<NavItem[]>(() => [
     {
-        title: 'Profile',
+        title: t('settings.nav.profile'),
         href: editProfile(),
     },
     {
-        title: 'Password',
+        title: t('settings.nav.password'),
         href: editPassword(),
     },
     {
-        title: 'Two-Factor Auth',
+        title: t('settings.nav.two_factor'),
         href: show(),
     },
     {
-        title: 'Appearance',
+        title: t('settings.nav.appearance'),
         href: editAppearance(),
     },
-];
+]);
 
 const { urlIsActive } = useActiveUrl();
 </script>
@@ -36,13 +40,13 @@ const { urlIsActive } = useActiveUrl();
 <template>
     <div class="px-4 py-6">
         <Heading
-            title="Settings"
-            description="Manage your profile and account settings"
+            :title="t('settings.title')"
+            :description="t('settings.description')"
         />
 
         <div class="flex flex-col lg:flex-row lg:space-x-12">
             <aside class="w-full max-w-xl lg:w-48">
-                <nav class="flex flex-col space-y-1 space-x-0" aria-label="Settings">
+                <nav class="flex flex-col space-y-1 space-x-0" :aria-label="t('settings.title')">
                     <Button
                         v-for="item in sidebarNavItems"
                         :key="toUrl(item.href)"

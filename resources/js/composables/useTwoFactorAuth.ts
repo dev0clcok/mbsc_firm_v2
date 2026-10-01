@@ -1,5 +1,6 @@
 import { qrCode, recoveryCodes, secretKey } from '@/routes/two-factor';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const fetchJson = async <T>(url: string): Promise<T> => {
     const response = await fetch(url, {
@@ -23,6 +24,8 @@ const hasSetupData = computed<boolean>(
 );
 
 export const useTwoFactorAuth = () => {
+    const { t } = useI18n();
+
     const fetchQrCode = async (): Promise<void> => {
         try {
             const { svg } = await fetchJson<{ svg: string; url: string }>(
@@ -31,7 +34,7 @@ export const useTwoFactorAuth = () => {
 
             qrCodeSvg.value = svg;
         } catch {
-            errors.value.push('Failed to fetch QR code');
+            errors.value.push(t('settings.two_factor.errors.qr_code'));
             qrCodeSvg.value = null;
         }
     };
@@ -44,7 +47,7 @@ export const useTwoFactorAuth = () => {
 
             manualSetupKey.value = key;
         } catch {
-            errors.value.push('Failed to fetch a setup key');
+            errors.value.push(t('settings.two_factor.errors.setup_key'));
             manualSetupKey.value = null;
         }
     };
@@ -72,7 +75,7 @@ export const useTwoFactorAuth = () => {
                 recoveryCodes.url(),
             );
         } catch {
-            errors.value.push('Failed to fetch recovery codes');
+            errors.value.push(t('settings.two_factor.errors.recovery_codes'));
             recoveryCodesList.value = [];
         }
     };

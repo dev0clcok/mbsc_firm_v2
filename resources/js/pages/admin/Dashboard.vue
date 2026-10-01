@@ -2,6 +2,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import { Briefcase, CircleCheck, CircleDashed, ExternalLink, HelpCircle, Inbox, MessageSquareQuote, UsersRound } from 'lucide-vue-next';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -22,6 +23,7 @@ const props = defineProps<{
 }>();
 
 const { t, locale } = useI18n();
+const { formatNumber } = useLocaleFormat();
 
 const cards = computed(() => [
     { key: 'services', value: props.stats.services, href: '/admin/services', icon: Briefcase },
@@ -82,8 +84,8 @@ const formatDate = (value: string) =>
                     <span class="text-sm font-medium opacity-80">{{ t('dashboard.stats.new_enquiries') }}</span>
                     <Inbox class="size-5 opacity-80" />
                 </div>
-                <p class="mt-3 text-4xl font-semibold tabular-nums">{{ stats.new_enquiries }}</p>
-                <p class="mt-1 text-sm opacity-80">{{ t('dashboard.stats.enquiries_total', { count: stats.enquiries }) }}</p>
+                <p class="mt-3 text-4xl font-semibold tabular-nums">{{ formatNumber(stats.new_enquiries) }}</p>
+                <p class="mt-1 text-sm opacity-80">{{ t('dashboard.stats.enquiries_total', { count: formatNumber(stats.enquiries) }) }}</p>
             </Link>
 
             <Link
@@ -96,7 +98,7 @@ const formatDate = (value: string) =>
                     <span class="text-sm font-medium">{{ t(`dashboard.stats.${card.key}`) }}</span>
                     <component :is="card.icon" class="size-5" />
                 </div>
-                <p class="mt-3 text-4xl font-semibold tabular-nums">{{ card.value }}</p>
+                <p class="mt-3 text-4xl font-semibold tabular-nums">{{ formatNumber(card.value) }}</p>
                 <p class="mt-1 text-sm text-muted-foreground">{{ t('dashboard.stats.shown_on_site') }}</p>
             </Link>
         </div>
@@ -104,11 +106,11 @@ const formatDate = (value: string) =>
         <section class="rounded-lg border border-border bg-card p-5" aria-labelledby="dashboard-weekly">
             <div class="flex flex-wrap items-baseline justify-between gap-2">
                 <h2 id="dashboard-weekly" class="text-base font-semibold">{{ t('dashboard.weekly.title') }}</h2>
-                <p class="text-sm text-muted-foreground">{{ t('dashboard.weekly.total', { count: weekTotal }) }}</p>
+                <p class="text-sm text-muted-foreground">{{ t('dashboard.weekly.total', { count: formatNumber(weekTotal) }) }}</p>
             </div>
             <ol class="mt-5 grid h-40 grid-cols-8 items-end gap-2 sm:gap-4" :aria-label="t('dashboard.weekly.title')">
                 <li v-for="week in weeklyEnquiries" :key="week.from" class="flex h-full flex-col justify-end text-center">
-                    <span class="text-sm font-semibold tabular-nums">{{ week.count }}</span>
+                    <span class="text-sm font-semibold tabular-nums">{{ formatNumber(week.count) }}</span>
                     <span
                         :class="['mt-1 block w-full rounded-t', week.count ? 'bg-primary' : 'bg-muted']"
                         :style="{ height: `${Math.max(3, (week.count / weekMax) * 78)}%` }"
@@ -151,7 +153,7 @@ const formatDate = (value: string) =>
                 <div class="border-b border-border px-5 py-4">
                     <h2 id="dashboard-checklist" class="text-base font-semibold">{{ t('dashboard.checklist.title') }}</h2>
                     <p class="mt-0.5 text-sm text-muted-foreground">
-                        {{ remaining ? t('dashboard.checklist.remaining', { count: remaining }) : t('dashboard.checklist.all_done') }}
+                        {{ remaining ? t('dashboard.checklist.remaining', { count: formatNumber(remaining) }) : t('dashboard.checklist.all_done') }}
                     </p>
                 </div>
                 <ul class="divide-y divide-border">

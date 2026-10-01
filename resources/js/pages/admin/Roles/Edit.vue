@@ -1,15 +1,15 @@
 <template>
     <AppLayout>
-        <Head title="Edit Role" />
+        <Head :title="t('roles.edit.title')" />
 
         <div class="space-y-6">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">
-                        Edit Role
+                        {{ t('roles.edit.title') }}
                     </h1>
                     <p class="mt-1 text-sm text-muted-foreground">
-                        Update role details and adjust permissions.
+                        {{ t('roles.edit.subtitle') }}
                     </p>
                 </div>
 
@@ -17,7 +17,7 @@
                     :href="rolesIndex().url"
                     class="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
                 >
-                    Back to Roles
+                    {{ t('roles.back_to_list') }}
                 </Link>
             </div>
 
@@ -26,28 +26,28 @@
                     <div class="space-y-6">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Role Details</CardTitle>
+                                <CardTitle>{{ t('roles.form.details') }}</CardTitle>
                                 <CardDescription>
-                                    Keep the slug stable if it’s referenced in code.
+                                    {{ t('roles.form.details_help_edit') }}
                                 </CardDescription>
                             </CardHeader>
                             <CardContent class="space-y-4">
                                 <div>
                                     <Label for="name">
-                                        Name <span class="text-destructive">*</span>
+                                        {{ t('roles.form.name') }} <span class="text-destructive">*</span>
                                     </Label>
                                     <Input
                                         id="name"
                                         v-model="form.name"
                                         type="text"
                                         required
-                                        placeholder="e.g. Admin"
+                                        :placeholder="t('roles.form.name_placeholder')"
                                     />
                                     <InputError :message="form.errors.name" />
                                 </div>
 
                                 <div>
-                                    <Label for="slug">Slug</Label>
+                                    <Label for="slug">{{ t('roles.form.slug') }}</Label>
                                     <Input
                                         id="slug"
                                         v-model="form.slug"
@@ -57,13 +57,13 @@
                                 </div>
 
                                 <div>
-                                    <Label for="description">Description</Label>
+                                    <Label for="description">{{ t('roles.form.description') }}</Label>
                                     <textarea
                                         id="description"
                                         v-model="form.description"
                                         rows="3"
                                         class="w-full rounded-md border border-input bg-background px-3 py-2"
-                                        placeholder="Optional notes about this role..."
+                                        :placeholder="t('roles.form.description_placeholder')"
                                     ></textarea>
                                     <InputError :message="form.errors.description" />
                                 </div>
@@ -74,11 +74,11 @@
                     <div class="space-y-6">
                         <Card>
                             <CardHeader class="space-y-1">
-                                <CardTitle>Permissions</CardTitle>
+                                <CardTitle>{{ t('roles.form.permissions') }}</CardTitle>
                                 <CardDescription>
-                                    Selected:
+                                    {{ t('common.selected') }}
                                     <span class="font-medium text-foreground">
-                                        {{ form.permissions.length }}
+                                        {{ formatNumber(form.permissions.length) }}
                                     </span>
                                 </CardDescription>
                             </CardHeader>
@@ -95,10 +95,10 @@
                 >
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
                         <Button as-child variant="secondary">
-                            <Link :href="rolesIndex().url">Cancel</Link>
+                            <Link :href="rolesIndex().url">{{ t('common.cancel') }}</Link>
                         </Button>
                         <Button type="submit" :loading="form.processing">
-                            Update Role
+                            {{ t('roles.edit.save') }}
                         </Button>
                     </div>
                 </div>
@@ -110,6 +110,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import PermissionTree from './PermissionTree.vue';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
@@ -149,6 +150,7 @@ const form = useForm({
 });
 
 const { t } = useI18n();
+const { formatNumber } = useLocaleFormat();
 
 useUnsavedWarning(() => form.isDirty, t('common.leave_unsaved'));
 

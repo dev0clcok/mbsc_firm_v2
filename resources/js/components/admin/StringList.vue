@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Plus, Trash2 } from 'lucide-vue-next';
 import { nextTick, ref } from 'vue';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 
 /** Editable list of short text lines, such as what a service covers. */
 const props = defineProps<{
@@ -12,6 +13,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string[]): void }>();
+
+const { formatNumber } = useLocaleFormat();
 
 const root = ref<HTMLElement | null>(null);
 
@@ -38,7 +41,7 @@ const add = async () => {
                 type="text"
                 class="w-full rounded-md border border-input bg-background px-3 py-2"
                 :placeholder="placeholder"
-                :aria-label="`${placeholder ?? ''} ${index + 1}`.trim()"
+                :aria-label="`${placeholder ?? ''} ${formatNumber(index + 1)}`.trim()"
                 :disabled="disabled"
                 @input="update(index, ($event.target as HTMLInputElement).value)"
                 @keydown.enter.prevent="add"
@@ -46,7 +49,7 @@ const add = async () => {
             <button
                 type="button"
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-destructive hover:bg-destructive/10"
-                :aria-label="`${removeLabel} ${index + 1}`"
+                :aria-label="`${removeLabel} ${formatNumber(index + 1)}`"
                 :disabled="disabled"
                 @click="remove(index)"
             >

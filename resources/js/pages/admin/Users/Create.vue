@@ -1,15 +1,15 @@
 <template>
     <AppLayout>
-        <Head title="Create User" />
+        <Head :title="t('users.create.title')" />
 
         <div class="space-y-6">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">
-                        Create User
+                        {{ t('users.create.title') }}
                     </h1>
                     <p class="mt-1 text-sm text-muted-foreground">
-                        Create a new user and optionally assign roles.
+                        {{ t('users.create.subtitle') }}
                     </p>
                 </div>
 
@@ -17,7 +17,7 @@
                     href="/admin/users"
                     class="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
                 >
-                    Back to Users
+                    {{ t('users.back_to_list') }}
                 </Link>
             </div>
 
@@ -25,29 +25,29 @@
                 <div class="grid gap-6 lg:grid-cols-2">
                     <Card>
                         <CardHeader>
-                            <CardTitle>User Details</CardTitle>
+                            <CardTitle>{{ t('users.form.details') }}</CardTitle>
                             <CardDescription>
-                                Basic account information.
+                                {{ t('users.form.details_help') }}
                             </CardDescription>
                         </CardHeader>
                         <CardContent class="space-y-4">
                             <div class="space-y-2">
                                 <Label for="name">
-                                    Name <span class="text-destructive">*</span>
+                                    {{ t('users.form.name') }} <span class="text-destructive">*</span>
                                 </Label>
                                 <Input
                                     id="name"
                                     v-model="form.name"
                                     type="text"
                                     required
-                                    placeholder="Full name"
+                                    :placeholder="t('users.form.name_placeholder')"
                                 />
                                 <InputError :message="form.errors.name" />
                             </div>
 
                             <div class="space-y-2">
                                 <Label for="email">
-                                    Email <span class="text-destructive">*</span>
+                                    {{ t('users.form.email') }} <span class="text-destructive">*</span>
                                 </Label>
                                 <Input
                                     id="email"
@@ -62,7 +62,7 @@
                             <div class="grid gap-4 md:grid-cols-2">
                                 <div class="space-y-2">
                                     <Label for="password">
-                                        Password <span class="text-destructive">*</span>
+                                        {{ t('users.form.password') }} <span class="text-destructive">*</span>
                                     </Label>
                                     <Input
                                         id="password"
@@ -77,7 +77,7 @@
 
                                 <div class="space-y-2">
                                     <Label for="password_confirmation">
-                                        Confirm Password <span class="text-destructive">*</span>
+                                        {{ t('users.form.password_confirmation') }} <span class="text-destructive">*</span>
                                     </Label>
                                     <Input
                                         id="password_confirmation"
@@ -94,11 +94,11 @@
 
                     <Card>
                         <CardHeader class="space-y-1">
-                            <CardTitle>Roles</CardTitle>
+                            <CardTitle>{{ t('users.form.roles') }}</CardTitle>
                             <CardDescription>
-                                Optional. Selected:
+                                {{ t('users.form.roles_optional') }} {{ t('common.selected') }}
                                 <span class="font-medium text-foreground">
-                                    {{ form.roles.length }}
+                                    {{ formatNumber(form.roles.length) }}
                                 </span>
                             </CardDescription>
                         </CardHeader>
@@ -122,7 +122,7 @@
                                 </label>
                             </div>
                             <div v-else class="text-sm text-muted-foreground">
-                                No roles found. Create roles first.
+                                {{ t('users.form.no_roles') }}
                             </div>
                             <InputError :message="form.errors.roles" />
                         </CardContent>
@@ -134,10 +134,10 @@
                 >
                     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
                         <Button as-child variant="secondary">
-                            <Link href="/admin/users">Cancel</Link>
+                            <Link href="/admin/users">{{ t('common.cancel') }}</Link>
                         </Button>
                         <Button type="submit" :loading="form.processing">
-                            Create User
+                            {{ t('users.create.save') }}
                         </Button>
                     </div>
                 </div>
@@ -159,6 +159,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
@@ -176,6 +177,7 @@ const form = useForm({
 });
 
 const { t } = useI18n();
+const { formatNumber } = useLocaleFormat();
 
 useUnsavedWarning(() => form.isDirty, t('common.leave_unsaved'));
 

@@ -53,7 +53,15 @@
             </template>
         </AppFilters>
 
-        <DataTable :columns="columns" :data="users.data" :actions="actions" :pagination="users" />
+        <DataTable :columns="columns" :data="users.data" :actions="actions" :pagination="users">
+            <template #cell-email_verified_at="{ value }">
+                <span class="text-foreground">{{ value ? localizeDigits(value) : '—' }}</span>
+            </template>
+
+            <template #cell-created_at="{ value }">
+                <span class="text-foreground">{{ value ? localizeDigits(value) : '—' }}</span>
+            </template>
+        </DataTable>
     </AppLayout>
 </template>
 
@@ -61,6 +69,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import DataTable from '@/components/admin/DataTable.vue';
 import AppFilters from '@/components/admin/AppFilters.vue';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { usePermissions } from '@/composables/usePermissions';
 import { useConfirm } from '@/composables/useConfirm';
 import { toast } from '@/composables/useToast';
@@ -75,6 +84,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const { localizeDigits } = useLocaleFormat();
 
 const { can } = usePermissions();
 const canEdit = computed(() => can('users.update'));
@@ -144,14 +154,15 @@ const actions = computed(() => {
                     description: t('users.delete.description'),
                     details: row.email ? `${row.name} <${row.email}>` : row.name,
                     confirmText: t('users.delete.confirm'),
+                    cancelText: t('common.cancel'),
                     confirmVariant: 'destructive',
                 });
                 if (!ok) return;
 
                 router.delete(`/admin/users/${row.id}`, {
                     preserveScroll: true,
-                    onSuccess: () => toast({ variant: 'success', message: 'User deleted.' }),
-                    onError: () => toast({ variant: 'error', message: 'Failed to delete user.' }),
+                    onSuccess: () => toast({ variant: 'success', message: t('users.deleted') }),
+                    onError: () => toast({ variant: 'error', message: t('users.delete_failed') }),
                 });
             },
         });

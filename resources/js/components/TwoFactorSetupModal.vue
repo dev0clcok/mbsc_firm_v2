@@ -22,6 +22,7 @@ import { Form } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
 import { Check, Copy, ScanLine } from 'lucide-vue-next';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 interface Props {
     requiresConfirmation: boolean;
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const { resolvedAppearance } = useAppearance();
+const { t } = useI18n();
 
 const props = defineProps<Props>();
 const isOpen = defineModel<boolean>('isOpen');
@@ -49,26 +51,24 @@ const modalConfig = computed<{
 }>(() => {
     if (props.twoFactorEnabled) {
         return {
-            title: 'Two-Factor Authentication Enabled',
-            description:
-                'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
-            buttonText: 'Close',
+            title: t('settings.two_factor.setup.enabled_title'),
+            description: t('settings.two_factor.setup.enabled_description'),
+            buttonText: t('settings.two_factor.setup.close'),
         };
     }
 
     if (showVerificationStep.value) {
         return {
-            title: 'Verify Authentication Code',
-            description: 'Enter the 6-digit code from your authenticator app',
-            buttonText: 'Continue',
+            title: t('settings.two_factor.setup.verify_title'),
+            description: t('settings.two_factor.setup.verify_description'),
+            buttonText: t('settings.two_factor.setup.continue'),
         };
     }
 
     return {
-        title: 'Enable Two-Factor Authentication',
-        description:
-            'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
-        buttonText: 'Continue',
+        title: t('settings.two_factor.setup.enable_title'),
+        description: t('settings.two_factor.setup.enable_description'),
+        buttonText: t('settings.two_factor.setup.continue'),
     };
 });
 
@@ -154,7 +154,7 @@ watch(
                 class="relative flex w-auto flex-col items-center justify-center space-y-5"
             >
                 <template v-if="!showVerificationStep">
-                    <AlertError v-if="errors?.length" :errors="errors" />
+                    <AlertError v-if="errors?.length" :errors="errors" :title="t('settings.two_factor.errors.title')" />
                     <template v-else>
                         <div
                             class="relative mx-auto flex max-w-md items-center overflow-hidden"
@@ -199,7 +199,7 @@ watch(
                                 class="absolute inset-0 top-1/2 h-px w-full bg-border"
                             />
                             <span class="relative bg-card px-2 py-1"
-                                >or, enter the code manually</span
+                                >{{ t('settings.two_factor.setup.manual') }}</span
                             >
                         </div>
 
@@ -224,6 +224,7 @@ watch(
                                     />
                                     <button
                                         @click="copy(manualSetupKey || '')"
+                                        :aria-label="t('settings.two_factor.setup.copy')"
                                         class="relative block h-auto border-l border-border px-3 hover:bg-muted"
                                     >
                                         <Check
@@ -284,14 +285,14 @@ watch(
                                     @click="showVerificationStep = false"
                                     :disabled="processing"
                                 >
-                                    Back
+                                    {{ t('common.back') }}
                                 </Button>
                                 <Button
                                     type="submit"
                                     class="w-auto flex-1"
                                     :disabled="processing || code.length < 6"
                                 >
-                                    Confirm
+                                    {{ t('settings.two_factor.setup.confirm') }}
                                 </Button>
                             </div>
                         </div>

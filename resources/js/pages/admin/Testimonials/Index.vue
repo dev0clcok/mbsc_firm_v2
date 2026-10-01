@@ -62,7 +62,7 @@
 
             <template #cell-sort_order="{ value }">
                 <span class="inline-flex items-center justify-center rounded-md bg-muted px-2.5 py-1 text-sm font-mono font-semibold text-muted-foreground">
-                    {{ value }}
+                    {{ formatNumber(value) }}
                 </span>
             </template>
 
@@ -87,6 +87,7 @@ import DataTable from '@/components/admin/DataTable.vue';
 import StatusToggle from '@/components/admin/StatusToggle.vue';
 import AppFilters from '@/components/admin/AppFilters.vue';
 import { useConfirm } from '@/composables/useConfirm';
+import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { usePermissions } from '@/composables/usePermissions';
 
 interface Props {
@@ -111,6 +112,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const { t } = useI18n();
+const { formatNumber } = useLocaleFormat();
 const { confirm } = useConfirm();
 const { can } = usePermissions();
 

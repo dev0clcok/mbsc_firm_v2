@@ -3,6 +3,8 @@ import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileCo
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
 import { Form, Head, Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 // import DeleteUser from '@/components/DeleteUser.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
@@ -21,12 +23,14 @@ interface Props {
 
 defineProps<Props>();
 
-const breadcrumbItems: BreadcrumbItem[] = [
+const { t } = useI18n();
+
+const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
     {
-        title: 'Profile settings',
+        title: t('settings.profile.title'),
         href: edit().url,
     },
-];
+]);
 
 const page = usePage();
 const user = page.props.auth.user;
@@ -34,15 +38,15 @@ const user = page.props.auth.user;
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
-        <Head title="Profile settings" />
+        <Head :title="t('settings.profile.title')" />
 
-        <h1 class="sr-only">Profile Settings</h1>
+        <h1 class="sr-only">{{ t('settings.profile.title') }}</h1>
 
         <SettingsLayout>
             <div class="flex flex-col space-y-6">
                 <HeadingSmall
-                    title="Profile information"
-                    description="Update your name and email address"
+                    :title="t('settings.profile.heading')"
+                    :description="t('settings.profile.description')"
                 />
 
                 <Form
@@ -51,7 +55,7 @@ const user = page.props.auth.user;
                     v-slot="{ errors, processing, recentlySuccessful }"
                 >
                     <div class="grid gap-2">
-                        <Label for="name">Name</Label>
+                        <Label for="name">{{ t('settings.profile.name') }}</Label>
                         <Input
                             id="name"
                             class="mt-1 block w-full"
@@ -59,13 +63,13 @@ const user = page.props.auth.user;
                             :default-value="user.name"
                             required
                             autocomplete="name"
-                            placeholder="Full name"
+                            :placeholder="t('settings.profile.name_placeholder')"
                         />
                         <InputError class="mt-2" :message="errors.name" />
                     </div>
 
                     <div class="grid gap-2">
-                        <Label for="email">Email address</Label>
+                        <Label for="email">{{ t('settings.profile.email') }}</Label>
                         <Input
                             id="email"
                             type="email"
@@ -74,20 +78,20 @@ const user = page.props.auth.user;
                             :default-value="user.email"
                             required
                             autocomplete="username"
-                            placeholder="Email address"
+                            :placeholder="t('settings.profile.email')"
                         />
                         <InputError class="mt-2" :message="errors.email" />
                     </div>
 
                     <div v-if="mustVerifyEmail && !user.email_verified_at">
                         <p class="-mt-4 text-sm text-muted-foreground">
-                            Your email address is unverified.
+                            {{ t('settings.profile.unverified') }}
                             <Link
                                 :href="send()"
                                 as="button"
                                 class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
                             >
-                                Click here to resend the verification email.
+                                {{ t('settings.profile.resend') }}
                             </Link>
                         </p>
 
@@ -95,8 +99,7 @@ const user = page.props.auth.user;
                             v-if="status === 'verification-link-sent'"
                             class="mt-2 text-sm font-medium text-green-600"
                         >
-                            A new verification link has been sent to your email
-                            address.
+                            {{ t('settings.profile.link_sent') }}
                         </div>
                     </div>
 
@@ -104,7 +107,7 @@ const user = page.props.auth.user;
                         <Button
                             :disabled="processing"
                             data-test="update-profile-button"
-                            >Save</Button
+                            >{{ t('common.save') }}</Button
                         >
 
                         <Transition
@@ -117,7 +120,7 @@ const user = page.props.auth.user;
                                 v-show="recentlySuccessful"
                                 class="text-sm text-neutral-600"
                             >
-                                Saved.
+                                {{ t('common.saved') }}
                             </p>
                         </Transition>
                     </div>
