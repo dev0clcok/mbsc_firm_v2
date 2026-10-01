@@ -4,10 +4,7 @@ import EnquiryForm from '@/components/site/EnquiryForm.vue';
 import OfficeMap from '@/components/site/OfficeMap.vue';
 import SiteBreadcrumb from '@/components/site/SiteBreadcrumb.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
-import { useSite } from '@/composables/useSite';
 import { Head } from '@inertiajs/vue3';
-
-const site = useSite();
 </script>
 
 <template>
