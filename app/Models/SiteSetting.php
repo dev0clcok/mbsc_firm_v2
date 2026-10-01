@@ -217,7 +217,39 @@ class SiteSetting extends Model
                 'latitude' => (float) $s['map_latitude'],
                 'longitude' => (float) $s['map_longitude'],
             ] : null,
+            'openingHours' => self::openingHours($s['office_hours']),
             'sameAs' => array_values(array_filter(array_map(fn ($key) => $s[$key], self::SOCIAL_KEYS))) ?: null,
         ]);
+    }
+
+    /**
+     * Office hours in schema.org form, for example "Sa-Th 10:00-19:00".
+     * The setting is free text, so this only answers when it reads as
+     * "Saturday to Thursday, 10:00 AM to 7:00 PM"; anything else is left
+     * out of the structured data rather than guessed.
+     */
+    public static function openingHours(?string $text): ?string
+    {
+        $days = ['monday' => 'Mo', 'tuesday' => 'Tu', 'wednesday' => 'We', 'thursday' => 'Th', 'friday' => 'Fr', 'saturday' => 'Sa', 'sunday' => 'Su'];
+        $text = str_replace("\u{00A0}", ' ', (string) $text);
+
+        if (! preg_match('/^\s*([a-z]+)\s*(?:to|-|–)\s*([a-z]+)\s*,?\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)\s*(?:to|-|–)\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)\s*$/iu', $text, $m)) {
+            return null;
+        }
+
+        $from = $days[strtolower($m[1])] ?? null;
+        $to = $days[strtolower($m[2])] ?? null;
+
+        if (! $from || ! $to) {
+            return null;
+        }
+
+        $time = fn (string $hour, string $minute, string $half) => sprintf(
+            '%02d:%02d',
+            ((int) $hour % 12) + (strtolower($half) === 'pm' ? 12 : 0),
+            (int) $minute,
+        );
+
+        return "{$from}-{$to} ".$time($m[3], $m[4] ?? '', $m[5]).'-'.$time($m[6], $m[7] ?? '', $m[8]);
     }
 }

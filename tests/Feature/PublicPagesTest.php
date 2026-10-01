@@ -173,3 +173,19 @@ test('a public error page offers the public links only', function () {
         ->assertNotFound()
         ->assertInertia(fn (Assert $page) => $page->component('Error')->where('backTo', null));
 });
+
+test('opening hours reach the structured data only when they can be read', function (string $text, ?string $expected) {
+    expect(SiteSetting::openingHours($text))->toBe($expected);
+})->with([
+    ['Saturday to Thursday, 10:00 AM to 7:00 PM', 'Sa-Th 10:00-19:00'],
+    ["Saturday to Thursday, 10:00\u{00A0}AM to 7:00\u{00A0}PM", 'Sa-Th 10:00-19:00'],
+    ['Sunday - Thursday 9 AM - 12:30 PM', 'Su-Th 09:00-12:30'],
+    ['By appointment', null],
+    ['', null],
+]);
+
+test('the firm structured data carries the office hours', function () {
+    SiteSetting::put(['office_hours' => 'Saturday to Thursday, 10:00 AM to 7:00 PM']);
+
+    expect(SiteSetting::structuredData()['openingHours'])->toBe('Sa-Th 10:00-19:00');
+});
