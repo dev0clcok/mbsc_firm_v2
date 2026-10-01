@@ -6,7 +6,7 @@ What the server needs to run this application. Nothing here has been deployed or
 
 | Component | Requirement |
 | --- | --- |
-| PHP | 8.2 or newer (developed on 8.4), with the usual Laravel extensions: `mbstring`, `pdo_mysql`, `openssl`, `tokenizer`, `xml`, `ctype`, `fileinfo`, `bcmath`, `curl` |
+| PHP | 8.4 or newer (several locked Symfony 8 packages require it), with the usual Laravel extensions: `mbstring`, `pdo_mysql`, `openssl`, `tokenizer`, `xml`, `ctype`, `fileinfo`, `bcmath`, `curl` |
 | PHP image support | The `gd` extension built with WebP support, and `exif`. Uploaded pictures are resized and converted to WebP with GD; without it image uploads in the admin panel fail. Check with `php -r "var_dump(function_exists('imagewebp'));"` |
 | Composer | 2.x |
 | MySQL | 8.x or MariaDB 10.6+. Sessions, cache and the queue also use the database |

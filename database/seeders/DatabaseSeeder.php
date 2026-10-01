@@ -13,11 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a test user if needed (so we can attach roles/permissions in seeders).
+        // Create the admin without the factory: Faker is a dev package and is not installed in production.
         if (User::count() === 0) {
-            User::factory()->create([
+            User::query()->create([
                 'name' => 'Admin',
                 'email' => config('admin.super_admin_email'),
+                'password' => config('admin.default_password'),
+                'email_verified_at' => now(),
             ]);
         }
 
