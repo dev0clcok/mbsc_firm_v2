@@ -8,7 +8,7 @@ import StringList from '@/components/admin/StringList.vue';
 import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import type { InertiaForm } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 export interface ServiceFormData {
@@ -45,6 +45,25 @@ useUnsavedWarning(() => props.form.isDirty, t('common.leave_unsaved'));
 
 const errors = () => props.form.errors as Record<string, string | undefined>;
 
+// On a new service the address follows the title until someone types
+// their own. An existing service keeps its address: links may point at it.
+const slugEdited = ref(props.mode === 'edit' || props.form.slug !== '');
+
+const slugify = (title: string) =>
+    title
+        .toLowerCase()
+        .replace(/&/g, ' and ')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+watch(
+    () => props.form.title,
+    (title) => {
+        // eslint-disable-next-line vue/no-mutating-props
+        if (!slugEdited.value) props.form.slug = slugify(title);
+    },
+);
+
 // A data address in an <img> draws the icon without running anything inside it.
 const iconPreview = computed(() => {
     const svg = props.form.icon_svg?.trim();
@@ -75,7 +94,7 @@ const iconPreview = computed(() => {
                         <input :id="f.id" v-model="form.title" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="form.clearErrors('title')" />
                     </FormField>
                     <FormField v-slot="f" :label="t('services.form.slug')" required :help="t('services.form.slug_help')" :error="errors().slug">
-                        <input :id="f.id" v-model="form.slug" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-sm" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="form.clearErrors('slug')" />
+                        <input :id="f.id" v-model="form.slug" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2 font-mono text-sm" :aria-invalid="f.invalid" :aria-describedby="f.describedBy" @input="((slugEdited = true), form.clearErrors('slug'))" />
                     </FormField>
                 </div>
                 <FormField v-slot="f" :label="t('services.form.short_description')" :help="t('services.form.short_description_help')" :error="errors().short_description">
