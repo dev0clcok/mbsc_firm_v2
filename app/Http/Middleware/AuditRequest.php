@@ -47,6 +47,16 @@ class AuditRequest
 
         try {
             $response = $next($request);
+            $status = method_exists($response, 'getStatusCode') ? $response->getStatusCode() : null;
+
+            // Changes to records were logged as they happened, with this
+            // request's details. They only lack the outcome, so add it
+            // instead of writing a second row for the same action.
+            if ($modelRows = $request->attributes->get('audit.model_rows', [])) {
+                AuditLog::query()->whereKey($modelRows)->update(['status_code' => $status]);
+
+                return $response;
+            }
 
             AuditLog::create([
                 // The request may have deleted the user's own account.
@@ -58,7 +68,7 @@ class AuditRequest
                 'url' => $request->fullUrl(),
                 'ip' => $request->ip(),
                 'user_agent' => $request->userAgent(),
-                'status_code' => method_exists($response, 'getStatusCode') ? $response->getStatusCode() : null,
+                'status_code' => $status,
                 'request' => [
                     'input' => $payload,
                 ],

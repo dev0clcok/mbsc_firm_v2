@@ -103,14 +103,16 @@
             </template>
 
             <template #cell-model="{ row }">
-                <div class="min-w-0">
+                <div v-if="row.subject" class="min-w-0 max-w-xs">
                     <div class="truncate text-sm font-medium text-foreground">
-                        {{ row.model_type || '—' }}
+                        {{ row.subject.name || `#${row.model_id}` }}
                     </div>
-                    <div class="truncate text-xs text-muted-foreground">
-                        {{ row.model_id ? `#${row.model_id}` : '—' }}
+                    <div class="truncate text-xs text-muted-foreground">{{ modelLabel(row.subject.type) }}</div>
+                    <div v-if="row.subject.changes.length" class="mt-0.5 text-xs text-muted-foreground">
+                        {{ t('audit.changed', { fields: row.subject.changes.map(fieldLabel).join(', ') }) }}
                     </div>
                 </div>
+                <span v-else class="text-sm text-muted-foreground">—</span>
             </template>
 
             <template #cell-status_code="{ value }">
@@ -170,6 +172,14 @@ const props = defineProps<{
 const { t, te, locale } = useI18n();
 
 // Events are stored as "model.created"; show a translated label, or the stored name when there is none.
+// Record kinds and field names come from the server as code names; show a
+// translation when there is one and a readable version of the name otherwise.
+const readable = (value: string) => value.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/_/g, ' ').toLowerCase();
+
+const modelLabel = (type: string) => (te(`audit.models.${type}`) ? t(`audit.models.${type}`) : readable(type));
+
+const fieldLabel = (field: string) => (te(`audit.fields.${field}`) ? t(`audit.fields.${field}`) : readable(field));
+
 const eventLabel = (value: string) => {
     const key = `audit.events.${String(value).replace(/\./g, '_')}`;
     return te(key) ? t(key) : value;

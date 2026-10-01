@@ -165,7 +165,7 @@
             "event": "Event",
             "method": "Method",
             "route_url": "Route / URL",
-            "model": "Model",
+            "model": "Record",
             "status": "Status",
             "ip": "IP"
         },
@@ -181,7 +181,33 @@
             "auth_login": "Login",
             "auth_logout": "Logout",
             "auth_failed": "Failed login"
-        }
+        },
+        "models": {
+            "Service": "Service",
+            "FAQ": "FAQ",
+            "TeamMember": "Team member",
+            "Testimonial": "Testimonial",
+            "Enquiry": "Enquiry",
+            "SiteSetting": "Site setting"
+        },
+        "fields": {
+            "is_active": "shown on site",
+            "sort_order": "position",
+            "value": "value",
+            "status": "status",
+            "assigned_to": "assigned person",
+            "title": "title",
+            "name": "name",
+            "description": "description",
+            "short_description": "summary",
+            "icon_svg": "icon",
+            "image_url": "picture",
+            "answer": "answer",
+            "question": "question",
+            "text": "text",
+            "position": "position title"
+        },
+        "changed": "Changed: {fields}"
     },
     "team_members": {
         "title": "Team",

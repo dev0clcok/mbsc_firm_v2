@@ -165,7 +165,7 @@
             "event": "ইভেন্ট",
             "method": "মেথড",
             "route_url": "রুট / ইউআরএল",
-            "model": "মডেল",
+            "model": "রেকর্ড",
             "status": "স্ট্যাটাস",
             "ip": "আইপি"
         },
@@ -181,7 +181,33 @@
             "auth_login": "লগইন",
             "auth_logout": "লগআউট",
             "auth_failed": "ব্যর্থ লগইন"
-        }
+        },
+        "models": {
+            "Service": "সেবা",
+            "FAQ": "প্রশ্নোত্তর",
+            "TeamMember": "টিম সদস্য",
+            "Testimonial": "প্রশংসাপত্র",
+            "Enquiry": "অনুসন্ধান",
+            "SiteSetting": "সাইট সেটিং"
+        },
+        "fields": {
+            "is_active": "সাইটে দেখানো",
+            "sort_order": "ক্রম",
+            "value": "মান",
+            "status": "অবস্থা",
+            "assigned_to": "দায়িত্বপ্রাপ্ত ব্যক্তি",
+            "title": "শিরোনাম",
+            "name": "নাম",
+            "description": "বিবরণ",
+            "short_description": "সারসংক্ষেপ",
+            "icon_svg": "আইকন",
+            "image_url": "ছবি",
+            "answer": "উত্তর",
+            "question": "প্রশ্ন",
+            "text": "লেখা",
+            "position": "পদবি"
+        },
+        "changed": "পরিবর্তিত: {fields}"
     },
     "team_members": {
         "title": "টিম",

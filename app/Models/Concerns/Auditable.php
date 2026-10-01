@@ -28,7 +28,7 @@ trait Auditable
     protected static function writeAudit(string $event, Model $model, ?array $oldValues, ?array $newValues): void
     {
         // Avoid flooding logs during seeding/migrations.
-        if (app()->runningInConsole()) {
+        if (app()->runningInConsole() && ! config('audit.console', false)) {
             return;
         }
 
@@ -37,15 +37,28 @@ trait Auditable
             return;
         }
 
-        AuditLog::create([
+        // The entry carries the request that caused the change, so one row
+        // tells the whole story and no separate "request" row is needed.
+        $request = request();
+        $route = $request->route()?->getName();
+
+        $log = AuditLog::create([
             'user_id' => Auth::id(),
             'event' => $event,
-            'action' => null,
+            'action' => $route,
+            'route' => $route,
+            'method' => strtoupper($request->getMethod()),
+            'url' => $request->fullUrl(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
             'model_type' => $model::class,
             'model_id' => $model->getKey(),
             'old_values' => $oldValues,
             'new_values' => $newValues,
         ]);
+
+        // Read by the AuditRequest middleware once the response is known.
+        $request->attributes->set('audit.model_rows', [...$request->attributes->get('audit.model_rows', []), $log->id]);
     }
 }
 
