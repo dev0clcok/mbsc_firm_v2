@@ -3,6 +3,7 @@
 use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\Testimonial;
+use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
@@ -139,4 +140,36 @@ test('a server error shows the site error page when debug mode is off', function
         ->assertStatus(500)
         ->assertDontSee('internal detail')
         ->assertInertia(fn (Assert $page) => $page->component('Error')->where('status', 500));
+});
+
+test('staff without permission get the site error page with a way back', function () {
+    $this->actingAs(User::factory()->create());
+
+    $this->get('/admin/services')
+        ->assertForbidden()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Error')
+            ->where('status', 403)
+            ->where('backTo.href', '/admin'));
+});
+
+test('too many attempts in the staff area show the site error page, not a bare 429', function () {
+    $this->actingAs(User::factory()->create());
+
+    foreach (range(1, 6) as $i) {
+        $this->put('/settings/password', []);
+    }
+
+    $this->put('/settings/password', [])
+        ->assertTooManyRequests()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Error')
+            ->where('status', 429)
+            ->where('backTo.label', 'Back to the dashboard'));
+});
+
+test('a public error page offers the public links only', function () {
+    $this->get('/no-such-page')
+        ->assertNotFound()
+        ->assertInertia(fn (Assert $page) => $page->component('Error')->where('backTo', null));
 });

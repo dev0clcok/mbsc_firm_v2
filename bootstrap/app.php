@@ -39,15 +39,27 @@ return Application::configure(basePath: dirname(__DIR__))
         // Server errors keep the debug screen while developing.
         $exceptions->respond(function (Response $response, Throwable $e, Request $request) {
             $status = $response->getStatusCode();
-            $handled = app()->hasDebugModeEnabled() ? [403, 404] : [403, 404, 500, 503];
+            $handled = app()->hasDebugModeEnabled() ? [403, 404, 429] : [403, 404, 429, 500, 503];
 
-            if (! in_array($status, $handled, true) || $request->expectsJson() || $request->is('admin*', 'settings*')) {
+            // The staff area keeps the framework's page for missing pages and
+            // server errors, and gets the site's page, with a way back to
+            // the dashboard or the login page, for 403 and 429.
+            $staffArea = $request->is('admin', 'admin/*', 'settings', 'settings/*', 'login', 'user/*', 'two-factor-challenge');
+
+            if (! in_array($status, $handled, true) || $request->expectsJson() || ($staffArea && ! in_array($status, [403, 429], true))) {
                 return $response;
             }
 
             try {
+                $signedIn = $staffArea && rescue(fn () => $request->user() !== null, false, false);
+
                 return Inertia::render('Error', [
                     'status' => $status,
+                    'backTo' => match (true) {
+                        ! $staffArea => null,
+                        $signedIn => ['href' => '/admin', 'label' => 'Back to the dashboard'],
+                        default => ['href' => '/login', 'label' => 'Go to the login page'],
+                    },
                     'site' => HandleInertiaRequests::siteProps(),
                     'auth' => ['user' => null],
                 ])->toResponse($request)->setStatusCode($status);
