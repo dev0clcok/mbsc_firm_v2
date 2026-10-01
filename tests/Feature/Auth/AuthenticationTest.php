@@ -75,10 +75,17 @@ test('users are rate limited', function () {
 
     RateLimiter::increment(md5('login'.implode('|', [$user->email, '127.0.0.1'])), amount: 5);
 
-    $response = $this->post(route('login.store'), [
+    $response = $this->from(route('login'))->post(route('login.store'), [
         'email' => $user->email,
         'password' => 'wrong-password',
     ]);
 
-    $response->assertTooManyRequests();
+    // The lockout is shown on the login form, with the wait, not as a 429 page.
+    $response->assertRedirect(route('login'))->assertSessionHasErrors('email');
+
+    expect(session('errors')->first('email'))->toMatch('/Too many login attempts\. Try again in \d+ seconds?\./')
+        ->and(session()->getOldInput('email'))->toBe($user->email)
+        ->and(session()->getOldInput('password'))->toBeNull();
+
+    $this->assertGuest();
 });
