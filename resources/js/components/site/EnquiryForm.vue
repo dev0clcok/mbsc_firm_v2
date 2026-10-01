@@ -62,8 +62,12 @@ const leave = (field: Field) => {
     if (field === 'email') touched.phone = true;
 };
 
+const formErrorEl = ref<HTMLElement | null>(null);
+
+// A field error takes the focus first; an error about the whole form
+// (the rate limit) is shown beside the button and focused there.
 const focusFirstError = () =>
-    nextTick(() => root.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus());
+    nextTick(() => (root.value?.querySelector<HTMLElement>('[aria-invalid="true"]') ?? formErrorEl.value)?.focus());
 
 const submit = () => {
     (Object.keys(touched) as Field[]).forEach((field) => (touched[field] = true));
@@ -124,10 +128,6 @@ const whatsappHref = computed(() => {
         </div>
 
         <template v-else>
-            <div v-if="serverErrors.form" role="alert" class="mb-6 rounded-site border border-rose bg-rose-tint p-4 font-medium text-rose-deep">
-                {{ serverErrors.form }}
-            </div>
-
             <form class="space-y-5" novalidate :aria-busy="form.processing" @submit.prevent="submit">
                 <div>
                     <label :for="`${id}-name`" class="site-label">Your name <span class="text-rose" aria-hidden="true">*</span></label>
@@ -205,6 +205,19 @@ const whatsappHref = computed(() => {
                 <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
                     <label :for="`${id}-website`">Leave this field empty</label>
                     <input :id="`${id}-website`" v-model="form.website" type="text" tabindex="-1" autocomplete="off" />
+                </div>
+
+                <!-- Always in the page so screen readers announce the message when it appears. -->
+                <div ref="formErrorEl" tabindex="-1" aria-live="assertive" class="outline-none [&:focus>div]:ring-2 [&:focus>div]:ring-rose">
+                    <div v-if="serverErrors.form" class="rounded-site border border-rose bg-rose-tint p-4 text-rose-deep">
+                        <p class="font-medium">{{ serverErrors.form }}</p>
+                        <p v-if="(site.phone && site.phone_href) || site.whatsapp_url" class="mt-2">
+                            To reach us now,
+                            <template v-if="site.phone && site.phone_href">call <a :href="site.phone_href" class="font-semibold underline">{{ site.phone }}</a></template>
+                            <template v-if="site.phone && site.phone_href && site.whatsapp_url"> or </template>
+                            <template v-if="site.whatsapp_url"><a :href="whatsappHref ?? site.whatsapp_url" target="_blank" rel="noopener noreferrer" class="font-semibold underline">message us on WhatsApp</a></template>.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">

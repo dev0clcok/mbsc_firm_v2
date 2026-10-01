@@ -53,6 +53,20 @@ test('enquiries are rate limited per visitor', function () use ($valid) {
 
     $this->post('/enquiries', $valid)->assertSessionHasErrors('form');
 
+    expect(Enquiry::count())->toBe(5)
+        ->and(session('errors')->first('form'))->toContain('Try again in 10 minutes');
+});
+
+test('mistakes in the form and honeypot hits do not use up the limit', function () use ($valid) {
+    foreach (range(1, 8) as $i) {
+        $this->post('/enquiries', ['name' => '', 'message' => 'short'])->assertSessionHasErrors('name');
+        $this->post('/enquiries', [...$valid, 'website' => 'https://spam.example'])->assertSessionHas('success');
+    }
+
+    foreach (range(1, 5) as $i) {
+        $this->post('/enquiries', $valid)->assertSessionHasNoErrors();
+    }
+
     expect(Enquiry::count())->toBe(5);
 });
 
