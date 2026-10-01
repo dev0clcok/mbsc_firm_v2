@@ -105,6 +105,7 @@ const steps = [
                         litigation, VAT advisory and compliance, and audit support. We combine precision, documentation discipline and
                         practical execution so clients stay confident with regulators and stakeholders.
                     </p>
+                    <!-- The home page introduces one person: whoever staff have placed first in Admin > Team, the founder by default. -->
                     <TeamList v-if="teamMembers.length" v-reveal :members="teamMembers.slice(0, 1)" class="mt-10" />
                     <p class="mt-6"><Link href="/about" class="site-link inline-flex min-h-11 items-center">About the firm</Link></p>
                 </div>
