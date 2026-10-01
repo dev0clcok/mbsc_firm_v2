@@ -50,12 +50,6 @@
                 </div>
             </template>
 
-            <template #cell-rating="{ value }">
-                <span class="inline-flex items-center gap-0.5 text-amber-500">
-                    <span v-for="i in (value || 5)" :key="i">★</span>
-                </span>
-            </template>
-
             <template #cell-is_active="{ row, value }">
                 <StatusToggle :active="value" :url="`/admin/testimonials/${row.id}/toggle`" :label="row.name" :disabled="!canEdit" />
             </template>
@@ -98,7 +92,6 @@ interface Props {
             position: string | null;
             company: string | null;
             text: string;
-            rating: number;
             sort_order: number;
             is_active: boolean;
         }>;
@@ -125,7 +118,6 @@ const canDelete = computed(() => can('testimonials.delete'));
 
 const columns = computed(() => [
     { key: 'name', label: t('testimonials.columns.name') },
-    { key: 'rating', label: t('testimonials.columns.rating'), align: 'center' as const },
     { key: 'is_active', label: t('testimonials.columns.status'), align: 'center' as const },
     { key: 'sort_order', label: t('testimonials.columns.sort'), align: 'center' as const },
 ]);

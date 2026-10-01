@@ -266,7 +266,6 @@
         },
         "columns": {
             "name": "Client",
-            "rating": "Rating",
             "status": "Status",
             "sort": "Sort"
         },
