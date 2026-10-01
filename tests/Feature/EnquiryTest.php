@@ -30,6 +30,20 @@ test('a visitor can send an enquiry, which is stored and emailed', function () u
     Mail::assertQueued(EnquiryReceived::class, fn ($mail) => $mail->hasTo('office@example.com'));
 });
 
+test('an enquiry is kept when the notification cannot be queued', function () use ($valid) {
+    Mail::shouldReceive('to')->once()->andThrow(new RuntimeException('Queue is down.'));
+
+    $this->from('/contact')->post('/enquiries', $valid)
+        ->assertRedirect('/contact')
+        ->assertSessionHas('success');
+
+    expect(Enquiry::count())->toBe(1);
+});
+
+test('the notification is queued, not sent while the visitor waits', function () {
+    expect(new EnquiryReceived(new Enquiry))->toBeInstanceOf(Illuminate\Contracts\Queue\ShouldQueue::class);
+});
+
 test('an enquiry needs a name, a message and a way to reply', function () {
     $this->post('/enquiries', ['name' => '', 'message' => 'short'])
         ->assertSessionHasErrors(['name', 'message', 'phone', 'email']);
