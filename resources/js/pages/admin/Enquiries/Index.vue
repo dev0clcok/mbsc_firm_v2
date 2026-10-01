@@ -5,8 +5,8 @@ import { useLocaleFormat } from '@/composables/useLocaleFormat';
 import { usePermissions } from '@/composables/usePermissions';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { Download, MessageSquareText } from 'lucide-vue-next';
-import { computed, reactive } from 'vue';
+import { ChevronDown, Download, MessageSquareText } from 'lucide-vue-next';
+import { computed, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 type Status = 'new' | 'contacted' | 'closed';
@@ -49,6 +49,10 @@ const filters = reactive({
     to: props.filters.to ?? '',
     sort: props.filters.sort ?? 'newest',
 });
+
+// On a phone the date and sort fields fold away behind one button; they
+// start open when one of them is in use.
+const moreFilters = ref(Boolean(filters.from || filters.to || filters.sort !== 'newest'));
 
 const canUpdate = computed(() => can('enquiries.update'));
 const canDelete = computed(() => can('enquiries.delete'));
@@ -159,15 +163,24 @@ const confirmDelete = async (row: Enquiry) => {
                 <label for="enquiry-search" class="mb-1.5 block text-sm font-medium">{{ t('common.search') }}</label>
                 <input id="enquiry-search" v-model="filters.search" type="search" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" :placeholder="t('enquiries.filters.search_placeholder')" />
             </div>
-            <div>
+            <button
+                type="button"
+                class="inline-flex min-h-10 items-center justify-between gap-2 rounded-md border border-input px-3 py-2 text-sm font-medium hover:bg-muted sm:hidden"
+                :aria-expanded="moreFilters"
+                @click="moreFilters = !moreFilters"
+            >
+                {{ moreFilters ? t('enquiries.filters.fewer') : t('enquiries.filters.more') }}
+                <ChevronDown :class="['size-4 transition-transform', moreFilters && 'rotate-180']" />
+            </button>
+            <div :class="[!moreFilters && 'max-sm:hidden']">
                 <label for="enquiry-from" class="mb-1.5 block text-sm font-medium">{{ t('enquiries.filters.from') }}</label>
                 <input id="enquiry-from" v-model="filters.from" type="date" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" @change="apply" />
             </div>
-            <div>
+            <div :class="[!moreFilters && 'max-sm:hidden']">
                 <label for="enquiry-to" class="mb-1.5 block text-sm font-medium">{{ t('enquiries.filters.to') }}</label>
                 <input id="enquiry-to" v-model="filters.to" type="date" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" @change="apply" />
             </div>
-            <div>
+            <div :class="[!moreFilters && 'max-sm:hidden']">
                 <label for="enquiry-sort" class="mb-1.5 block text-sm font-medium">{{ t('enquiries.filters.sort') }}</label>
                 <select id="enquiry-sort" v-model="filters.sort" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" @change="apply">
                     <option value="newest">{{ t('enquiries.filters.newest') }}</option>

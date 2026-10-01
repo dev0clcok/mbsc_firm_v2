@@ -582,7 +582,9 @@
             "to": "To date",
             "sort": "Order",
             "newest": "Newest first",
-            "oldest": "Oldest first"
+            "oldest": "Oldest first",
+            "more": "More filters",
+            "fewer": "Fewer filters"
         },
         "status": {
             "new": "New",
