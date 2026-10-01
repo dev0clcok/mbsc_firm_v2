@@ -113,35 +113,49 @@ const applyCrop = () => {
     );
 };
 
-// A picture whose shape is far from the slot's is offered for cropping straight away.
-const offerCrop = (file: File) => {
-    const probe = new Image();
-    const url = URL.createObjectURL(file);
-    probe.onload = () => {
-        URL.revokeObjectURL(url);
-        if (Math.abs(probe.naturalWidth / probe.naturalHeight - props.ratio) > 0.08) openCrop();
-    };
-    probe.src = url;
-};
+// Opens the file as a picture. A file with a picture's name or type that
+// is not one (a renamed document, a damaged download) fails here, before
+// anything is previewed.
+const readSize = (file: File) =>
+    new Promise<{ width: number; height: number } | null>((resolve) => {
+        const probe = new Image();
+        const url = URL.createObjectURL(file);
+        probe.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve({ width: probe.naturalWidth, height: probe.naturalHeight });
+        };
+        probe.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(null);
+        };
+        probe.src = url;
+    });
 
 const previewUrl = computed(() => objectUrl.value ?? (props.remove ? null : props.existingUrl));
 
-const choose = (file: File | undefined) => {
+// A refused file leaves nothing behind: no preview of it, and the file
+// input is emptied so the same file can be picked again once corrected.
+const reject = (message: string) => {
+    localError.value = message;
+    if (input.value) input.value.value = '';
+    if (props.modelValue) emit('update:modelValue', null);
+};
+
+const choose = async (file: File | undefined) => {
     localError.value = '';
     if (!file) return;
 
-    if (!ACCEPT.includes(file.type)) {
-        localError.value = t('image_field.wrong_type');
-        return;
-    }
-    if (file.size > MAX_BYTES) {
-        localError.value = t('image_field.too_large');
-        return;
-    }
+    if (!ACCEPT.includes(file.type)) return reject(t('image_field.wrong_type'));
+    if (file.size > MAX_BYTES) return reject(t('image_field.too_large'));
+
+    const size = await readSize(file);
+    if (!size || !size.width || !size.height) return reject(t('image_field.wrong_type'));
 
     emit('update:remove', false);
     emit('update:modelValue', file);
-    nextTick(() => offerCrop(file));
+
+    // A picture whose shape is far from the slot's is offered for cropping straight away.
+    if (Math.abs(size.width / size.height - props.ratio) > 0.08) nextTick(openCrop);
 };
 
 const onDrop = (event: DragEvent) => {
