@@ -117,6 +117,13 @@ test('existing enquiries get a searchable phone number', function () use ($valid
     expect($enquiry->fresh()->phone_normalized)->toBe('01700000002');
 });
 
+test('a message that is too long is refused in plain words', function () use ($valid) {
+    $this->post('/enquiries', [...$valid, 'message' => str_repeat('a', 3001)])
+        ->assertSessionHasErrors(['message' => 'Shorten your message to 3000 characters or fewer.']);
+
+    $this->post('/enquiries', [...$valid, 'message' => str_repeat('a', 3000)])->assertSessionHasNoErrors();
+});
+
 test('honeypot submissions look successful but are discarded', function () use ($valid) {
     $this->post('/enquiries', [...$valid, 'website' => 'https://spam.example'])
         ->assertSessionHas('success');

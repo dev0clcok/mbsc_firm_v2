@@ -11,6 +11,9 @@ const props = defineProps<{
 
 type Field = 'name' | 'phone' | 'email' | 'message';
 
+// The server allows the same length.
+const MESSAGE_MAX = 3000;
+
 const site = useSite();
 const id = useId();
 
@@ -56,7 +59,8 @@ const rules: Record<Field, () => string | undefined> = {
     message: () => {
         const length = form.message.trim().length;
         if (!length) return 'Tell us what you need help with.';
-        return length >= 10 ? undefined : 'Add a little more detail, at least 10 characters.';
+        if (length < 10) return 'Add a little more detail, at least 10 characters.';
+        return form.message.length <= MESSAGE_MAX ? undefined : `Shorten your message to ${MESSAGE_MAX} characters or fewer.`;
     },
 };
 
@@ -203,11 +207,15 @@ const whatsappHref = computed(() => {
                         v-model="form.message"
                         rows="5"
                         required
+                        :maxlength="MESSAGE_MAX"
                         class="site-input"
                         :aria-invalid="errorFor('message') ? 'true' : undefined"
-                        :aria-describedby="errorFor('message') ? `${id}-message-error` : undefined"
+                        :aria-describedby="`${id}-message-count${errorFor('message') ? ` ${id}-message-error` : ''}`"
                         @blur="leave('message')"
                     ></textarea>
+                    <p :id="`${id}-message-count`" class="mt-1 text-right text-sm text-ink-soft">
+                        {{ form.message.length }} of {{ MESSAGE_MAX }} characters
+                    </p>
                     <p v-if="errorFor('message')" :id="`${id}-message-error`" class="site-error">{{ errorFor('message') }}</p>
                 </div>
 

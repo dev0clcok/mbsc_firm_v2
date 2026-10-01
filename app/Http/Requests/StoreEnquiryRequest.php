@@ -58,6 +58,7 @@ class StoreEnquiryRequest extends FormRequest
             'service.exists' => 'Choose a service from the list, or leave it as "Not sure yet".',
             'message.required' => 'Tell us what you need help with.',
             'message.min' => 'Add a little more detail, at least 10 characters.',
+            'message.max' => 'Shorten your message to 3000 characters or fewer.',
         ];
     }
 
