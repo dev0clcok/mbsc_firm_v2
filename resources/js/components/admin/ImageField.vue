@@ -266,7 +266,7 @@ defineExpose({ choose });
 
         <dialog
             ref="dialog"
-            class="m-auto w-[min(92vw,44rem)] rounded-lg border border-border bg-card p-0 text-card-foreground shadow-xl backdrop:bg-black/50"
+            class="m-auto w-[min(92vw,44rem)] overflow-hidden rounded-lg border border-border bg-card p-0 text-card-foreground shadow-xl backdrop:bg-black/50"
             :aria-labelledby="`${id}-crop-title`"
             @cancel.prevent="closeCrop"
         >
@@ -274,7 +274,8 @@ defineExpose({ choose });
                 <h3 :id="`${id}-crop-title`" class="text-lg font-semibold">{{ t('image_field.crop_title') }}</h3>
                 <p class="mt-0.5 text-sm text-muted-foreground">{{ t('image_field.crop_help') }}</p>
             </div>
-            <div class="max-h-[60vh] bg-muted/40 p-4">
+            <!-- The cropper sizes itself to the picture; nothing here should scroll. -->
+            <div class="max-h-[60vh] overflow-hidden bg-muted/40 p-4">
                 <img v-if="cropSource" ref="cropImage" :src="cropSource" alt="" class="block max-h-[52vh] max-w-full" />
             </div>
             <div class="flex justify-end gap-3 border-t border-border px-5 py-4">
