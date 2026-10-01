@@ -184,6 +184,7 @@ const whatsappHref = computed(() => {
                         <option value="">Not sure yet</option>
                         <option v-for="s in site.services" :key="s.slug" :value="s.title">{{ s.title }}</option>
                     </select>
+                    <p v-if="serverErrors.service" class="site-error">{{ serverErrors.service }}</p>
                 </div>
 
                 <div>

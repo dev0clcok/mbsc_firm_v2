@@ -2,6 +2,7 @@
 
 use App\Mail\EnquiryReceived;
 use App\Models\Enquiry;
+use App\Models\Service;
 use App\Models\SiteSetting;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 beforeEach(function () {
     Mail::fake();
     SiteSetting::put(['enquiry_email' => 'office@example.com']);
+    Service::create(['slug' => 'vat', 'title' => 'VAT Advisory & Compliance', 'is_active' => true]);
 });
 
 $valid = [
@@ -50,6 +52,18 @@ test('an enquiry needs a name, a message and a way to reply', function () {
 
     expect(Enquiry::count())->toBe(0);
     Mail::assertNothingQueued();
+});
+
+test('the service must be one that is shown on the site, or left empty', function () use ($valid) {
+    Service::create(['slug' => 'hidden', 'title' => 'Hidden service', 'is_active' => false]);
+
+    $this->post('/enquiries', [...$valid, 'service' => 'Anything typed by hand'])->assertSessionHasErrors('service');
+    $this->post('/enquiries', [...$valid, 'service' => 'Hidden service'])->assertSessionHasErrors('service');
+    expect(Enquiry::count())->toBe(0);
+
+    $this->post('/enquiries', [...$valid, 'service' => ''])->assertSessionHasNoErrors();
+    $this->post('/enquiries', $valid)->assertSessionHasNoErrors();
+    expect(Enquiry::count())->toBe(2);
 });
 
 test('honeypot submissions look successful but are discarded', function () use ($valid) {
