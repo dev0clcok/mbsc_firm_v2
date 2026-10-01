@@ -40,7 +40,7 @@ const count = computed(() => filtered.value.reduce((total, group) => total + gro
             <div class="site-container">
                 <SiteBreadcrumb :items="[{ label: 'FAQs' }]" />
                 <h1 class="site-display mt-6">Frequently asked questions</h1>
-                <p class="site-lead mt-6">Answers grouped by service. If yours is not here, <Link href="/contact#enquiry" class="site-link">ask us directly</Link>.</p>
+                <p class="site-lead mt-6"><template v-if="groups.length > 1">Answers grouped by service. </template>If yours is not here, <Link href="/contact#enquiry" class="site-link">ask us directly</Link>.</p>
 
                 <div v-if="groups.length" class="mt-10 max-w-xl">
                     <label for="faq-search" class="site-label">Search the questions</label>
