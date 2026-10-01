@@ -127,8 +127,7 @@ const whatsappHref = computed(() => {
             <p class="mt-4 font-semibold text-ink">What happens next</p>
             <ol class="mt-2 list-decimal space-y-2 pl-5 text-ink-soft">
                 <li>Someone at {{ site.name }} reads your enquiry.</li>
-                <li v-if="site.response_time">We reply by phone or email {{ site.response_time }}.</li>
-                <li v-else>We reply using the phone number or email address you gave.</li>
+                <li>We reply using the phone number or email address you gave.</li>
                 <li>The first consultation is free, so there is nothing to pay at this stage.</li>
             </ol>
             <p v-if="site.phone && site.phone_href" class="mt-4 text-ink-soft">

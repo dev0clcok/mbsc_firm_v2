@@ -20,7 +20,6 @@ const site = useSite();
                 <h1 class="site-display mt-6">Contact</h1>
                 <p class="site-lead mt-6">
                     Send an enquiry, call, or message us on WhatsApp. The first consultation is free.
-                    <template v-if="site.response_time">We reply {{ site.response_time }}.</template>
                 </p>
 
                 <div class="mt-12 grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">

@@ -438,10 +438,6 @@
                 "label": "Office hours",
                 "help": "Footer, contact page and the enquiry thank-you message."
             },
-            "response_time": {
-                "label": "Response time",
-                "help": "Finishes the sentence \"We reply …\", for example: within one working day. Shown beside the enquiry form and after sending."
-            },
             "facebook_url": {
                 "label": "Facebook",
                 "help": "Footer icon."
@@ -591,10 +587,6 @@
                 "maps_url": {
                     "label": "Google Maps link",
                     "help": "Add it so visitors can open directions to the office."
-                },
-                "response_time": {
-                    "label": "Response time",
-                    "help": "Tell visitors how soon you reply, for example within one working day."
                 },
                 "hero_images": {
                     "label": "Page images",

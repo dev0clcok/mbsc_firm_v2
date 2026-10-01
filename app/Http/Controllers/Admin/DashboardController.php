@@ -81,7 +81,6 @@ class DashboardController extends Controller implements HasMiddleware
             ['key' => 'enquiry_email', 'done' => filled($settings['enquiry_email']), 'href' => '/admin/site-settings'],
             ['key' => 'mail', 'done' => ! in_array(config('mail.default'), ['log', 'array'], true), 'href' => '/admin/site-settings'],
             ['key' => 'maps_url', 'done' => filled($settings['maps_url']), 'href' => '/admin/site-settings'],
-            ['key' => 'response_time', 'done' => filled($settings['response_time']), 'href' => '/admin/site-settings'],
             ['key' => 'hero_images', 'done' => collect(SiteSetting::IMAGE_KEYS)->every(fn ($key) => SiteSetting::image($key) !== null), 'href' => '/admin/site-settings'],
             ['key' => 'testimonials', 'done' => Testimonial::query()->active()->exists(), 'href' => '/admin/testimonials'],
         ];

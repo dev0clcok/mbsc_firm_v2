@@ -18,13 +18,13 @@ class FAQSeeder extends Seeder
             ],
             [
                 'question' => 'How long does VAT registration take?',
-                'answer' => 'VAT registration usually takes 3-7 working days after submission of all required documents. We ensure expedited processing for urgent requirements.',
+                'answer' => 'The time depends on how complete your documents are and on the VAT office\'s own processing, so we do not quote a fixed number of days. At the first consultation we go through the documents you have and tell you what is still needed before the application can be submitted.',
                 'sort_order' => 2,
                 'is_active' => true,
             ],
             [
                 'question' => 'Do you provide services for foreign companies?',
-                'answer' => 'Yes, we specialize in assisting foreign companies with BIDA registration, branch office setup, liaison office establishment, and all regulatory compliance requirements.',
+                'answer' => 'Foreign-owned companies and their local subsidiaries can use the same services we offer every client: RJSC company registration and filings, income tax, VAT and audit support. Tell us about your situation in an enquiry and we will say whether it is work we take on.',
                 'sort_order' => 3,
                 'is_active' => true,
             ],

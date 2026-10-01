@@ -28,7 +28,7 @@ const steps = [
     { title: 'Consultation', description: 'A free first consultation to understand what you need.' },
     { title: 'Documentation', description: 'We collect and prepare all required documents.' },
     { title: 'Processing', description: 'We file and follow up your application with the authority.' },
-    { title: 'Delivery', description: 'You receive the result on time, with ongoing support.' },
+    { title: 'Delivery', description: 'You receive the completed documents, with ongoing support.' },
 ];
 </script>
 
@@ -150,7 +150,6 @@ const steps = [
                     <h2 id="home-enquiry" class="site-title">Tell us what you need</h2>
                     <p class="site-lead mt-3">
                         Describe your situation in a few lines.
-                        <template v-if="site.response_time">We reply {{ site.response_time }}.</template>
                     </p>
                 </div>
                 <div class="site-card p-6 sm:p-8">

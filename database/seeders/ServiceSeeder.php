@@ -188,7 +188,7 @@ class ServiceSeeder extends Seeder
             ['title' => 'Consultation', 'description' => 'A free first consultation to understand what you need.'],
             ['title' => 'Documentation', 'description' => 'We collect and prepare all required documents.'],
             ['title' => 'Processing', 'description' => 'We file and follow up your application with the authority.'],
-            ['title' => 'Delivery', 'description' => 'You receive the result on time, with ongoing support.'],
+            ['title' => 'Delivery', 'description' => 'You receive the completed documents, with ongoing support.'],
         ];
 
         foreach ($services as $service) {

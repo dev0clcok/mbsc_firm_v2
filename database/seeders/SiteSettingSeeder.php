@@ -18,7 +18,6 @@ class SiteSettingSeeder extends Seeder
             'address' => 'Burma Razu Building (2nd Floor), beside Fancy Tailors, Kotowali, Chattogram, Bangladesh',
             'maps_url' => null,
             'office_hours' => 'Saturday to Thursday, 10:00 AM to 7:00 PM',
-            'response_time' => null,
             'facebook_url' => 'https://www.facebook.com/profile.php?id=61578616047092',
             'linkedin_url' => null,
             'x_url' => null,

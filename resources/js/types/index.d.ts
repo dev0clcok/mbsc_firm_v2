@@ -50,7 +50,6 @@ export interface SiteSettings {
     maps_url: string | null;
     map_embed_url: string | null;
     office_hours: string | null;
-    response_time: string | null;
     privacy_published: boolean;
     socials: Array<{ platform: string; url: string }>;
     services: Array<{ slug: string; title: string }>;

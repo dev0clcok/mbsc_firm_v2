@@ -27,7 +27,6 @@ class SiteSetting extends Model
         'map_latitude',
         'map_longitude',
         'office_hours',
-        'response_time',
         'facebook_url',
         'linkedin_url',
         'x_url',
@@ -151,7 +150,6 @@ class SiteSetting extends Model
             'office_hours' => $s['office_hours']
                 ? preg_replace('/(\d)\s+(AM|PM)\b/i', "$1\u{00A0}$2", $s['office_hours'])
                 : null,
-            'response_time' => $s['response_time'],
             'privacy_published' => self::privacyPublished(),
             'socials' => $socials,
         ];
