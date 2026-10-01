@@ -133,22 +133,25 @@ const confirmDelete = async (row: Enquiry) => {
             </a>
         </div>
 
-        <div class="flex gap-1 overflow-x-auto border-b border-border" role="tablist" :aria-label="t('enquiries.filters.status')">
-            <button
-                v-for="tab in tabs"
-                :key="tab.key"
-                type="button"
-                role="tab"
-                :aria-selected="filters.status === tab.key"
-                :class="[
-                    '-mb-px inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-3 text-sm font-medium transition-colors',
-                    filters.status === tab.key ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
-                ]"
-                @click="((filters.status = tab.key), apply())"
-            >
-                {{ tab.label }}
-                <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold tabular-nums">{{ formatNumber(tab.count) }}</span>
-            </button>
+        <!-- The scrolling row has no vertical overflow of its own; the rule under the tabs belongs to the wrapper. -->
+        <div class="border-b border-border">
+            <div class="-mb-px flex gap-1 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" :aria-label="t('enquiries.filters.status')">
+                <button
+                    v-for="tab in tabs"
+                    :key="tab.key"
+                    type="button"
+                    role="tab"
+                    :aria-selected="filters.status === tab.key"
+                    :class="[
+                        'inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 px-3 text-sm font-medium whitespace-nowrap transition-colors',
+                        filters.status === tab.key ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+                    ]"
+                    @click="((filters.status = tab.key), apply())"
+                >
+                    {{ tab.label }}
+                    <span class="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold tabular-nums">{{ formatNumber(tab.count) }}</span>
+                </button>
+            </div>
         </div>
 
         <form class="grid gap-4 rounded-lg border border-border bg-card p-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_auto]" @submit.prevent="apply">
