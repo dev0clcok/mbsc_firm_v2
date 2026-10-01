@@ -232,3 +232,15 @@ test('staff without the enquiries permission cannot export', function () {
 
     $this->get('/admin/enquiries/export')->assertForbidden();
 });
+
+test('the export keeps phone numbers as text and includes internal notes', function () use ($valid) {
+    $admin = User::factory()->create(['name' => 'Office Admin', 'email' => config('admin.super_admin_email')]);
+    $enquiry = Enquiry::create([...$valid, 'phone' => '01700-000002']);
+    $enquiry->notes()->create(['user_id' => $admin->id, 'body' => 'Called, no answer.']);
+
+    $csv = $this->actingAs($admin)->get('/admin/enquiries/export')->assertOk()->streamedContent();
+
+    expect($csv)->toContain('Status,"Assigned to",Message,"Internal notes"')
+        ->toContain('"=""01700-000002"""')
+        ->toContain('Office Admin: Called, no answer.');
+});

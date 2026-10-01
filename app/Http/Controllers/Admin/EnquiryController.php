@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enquiry;
 use App\Models\EnquiryNote;
 use App\Models\User;
+use App\Support\Phone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -119,17 +120,25 @@ class EnquiryController extends Controller implements HasMiddleware
      */
     public function export(Request $request): StreamedResponse
     {
-        $query = $this->query($request)->with('assignee:id,name');
+        $query = $this->query($request)->with(['assignee:id,name', 'notes.author:id,name']);
 
         return response()->streamDownload(function () use ($query) {
             $out = fopen('php://output', 'w');
             // Byte-order mark so Excel reads Bengali and other non-Latin text correctly.
             fwrite($out, "\xEF\xBB\xBF");
-            fputcsv($out, ['Received', 'Name', 'Phone', 'Email', 'Service', 'Status', 'Assigned to', 'Message']);
+            fputcsv($out, ['Received', 'Name', 'Phone', 'Email', 'Service', 'Status', 'Assigned to', 'Message', 'Internal notes']);
 
             $query->chunk(200, function ($enquiries) use ($out) {
                 foreach ($enquiries as $enquiry) {
-                    fputcsv($out, array_map($this->safeCell(...), [
+                    // Oldest note first, one per line inside the cell.
+                    $notes = $enquiry->notes->sortBy('created_at')->map(fn (EnquiryNote $note) => sprintf(
+                        '%s %s: %s',
+                        $note->created_at->timezone('Asia/Dhaka')->format('Y-m-d H:i'),
+                        $note->author?->name ?? 'Former user',
+                        $note->body,
+                    ))->implode("\n");
+
+                    $cells = array_map($this->safeCell(...), [
                         $enquiry->created_at->timezone('Asia/Dhaka')->format('Y-m-d H:i'),
                         $enquiry->name,
                         $enquiry->phone,
@@ -138,7 +147,11 @@ class EnquiryController extends Controller implements HasMiddleware
                         $enquiry->status,
                         $enquiry->assignee?->name,
                         $enquiry->message,
-                    ]));
+                        $notes,
+                    ]);
+                    $cells[2] = $this->textCell($enquiry->phone);
+
+                    fputcsv($out, $cells);
                 }
             });
 
@@ -153,6 +166,18 @@ class EnquiryController extends Controller implements HasMiddleware
             ->when($request->filled('status'), fn ($q) => $q->where('status', $request->string('status')))
             ->orderBy('created_at', $request->input('sort') === 'oldest' ? 'asc' : 'desc')
             ->orderBy('id', $request->input('sort') === 'oldest' ? 'asc' : 'desc');
+    }
+
+    /**
+     * A phone number as text, so a spreadsheet keeps the leading zero and
+     * the plus sign. Only characters a phone number can contain are kept,
+     * so the cell cannot carry a formula of the visitor's own.
+     */
+    private function textCell(?string $value): string
+    {
+        $value = preg_replace('/[^0-9+\-\s()]/', '', (string) Phone::toAscii($value));
+
+        return $value === '' ? '' : '="'.$value.'"';
     }
 
     /**
