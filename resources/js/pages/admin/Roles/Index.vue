@@ -120,7 +120,7 @@ const actions = computed(() => {
             icon: 'trash',
             variant: 'destructive',
             onClick: (row: any) => {
-                confirmDelete(row.id);
+                confirmDelete(row);
             },
         });
     }
@@ -128,17 +128,18 @@ const actions = computed(() => {
     return base;
 });
 
-const confirmDelete = async (id: number) => {
+const confirmDelete = async (row: { id: number; name: string }) => {
     const ok = await confirm({
         title: t('roles.delete.title'),
         description: t('roles.delete.description'),
+        details: row.name,
         confirmText: t('roles.delete.confirm'),
         cancelText: t('common.cancel'),
         confirmVariant: 'destructive',
     });
     if (!ok) return;
 
-    router.delete(`/admin/roles/${id}`, {
+    router.delete(`/admin/roles/${row.id}`, {
         onSuccess: () => toast({ variant: 'success', message: t('roles.deleted') }),
         onError: () => toast({ variant: 'error', message: t('roles.delete_failed') }),
     });
