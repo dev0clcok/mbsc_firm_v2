@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AppendsToOrder;
 use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TeamMember extends Model
 {
-    use Auditable;
+    use AppendsToOrder, Auditable;
 
     protected $table = 'team_members';
 

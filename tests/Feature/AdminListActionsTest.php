@@ -2,6 +2,7 @@
 
 use App\Models\FAQ;
 use App\Models\Service;
+use App\Models\TeamMember;
 use App\Models\Testimonial;
 use App\Models\User;
 
@@ -43,4 +44,36 @@ test('list actions are limited to known lists and to staff with permission', fun
     $this->actingAs(User::factory()->create());
     $this->patch("/admin/testimonials/{$testimonial->id}/toggle")->assertForbidden();
     expect($testimonial->fresh()->is_active)->toBeTrue();
+});
+
+test('new records are added at the end of their list', function () {
+    $founder = TeamMember::create(['name' => 'Founder', 'position' => 'Founder', 'sort_order' => 1]);
+    Service::create(['slug' => 'vat', 'title' => 'VAT', 'sort_order' => 4]);
+    FAQ::create(['question' => 'First', 'answer' => 'a', 'sort_order' => 2]);
+    Testimonial::create(['name' => 'First', 'text' => 'Good.', 'sort_order' => 7]);
+
+    $this->actingAs($this->admin);
+
+    // The create forms send 0 when the order field is left alone.
+    $this->post('/admin/team-members', ['name' => 'New colleague', 'position' => 'Associate', 'sort_order' => 0, 'is_active' => true])->assertRedirect();
+    $this->post('/admin/services', ['slug' => 'tax', 'title' => 'Tax', 'sort_order' => 0, 'is_active' => true])->assertRedirect();
+    $this->post('/admin/faqs', ['question' => 'Second', 'answer' => 'b', 'sort_order' => 0, 'is_active' => true])->assertRedirect();
+    $this->post('/admin/testimonials', ['name' => 'Second', 'text' => 'Fine.', 'sort_order' => 0, 'is_active' => true])->assertRedirect();
+
+    expect(TeamMember::orderBy('sort_order')->orderBy('id')->pluck('name')->all())->toBe(['Founder', 'New colleague'])
+        ->and(TeamMember::where('name', 'New colleague')->value('sort_order'))->toBe(2)
+        ->and($founder->fresh()->sort_order)->toBe(1)
+        ->and(Service::where('slug', 'tax')->value('sort_order'))->toBe(5)
+        ->and(FAQ::where('question', 'Second')->value('sort_order'))->toBe(3)
+        ->and(Testimonial::where('name', 'Second')->value('sort_order'))->toBe(8);
+});
+
+test('a position chosen on the create form is kept', function () {
+    Service::create(['slug' => 'vat', 'title' => 'VAT', 'sort_order' => 4]);
+
+    $this->actingAs($this->admin)
+        ->post('/admin/services', ['slug' => 'tax', 'title' => 'Tax', 'sort_order' => 2, 'is_active' => true])
+        ->assertRedirect();
+
+    expect(Service::where('slug', 'tax')->value('sort_order'))->toBe(2);
 });

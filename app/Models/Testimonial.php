@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AppendsToOrder;
 use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class Testimonial extends Model
 {
-    use Auditable;
+    use AppendsToOrder, Auditable;
 
     protected $table = 'testimonials';
 

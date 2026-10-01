@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AppendsToOrder;
 use App\Models\Concerns\Auditable;
 use App\Support\SvgIcon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
-    use Auditable;
+    use AppendsToOrder, Auditable;
 
     protected $table = 'services';
 
