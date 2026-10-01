@@ -159,7 +159,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 defineProps<{
     roles: Array<{ id: number; name: string; slug: string }>;
@@ -172,6 +174,10 @@ const form = useForm({
     password_confirmation: '',
     roles: [] as number[],
 });
+
+const { t } = useI18n();
+
+useUnsavedWarning(() => form.isDirty, t('common.leave_unsaved'));
 
 const toggleRole = (id: number, checked: boolean) => {
     const next = new Set(form.roles);

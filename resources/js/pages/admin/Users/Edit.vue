@@ -61,7 +61,9 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
+import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     user: { id: number; name: string; email: string };
@@ -72,6 +74,10 @@ const props = defineProps<{
 const form = useForm({
     roles: props.selectedRoles || ([] as number[]),
 });
+
+const { t } = useI18n();
+
+useUnsavedWarning(() => form.isDirty, t('common.leave_unsaved'));
 
 const toggleRole = (id: number, checked: boolean) => {
     const next = new Set(form.roles);

@@ -110,7 +110,9 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import PermissionTree from './PermissionTree.vue';
+import { useUnsavedWarning } from '@/composables/useUnsavedWarning';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -145,6 +147,10 @@ const form = useForm({
     description: props.role.description || '',
     permissions: props.selectedPermissions || ([] as string[]),
 });
+
+const { t } = useI18n();
+
+useUnsavedWarning(() => form.isDirty, t('common.leave_unsaved'));
 
 const submit = () => {
     form.put(rolesUpdate({ role: props.role.id }).url);
