@@ -19,12 +19,26 @@ const onScroll = () => {
     scrolled.value = window.scrollY > 8;
 };
 
+// Escape closes the mobile menu from anywhere on the page and hands the
+// focus back to the button that opened it.
+const menuButton = ref<HTMLButtonElement | null>(null);
+const onKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Escape' && menuOpen.value) {
+        menuOpen.value = false;
+        menuButton.value?.focus();
+    }
+};
+
 onMounted(() => {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('keydown', onKeydown);
 });
 
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll));
+onBeforeUnmount(() => {
+    window.removeEventListener('scroll', onScroll);
+    document.removeEventListener('keydown', onKeydown);
+});
 
 const navLinks = [
     { name: 'Home', href: '/', page: 'home' },
@@ -81,6 +95,7 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
                     </a>
                     <Link href="/contact#enquiry" class="site-btn site-btn-primary hidden sm:inline-flex">Send an enquiry</Link>
                     <button
+                        ref="menuButton"
                         type="button"
                         class="flex h-12 w-12 items-center justify-center rounded-site text-ink hover:bg-mist lg:hidden"
                         :aria-expanded="menuOpen"
@@ -93,7 +108,7 @@ const socialLabel = (platform: string) => (platform === 'x' ? 'X' : platform.cha
                 </div>
             </div>
 
-            <nav v-show="menuOpen" id="site-menu" class="border-t border-rule bg-paper lg:hidden" aria-label="Main" @keydown.esc="menuOpen = false">
+            <nav v-show="menuOpen" id="site-menu" class="border-t border-rule bg-paper lg:hidden" aria-label="Main">
                 <ul class="site-container divide-y divide-rule">
                     <li v-for="link in navLinks" :key="link.page">
                         <Link
