@@ -313,7 +313,7 @@ watch(
 
                             <div
                                 v-if="expanded.modules.has(`${group.key}:${module.key}`)"
-                                class="mt-3 grid gap-2 pl-8 sm:grid-cols-2 lg:grid-cols-4"
+                                class="mt-3 grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-2 pl-8"
                             >
                                 <label
                                     v-for="p in module.permissions"
@@ -322,11 +322,11 @@ watch(
                                 >
                                     <input
                                         type="checkbox"
-                                        class="h-4 w-4 rounded border-input"
+                                        class="h-4 w-4 shrink-0 rounded border-input"
                                         :checked="selected.has(p.slug)"
                                         @change="toggleMany([p.slug], ($event.target as HTMLInputElement).checked)"
                                     />
-                                    <span class="truncate">{{ p.label }}</span>
+                                    <span class="min-w-0 break-words">{{ p.label }}</span>
                                 </label>
                             </div>
                         </div>
