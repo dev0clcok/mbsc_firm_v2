@@ -33,6 +33,8 @@ Copy `.env.example` to `.env` and set at least these:
 | `QUEUE_CONNECTION` | `database` |
 | `INERTIA_SSR_ENABLED` | `true` |
 
+`APP_DEBUG` must be `false` on any server the public can reach. With it on, an error shows the framework's debug page, which prints server file paths, database queries and configuration to whoever caused the error. `.env.example` ships with `false`; after deploying, confirm with `php artisan about --only=environment` that "Debug Mode" reads OFF, and open a made-up address such as `/no-such-page` to check the site's own error page appears.
+
 The address that receives enquiry emails is not an environment variable. Set it in the admin panel under Site Settings, "Enquiry notification email".
 
 ## First deployment
@@ -116,5 +118,6 @@ Do not run `db:seed` again as a routine step. The service and FAQ seeders overwr
 ## After going live
 
 - Submit `https://www.mbscfirm.com/sitemap.xml` in Google Search Console.
+- Confirm server-side rendering is on: `curl -s https://www.mbscfirm.com/services | grep -c "<h1"` should print 1 or more. If it prints 0 the SSR process is not running or `INERTIA_SSR_ENABLED` is not `true`, and pages are being rendered in the browser only.
 - Send a test enquiry from the contact page and confirm it appears under Admin > Enquiries and arrives by email.
 - Check a link preview by pasting the home page URL into WhatsApp.
